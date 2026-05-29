@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.DS_Store
+Thumbs.db
+data/raw/
+data/processed/*.csv
+!data/processed/README.md
+manuscript/
+docs/
+env/
+*.aux
+*.log
+*.out
+*.synctex.gz

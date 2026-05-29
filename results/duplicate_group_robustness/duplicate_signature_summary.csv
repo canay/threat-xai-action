@@ -1,0 +1,4 @@
+feature_set,features,rows,unique_signatures,duplicate_rows,duplicate_row_fraction,mixed_label_signature_groups,largest_signature_group,median_signature_group
+core,20,177156,47047,151361,0.8543938675517623,3,59342,1.0
+no_threat_descriptors,17,177156,45999,152924,0.8632166000587054,4,59342,1.0
+minimal_context,11,177156,45999,152924,0.8632166000587054,4,59342,1.0

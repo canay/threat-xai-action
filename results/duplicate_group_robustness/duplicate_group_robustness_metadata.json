@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-05-24T03:21:34.710632",
+  "ended_at": "2026-05-24T03:27:40.370290",
+  "wall_seconds": 365.65897039999254,
+  "data": "data\\processed\\threat_five_class.csv",
+  "rows": 177156,
+  "splits": 5,
+  "test_size": 0.2,
+  "device": "cpu",
+  "n_estimators": 300,
+  "max_depth": 6,
+  "note": "Grouped splits keep exact feature signatures out of both train and test at the same time."
+}

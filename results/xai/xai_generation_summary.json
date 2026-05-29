@@ -1,0 +1,62 @@
+{
+  "model": "XGBoost",
+  "split": "stratified 80/20, random_state=42",
+  "shap_sample_size": 1155,
+  "lime_training_sample_size": 6000,
+  "classes": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "top_global_shap_features": [
+    {
+      "feature": "Threat/Content Type",
+      "mean_abs_shap": 1.0485650300979614
+    },
+    {
+      "feature": "Direction",
+      "mean_abs_shap": 0.9693156480789185
+    },
+    {
+      "feature": "Subcategory of app",
+      "mean_abs_shap": 0.7855905890464783
+    },
+    {
+      "feature": "Threat/Content Name",
+      "mean_abs_shap": 0.7234956622123718
+    },
+    {
+      "feature": "Severity",
+      "mean_abs_shap": 0.5264720320701599
+    },
+    {
+      "feature": "Source Country",
+      "mean_abs_shap": 0.3501753807067871
+    },
+    {
+      "feature": "Category of app",
+      "mean_abs_shap": 0.27515923976898193
+    },
+    {
+      "feature": "Application",
+      "mean_abs_shap": 0.2460722178220749
+    },
+    {
+      "feature": "Category",
+      "mean_abs_shap": 0.2326442450284958
+    },
+    {
+      "feature": "Source Port",
+      "mean_abs_shap": 0.18737879395484924
+    }
+  ],
+  "lime_selected_classes": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ]
+}

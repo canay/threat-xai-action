@@ -1,0 +1,72 @@
+{
+  "chronological_split": {
+    "train_until": "2026-05-14 17:07:15",
+    "test_from": "2026-05-14 17:07:15",
+    "note": "Single-day chronological holdout; this is a temporal stress check, not cross-period validation."
+  },
+  "labels": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "feature_sets": {
+    "core": [
+      "Threat/Content Type",
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Threat/Content Name",
+      "Category",
+      "Severity",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ],
+    "no_threat_descriptors": [
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Category",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ],
+    "minimal_context": [
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Direction"
+    ]
+  },
+  "shap_stability_mean_top10_overlap": 1.0,
+  "shap_stability_mean_spearman": 1.0
+}

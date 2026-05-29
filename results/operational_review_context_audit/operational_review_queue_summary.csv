@@ -1,0 +1,15 @@
+run_id,split,feature_set,scenario,test_rows,queue_rows,queue_fraction,total_errors,captured_errors,error_capture_rate,queue_error_precision,reset_related_in_queue,mean_confidence_queue,mean_confidence_not_queue
+stratified_holdout__core,stratified_holdout,core,mismatch_only,35432,3,8.466922555881689e-05,3,3,1.0,1.0,3,0.8014004230499268,0.9998946785926819
+stratified_holdout__core,stratified_holdout,core,low_confidence_bottom_5pct,35432,1779,0.05020885075637842,3,3,1.0,0.0016863406408094434,736,0.9976257681846619,0.9999968409538269
+stratified_holdout__core,stratified_holdout,core,reset_related,35432,736,0.02077218333709641,3,3,1.0,0.004076086956521739,736,0.9954747557640076,0.9999711513519287
+stratified_holdout__core,stratified_holdout,core,mismatch_or_low5,35432,1779,0.05020885075637842,3,3,1.0,0.0016863406408094434,736,0.9976257681846619,0.9999968409538269
+stratified_holdout__core,stratified_holdout,core,mismatch_or_low5_or_reset,35432,1779,0.05020885075637842,3,3,1.0,0.0016863406408094434,736,0.9976257681846619,0.9999968409538269
+stratified_holdout__core,stratified_holdout,core,low1_or_reset,35432,936,0.026416798374350868,3,3,1.0,0.003205128205128205,736,0.9956033825874329,0.9999938607215881
+stratified_holdout__core,stratified_holdout,core,low10_or_reset,35432,3706,0.10459471664032513,3,3,1.0,0.0008094981111710739,736,0.998846173286438,0.9999982714653015
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,mismatch_only,35432,13,0.0003668999774215399,13,13,1.0,1.0,13,0.730810284614563,0.9995696544647217
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,low_confidence_bottom_5pct,35432,1805,0.0509426507112215,13,13,1.0,0.007202216066481994,520,0.9897093176841736,0.9999948740005493
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,reset_related,35432,743,0.020969744863400315,13,13,1.0,0.017496635262449527,743,0.9791219234466553,0.9999068975448608
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,mismatch_or_low5,35432,1805,0.0509426507112215,13,13,1.0,0.007202216066481994,520,0.9897093176841736,0.9999948740005493
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,mismatch_or_low5_or_reset,35432,2028,0.057236396477760215,13,13,1.0,0.00641025641025641,743,0.9908343553543091,0.9999953508377075
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,low1_or_reset,35432,891,0.025146759990968617,13,13,1.0,0.014590347923681257,743,0.9793194532394409,0.999990701675415
+stratified_holdout__no_threat_descriptors,stratified_holdout,no_threat_descriptors,low10_or_reset,35432,3546,0.10007902461052157,13,13,1.0,0.0036661026508742244,743,0.9947376847267151,0.9999973177909851

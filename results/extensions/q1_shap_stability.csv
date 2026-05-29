@@ -1,0 +1,6 @@
+sample_seed,sample_rows,top10_overlap_with_first_sample,spearman_with_first_sample,top_features
+11,650,1.0,1.0,Threat/Content Type; Direction; Subcategory of app; Threat/Content Name; Severity; Source Country; Category; Category of app; Application; Source Port
+23,650,1.0,1.0,Threat/Content Type; Direction; Subcategory of app; Threat/Content Name; Severity; Source Country; Category; Category of app; Application; Source Port
+42,650,1.0,1.0,Threat/Content Type; Direction; Subcategory of app; Threat/Content Name; Severity; Source Country; Category; Category of app; Application; Source Port
+71,650,1.0,1.0,Threat/Content Type; Direction; Subcategory of app; Threat/Content Name; Severity; Source Country; Category; Category of app; Application; Source Port
+97,650,1.0,1.0,Threat/Content Type; Direction; Subcategory of app; Threat/Content Name; Severity; Source Country; Category; Category of app; Application; Source Port
