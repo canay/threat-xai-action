@@ -48,12 +48,13 @@ Cem Özkurt
 - Email: cemozkurt@sakarya.edu.tr
 - ORCID: 0000-0002-1251-7715
 
-Fatmir Garri
+Muhammed Emin ONAY
 
-- Department of Information Technology
+- Department of Mechatronics Engineering
+- Faculty of Technology
 - Sakarya University of Applied Sciences
-- Email: fatmirgarri@subu.edu.tr
-- ORCID: 0009-0005-6762-6846
+- Email: 22010404086@subu.edu.tr
+- ORCID: 0009-0000-0454-4986
 
 GitHub:
 
