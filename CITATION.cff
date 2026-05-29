@@ -7,7 +7,7 @@ authors:
     given-names: "Özkan"
   - family-names: "Özkurt"
     given-names: "Cem"
-  - family-names: "Garri"
+  - family-names: "Onay"
     given-names: "Muhammed Emin"
 repository-code: "https://github.com/canay/threat-xai-action"
 version: "0.1.0"

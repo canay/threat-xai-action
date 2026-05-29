@@ -48,7 +48,7 @@ Cem Özkurt
 - Email: cemozkurt@sakarya.edu.tr
 - ORCID: 0000-0002-1251-7715
 
-Muhammed Emin ONAY
+Muhammed Emin Onay
 
 - Department of Mechatronics Engineering
 - Faculty of Technology
