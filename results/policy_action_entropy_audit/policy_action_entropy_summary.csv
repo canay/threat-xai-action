@@ -1,0 +1,6 @@
+audit_level,key_columns,contexts,records,mixed_contexts,mixed_context_fraction,records_in_mixed_contexts,low_purity_threshold,low_purity_contexts,records_in_low_purity_contexts,record_weighted_mean_entropy_bits,record_weighted_normalized_entropy,record_weighted_dominant_fraction,record_weighted_majority_error_floor,median_context_dominant_fraction
+rule_context,Rule Group,15,177156,10,0.6666666666666666,174909,0.8,5,1248,0.041027042318341235,0.017669385373594644,0.9927577953893744,0.007242204610625663,0.9925595238095238
+rule_context_plus_threat_type,Rule Group + Threat/Content Type,18,177156,9,0.5,14701,0.8,4,1237,0.024191654671765865,0.010418778568136243,0.9943609022556391,0.005639097744360902,0.9980682009071057
+rule_context_plus_direction,Rule Group + Direction,18,177156,8,0.4444444444444444,164216,0.8,5,1247,0.02710224070424856,0.01167229974258238,0.9956140350877193,0.0043859649122807015,1.0
+rule_context_plus_application,Rule Group + Application,26,177156,10,0.38461538461538464,172324,0.8,5,1015,0.0364966430726228,0.01571824861975033,0.9940391519338888,0.005960848066111224,1.0
+rule_context_plus_threat_type_direction,Rule Group + Threat/Content Type + Direction,21,177156,7,0.3333333333333333,4008,0.8,4,1236,0.010266853057673182,0.004421692937123978,0.997217141953984,0.0027828580460159407,1.0

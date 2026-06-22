@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-05-24T23:11:03.906637",
+  "ended_at": "2026-05-24T23:17:07.275749",
+  "wall_seconds": 363.3699333999539,
+  "data": "data\\processed\\threat_five_class.csv",
+  "rows": 177156,
+  "device": "cpu",
+  "n_estimators": 220,
+  "max_depth": 6,
+  "min_context_rows": 1000,
+  "max_contexts_per_column": 6,
+  "note": "Review queue simulation uses observed action as an audit reference. Leave-one-context-out checks are same-dataset stress tests, not independent external validation."
+}

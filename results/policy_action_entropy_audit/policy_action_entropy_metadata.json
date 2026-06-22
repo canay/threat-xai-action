@@ -1,0 +1,20 @@
+{
+  "data": "data/processed/threat_five_class.csv",
+  "rows": 177156,
+  "target_labels": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "anonymize_rules": true,
+  "non_missing_rule_contexts": 14,
+  "missing_rule_records": 160276,
+  "low_purity_threshold": 0.8,
+  "outputs": [
+    "policy_action_entropy_summary.csv",
+    "policy_action_rule_purity.csv"
+  ],
+  "note": "Rule values are anonymized by default. This is a model-independent audit of policy-conditioned action regularity, not a classifier benchmark. The audit was generated from an authorized controlled-access local copy placed at the expected processed-data path; event-level data are not included in the public artifact."
+}

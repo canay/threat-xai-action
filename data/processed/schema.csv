@@ -1,0 +1,28 @@
+column,role,public_artifact_note
+target,mapped five-class study target,aggregate class counts and confusion summaries are public
+raw_action,source firewall action before mapping,controlled event-level field not publicly released
+Receive Time,excluded timestamp,not used as predictor
+Generate Time,chronological split ordering field,used only for ordering in temporal stress tests
+High Res Timestamp,excluded timestamp,not used as predictor
+Type,administrative log type,excluded from core predictors where present
+Threat/Content Type,direct threat/signature descriptor,removed in no-threat-descriptors ablation
+Application,operational application context,retained as residual operational proxy
+Source Zone,network context,retained as residual operational proxy
+Destination Zone,network context,retained as residual operational proxy
+Inbound Interface,network context,retained as residual operational proxy
+Outbound Interface,network context,retained as residual operational proxy
+IP Protocol,transport context,retained as residual operational proxy
+Source Port,transport context,retained as residual operational proxy
+Destination Port,transport context,retained as residual operational proxy
+Source Country,geographic context,retained as residual operational proxy
+Destination Country,geographic context,retained as residual operational proxy
+Threat/Content Name,direct threat/signature descriptor,removed in no-threat-descriptors ablation
+Category,residual category proxy,retained in no-threat-descriptors ablation and audited separately
+Severity,direct threat/signature descriptor,removed in no-threat-descriptors ablation
+Direction,traffic direction context,retained as residual operational proxy
+Subcategory of app,application metadata,retained as residual operational proxy
+Category of app,application metadata,retained as residual operational proxy
+Technology of app,application metadata,retained as residual operational proxy
+Risk of app,application risk metadata,retained as residual operational proxy
+SaaS of app,application metadata,retained as residual operational proxy
+Rule,direct policy context,excluded as predictor and anonymized only in aggregate grouping outputs

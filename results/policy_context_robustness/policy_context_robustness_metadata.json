@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-05-24T03:36:30.452364",
+  "ended_at": "2026-05-24T03:44:48.014592",
+  "wall_seconds": 497.56261759996414,
+  "data": "data\\processed\\threat_five_class.csv",
+  "rows": 177156,
+  "rule_groups": 15,
+  "candidate_rule_groups": 8,
+  "min_rule_rows": 50,
+  "device": "cpu",
+  "n_estimators": 300,
+  "max_depth": 6,
+  "note": "Rule is used only as a held-out group variable and is not included in any feature set."
+}

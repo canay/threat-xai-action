@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "bootstrap_iterations": 1000,
+  "labels": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "xgb_ci_source": "github-threat-xai-action\\results\\extensions\\q1_validation_confusions.csv",
+  "note": "Confusion-only mode samples saved fixed-model confusion-cell counts and does not read controlled data."
+}

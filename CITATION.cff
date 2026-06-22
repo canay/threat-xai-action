@@ -1,0 +1,16 @@
+﻿cff-version: 1.2.0
+title: "Auditing Policy-Conditioned Firewall Enforcement: A Leakage-Aware and Explainable Evaluation Protocol for Enterprise Threat Logs"
+message: "If you use this reproducibility package, please cite the associated paper and this repository."
+type: software
+authors:
+  - family-names: "Canay"
+    given-names: "Özkan"
+  - family-names: "Özkurt"
+    given-names: "Cem"
+  - family-names: "Garri"
+    given-names: "Fatmir"
+repository-code: "https://github.com/canay/threat-xai-action"
+version: "0.1.0"
+date-released: "2026-05-16"
+license: "MIT"
+

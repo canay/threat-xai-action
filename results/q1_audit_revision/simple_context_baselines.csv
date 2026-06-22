@@ -1,0 +1,7 @@
+split,baseline,context_columns,train_rows,test_rows,mapping_size,matched_context_fraction,accuracy,balanced_accuracy_fixed_labels,macro_f1,errors
+stratified_holdout,train_majority,(none),141724,35432,0,0.0,0.9075976518401445,0.2,0.19031217635744932,3274
+stratified_holdout,context_majority_app_dir_zones,Application;Direction;Source Zone;Destination Zone,141724,35432,20,0.9999717769248138,0.9963874463761572,0.9709162562316498,0.9534602901384142,128
+stratified_holdout,context_majority_operational_minimal,Application;Direction;Source Zone;Destination Zone;Inbound Interface;Outbound Interface;IP Protocol;Destination Port;Source Country;Destination Country,141724,35432,29208,0.9062429442312034,0.9988993000677354,0.9888085917213992,0.9768399418870224,39
+chronological_holdout,train_majority,(none),141724,35432,0,0.0,0.8289963874463762,0.2,0.18130082555358382,6059
+chronological_holdout,context_majority_app_dir_zones,Application;Direction;Source Zone;Destination Zone,141724,35432,15,0.9972623617069316,0.9732163016482276,0.6874199678694783,0.7482155391697232,949
+chronological_holdout,context_majority_operational_minimal,Application;Direction;Source Zone;Destination Zone;Inbound Interface;Outbound Interface;IP Protocol;Destination Port;Source Country;Destination Country,141724,35432,25753,0.4677974712124633,0.9201286972228494,0.5593962080494996,0.6204675462419991,2830
