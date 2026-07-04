@@ -2,7 +2,7 @@
 
 Public reproducibility artifact for the manuscript:
 
-**Auditing Policy-Conditioned Firewall Enforcement: A Leakage-Aware and Explainable Evaluation Protocol for Enterprise Threat Logs**
+**LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement**
 
 Short protocol/artifact name:
 
