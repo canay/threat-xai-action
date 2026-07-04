@@ -6,7 +6,7 @@ Public reproducibility artifact for the manuscript:
 
 Short protocol/artifact name:
 
-**FIRE-AUDIT: Leakage-Aware Firewall-Action Reconstruction and Explainable Audit for Enterprise Network Logs**
+`FIRE-AUDIT`
 
 Repository short name:
 
@@ -63,7 +63,7 @@ GitHub:
 
 https://github.com/canay
 
-This repository is the author-managed code-and-output replication package for the submitted manuscript. A repository DOI can be added after an archival release is created.
+This repository is the author-managed code-and-output replication package for the associated manuscript. A repository DOI can be added after an archival release is created.
 
 ## Repository Contents
 
@@ -331,8 +331,8 @@ Run the round-9 revision experiments (class-weight sensitivity, source-port near
 
 ```bash
 python code/13_classweight_sensitivity.py --data data/processed/threat_five_class.csv
-python code/14_sourceport_nearduplicate_ablation.py
-python code/15_forward_chaining_chronological.py
+python code/14_sourceport_nearduplicate_ablation.py --data data/processed/threat_five_class.csv
+python code/15_forward_chaining_chronological.py --data data/processed/threat_five_class.csv
 ```
 
 ## Submission And Public Release Checklist
@@ -347,10 +347,9 @@ Before archival public release:
 - Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.
 - Confirm that `data/processed/` does not contain the full event-level firewall CSV unless institutional public-release authorization has been obtained.
 - Confirm that no raw enterprise logs, manuscript drafts, private review notes, or local credentials are included.
-- Check whether the target journal requires a data availability statement, code availability statement, or repository DOI.
+- Check whether the publication venue requires a data availability statement, code availability statement, or repository DOI.
 - Consider archiving the final GitHub release on Zenodo and adding the DOI here.
 
 ## License
 
 This project's code and aggregate output artifacts are released under the MIT License (see `LICENSE`). The public anonymized 1,000-row sample is included as a limited reproducibility aid for schema inspection and smoke testing, not as a general-purpose benchmark dataset. The raw and full event-level processed enterprise firewall data are not covered by this license and remain controlled-access institutional material, as described in the Data availability section.
-

@@ -4,7 +4,7 @@ Artifact short name: `threat-xai-action`
 
 Repository: `https://github.com/canay/threat-xai-action`
 
-Manuscript: "FIRE-AUDIT: Leakage-Aware Firewall-Action Reconstruction and Explainable Audit for Enterprise Network Logs"
+Manuscript: "LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement"
 
 ## Public Contents
 

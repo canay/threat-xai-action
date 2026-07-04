@@ -10,6 +10,7 @@ Model and preprocessing match the selected 300-tree XGBoost pipeline.
 Writes results/q1_audit_revision/forward_chaining_chronological.csv.
 """
 from pathlib import Path
+import argparse
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -20,20 +21,11 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = REPO_ROOT.parent
-_REL = Path("data/processed/threat_five_class.csv")
 SEED = 42
 CORE = ["Threat/Content Type","Application","Source Zone","Destination Zone","Inbound Interface",
         "Outbound Interface","IP Protocol","Source Port","Destination Port","Source Country",
         "Destination Country","Threat/Content Name","Category","Severity","Direction",
         "Subcategory of app","Category of app","Technology of app","Risk of app","SaaS of app"]
-
-
-def _resolve_data() -> Path:
-    for c in (Path.cwd()/_REL, PROJECT_ROOT/_REL, REPO_ROOT/_REL):
-        if c.is_file():
-            return c
-    raise SystemExit("threat_five_class.csv not found (controlled-access).")
 
 
 def build_pipe():
@@ -50,8 +42,13 @@ def build_pipe():
 
 
 def main():
-    data = _resolve_data(); print(f"Using dataset: {data}")
-    df = pd.read_csv(data, low_memory=False)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data", type=Path, required=True, help="Path to the controlled processed CSV.")
+    args = parser.parse_args()
+    if not args.data.is_file():
+        raise SystemExit("Controlled processed CSV not found. Pass --data <path>.")
+    print(f"Using dataset: {args.data}")
+    df = pd.read_csv(args.data, low_memory=False)
     df["target"] = df["target"].astype(str)
     df["_gt"] = pd.to_datetime(df["Generate Time"], errors="coerce")
     order = df.sort_values("_gt").index.to_numpy()

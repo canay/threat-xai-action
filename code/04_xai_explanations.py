@@ -27,7 +27,7 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
 
-# Q1 Elsevier/IEEE Premium Palette
+# Publication-neutral figure palette
 PRIMARY = "#00539C"     # Deep Sapphire
 TEAL = "#008080"        # Muted Teal
 CRIMSON = "#C00000"     # Dark Red

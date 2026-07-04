@@ -1,5 +1,5 @@
 ﻿cff-version: 1.2.0
-title: "FIRE-AUDIT: Leakage-Aware Firewall-Action Reconstruction and Explainable Audit for Enterprise Network Logs"
+title: "LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement"
 message: "If you use this reproducibility package, please cite the associated paper and this repository."
 type: software
 authors:

@@ -14,6 +14,7 @@ train/test boundary. This script:
 Writes nothing to results/; prints a compact report.
 """
 import hashlib
+import argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -26,21 +27,8 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = REPO_ROOT.parent
-_REL = Path("data/processed/threat_five_class.csv")
 
 
-def _resolve_data() -> Path:
-    for cand in (Path.cwd() / _REL, PROJECT_ROOT / _REL, REPO_ROOT / _REL):
-        if cand.is_file():
-            return cand
-    raise SystemExit(
-        "threat_five_class.csv not found (controlled-access). "
-        "Run from the repository root with the processed dataset available."
-    )
-
-
-DATA = _resolve_data()
 CORE = ["Threat/Content Type","Application","Source Zone","Destination Zone","Inbound Interface",
         "Outbound Interface","IP Protocol","Source Port","Destination Port","Source Country",
         "Destination Country","Threat/Content Name","Category","Severity","Direction",
@@ -63,7 +51,12 @@ def build_pipe(feats):
     return Pipeline([("pre",pre),("model",m)])
 
 def main():
-    df = pd.read_csv(DATA, low_memory=False); df["target"]=df["target"].astype(str)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data", type=Path, required=True, help="Path to the controlled processed CSV.")
+    args = parser.parse_args()
+    if not args.data.is_file():
+        raise SystemExit("Controlled processed CSV not found. Pass --data <path>.")
+    df = pd.read_csv(args.data, low_memory=False); df["target"]=df["target"].astype(str)
     n=len(df)
     # (1) Source Port characterization
     sp = pd.to_numeric(df["Source Port"], errors="coerce")

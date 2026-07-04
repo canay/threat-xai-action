@@ -8,8 +8,8 @@ no-threat-descriptors settings. It quantifies whether the unweighted choice
 understates minority-class (Reset-Both / Reset-Server) performance
 (reviewer concern: C7 / D9 in the round-2 audit).
 
-Pipeline matches 05_q1_validation_extensions.py. Event-level CSV is
-controlled-access and auto-located (project root, cwd, then repo).
+Pipeline matches 05_q1_validation_extensions.py. The event-level CSV is
+controlled-access and must be passed explicitly with --data.
 """
 from __future__ import annotations
 
@@ -27,8 +27,6 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = REPO_ROOT.parent
-REL = Path("data/processed/threat_five_class.csv")
 
 CORE_FEATURES = [
     "Threat/Content Type", "Application", "Source Zone", "Destination Zone",
@@ -47,13 +45,11 @@ FEATURE_SETS = {
 }
 
 
-def resolve_data(explicit):
-    cands = ([Path(explicit)] if explicit else []) + [Path.cwd()/REL, PROJECT_ROOT/REL, REPO_ROOT/REL]
-    for c in cands:
-        if c.is_file():
-            return c
-    raise SystemExit("threat_five_class.csv not found (controlled-access). Pass --data <path>.\nTried:\n  " +
-                     "\n  ".join(str(c) for c in cands))
+def resolve_data(explicit: Path) -> Path:
+    candidate = explicit.expanduser()
+    if candidate.is_file():
+        return candidate
+    raise SystemExit("Controlled processed CSV not found. Pass --data <path>.")
 
 
 def build_pipeline(features, seed):
@@ -79,7 +75,7 @@ def inverse_freq_weights(y):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--data", type=Path, default=None)
+    p.add_argument("--data", type=Path, required=True)
     p.add_argument("--outdir", type=Path, default=REPO_ROOT / "results/q1_audit_revision")
     p.add_argument("--seed", type=int, default=42)
     args = p.parse_args()

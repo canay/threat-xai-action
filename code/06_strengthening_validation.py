@@ -1,4 +1,4 @@
-"""JISA-oriented strengthening checks for the firewall action manuscript.
+"""Strengthening checks for the firewall action manuscript.
 
 This script adds three reviewer-facing validation layers:
 

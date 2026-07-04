@@ -7,11 +7,9 @@ for the rare reset classes (Reset-Both, Reset-Server). The preprocessing and
 XGBoost configuration match 05_q1_validation_extensions.py exactly, so seed 42
 reproduces the selected-model core result reported in the manuscript.
 
-The event-level CSV (threat_five_class.csv) is controlled-access and is NOT in
-the public repository. The script auto-locates it: it looks under the project
-root (the parent of this repository), then the current directory, then the
-repository. You can also pass --data explicitly. Results are written to the
-repository's results/q1_audit_revision/ regardless of the current directory.
+The event-level CSV is controlled-access and is NOT in the public repository.
+Pass it explicitly with --data. Results are written to the repository's
+results/q1_audit_revision/ unless --outdir is provided.
 """
 from __future__ import annotations
 
@@ -28,9 +26,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
-REPO_ROOT = Path(__file__).resolve().parent.parent      # github-threat-xai-action/
-PROJECT_ROOT = REPO_ROOT.parent                          # fw1_threat_xai_action/
-REL = Path("data/processed/threat_five_class.csv")
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 CORE_FEATURES = [
     "Threat/Content Type", "Application", "Source Zone", "Destination Zone",
@@ -49,19 +45,12 @@ FEATURE_SETS = {
 }
 
 
-def resolve_data(explicit: Path | None) -> Path:
-    candidates = []
-    if explicit is not None:
-        candidates.append(Path(explicit))
-    candidates += [Path.cwd() / REL, PROJECT_ROOT / REL, REPO_ROOT / REL]
-    for c in candidates:
-        if c.is_file():
-            return c
-    tried = "\n  ".join(str(c) for c in candidates)
+def resolve_data(explicit: Path) -> Path:
+    candidate = explicit.expanduser()
+    if candidate.is_file():
+        return candidate
     raise SystemExit(
-        "Could not find the event-level dataset 'threat_five_class.csv'.\n"
-        "It is controlled-access and not in the public repo. Tried:\n  " + tried +
-        "\nPass the path explicitly, e.g.:\n"
+        "Could not find the controlled event-level dataset. Pass the path explicitly, e.g.:\n"
         "  python code/12_repeated_seed_robustness.py --data /path/to/threat_five_class.csv"
     )
 
@@ -89,8 +78,7 @@ def build_pipeline(features, seed):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--data", type=Path, default=None,
-                   help="Path to threat_five_class.csv (auto-located if omitted).")
+    p.add_argument("--data", type=Path, required=True, help="Path to the controlled processed CSV.")
     p.add_argument("--outdir", type=Path, default=REPO_ROOT / "results/q1_audit_revision")
     p.add_argument("--seeds", type=int, nargs="+", default=list(range(42, 52)))
     args = p.parse_args()
