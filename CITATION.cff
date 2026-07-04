@@ -1,5 +1,5 @@
 ﻿cff-version: 1.2.0
-title: "Auditing Policy-Conditioned Firewall Enforcement: A Leakage-Aware and Explainable Evaluation Protocol for Enterprise Threat Logs"
+title: "FIRE-AUDIT: Leakage-Aware Firewall-Action Reconstruction and Explainable Audit for Enterprise Network Logs"
 message: "If you use this reproducibility package, please cite the associated paper and this repository."
 type: software
 authors:

@@ -10,6 +10,8 @@ data/processed/*.csv
 !data/processed/README.md
 !data/processed/schema.csv
 !data/processed/synthetic_schema_example.csv
+!data/processed/public_anonymized_sample_1000.csv
+results/public_sample_smoke/
 manuscript/
 docs/
 env/

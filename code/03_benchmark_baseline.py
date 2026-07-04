@@ -74,9 +74,10 @@ def load_dataset(
     sample_per_class: int | None,
     random_state: int,
     exclude_features: set[str],
+    data_override: Path | None = None,
 ) -> tuple[pd.DataFrame, pd.Series]:
     spec = DATASETS[name]
-    path = spec["path"]
+    path = data_override if data_override is not None else spec["path"]
     target_col = spec["target"]
     df = pd.read_csv(path, low_memory=False)
     if sample_per_class is not None:
@@ -260,10 +261,23 @@ def main() -> None:
     parser.add_argument("--exclude-features", default="", help="Comma-separated feature names to drop")
     parser.add_argument("--tag", default="", help="Extra suffix for output file names")
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument(
+        "--data-override",
+        type=Path,
+        default=None,
+        help="Optional CSV path used instead of the default dataset path, useful for public sample smoke tests.",
+    )
     args = parser.parse_args()
 
     exclude_features = {item.strip() for item in args.exclude_features.split(",") if item.strip()}
-    X, y_text = load_dataset(args.dataset, args.feature_set, args.sample_per_class, args.random_state, exclude_features)
+    X, y_text = load_dataset(
+        args.dataset,
+        args.feature_set,
+        args.sample_per_class,
+        args.random_state,
+        exclude_features,
+        args.data_override,
+    )
     encoder = LabelEncoder()
     y = encoder.fit_transform(y_text)
     labels = list(encoder.classes_)
@@ -313,6 +327,7 @@ def main() -> None:
         "dataset": args.dataset,
         "feature_set": args.feature_set,
         "sample_per_class": args.sample_per_class,
+        "data_override": str(args.data_override) if args.data_override else None,
         "tag": args.tag,
         "exclude_features": sorted(exclude_features),
         "run_timing": {

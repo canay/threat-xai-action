@@ -1,0 +1,61 @@
+{
+  "purpose": "public smoke-test sample; not used for reported manuscript metrics",
+  "source_path": "data\\processed\\threat_five_class.csv",
+  "source_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "output_path": "github-threat-xai-action\\data\\processed\\public_anonymized_sample_1000.csv",
+  "output_sha256": "52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08",
+  "seed": 20260701,
+  "rows": 1000,
+  "header_columns": [
+    "target",
+    "raw_action",
+    "Receive Time",
+    "Generate Time",
+    "High Res Timestamp",
+    "Type",
+    "Threat/Content Type",
+    "Application",
+    "Source Zone",
+    "Destination Zone",
+    "Inbound Interface",
+    "Outbound Interface",
+    "IP Protocol",
+    "Source Port",
+    "Destination Port",
+    "Source Country",
+    "Destination Country",
+    "Threat/Content Name",
+    "Category",
+    "Severity",
+    "Direction",
+    "Subcategory of app",
+    "Category of app",
+    "Technology of app",
+    "Risk of app",
+    "SaaS of app",
+    "Rule"
+  ],
+  "source_class_counts": {
+    "Deny": 10187,
+    "Drop": 160788,
+    "Reset-Server": 776,
+    "Reset-Both": 2903,
+    "Allow": 2502
+  },
+  "sample_class_counts": {
+    "Drop": 731,
+    "Allow": 61,
+    "Deny": 93,
+    "Reset-Both": 62,
+    "Reset-Server": 53
+  },
+  "anonymization": {
+    "target": "kept to preserve five-class script behavior",
+    "raw_action": "replaced with a constant redacted token",
+    "timestamps": "replaced with synthetic sequential timestamps on 2026-01-01",
+    "event_fields": "mapped within each column to stable generic codes such as application_001",
+    "rule": "mapped to generic rule_context codes; raw policy names are not released",
+    "row_identifiers": "no source row id or original order identifier is released; sampled rows are shuffled before synthetic timestamps are assigned"
+  },
+  "release_boundary": "This sample is suitable for schema inspection and smoke tests only. It does not reproduce the reported manuscript metrics."
+}
