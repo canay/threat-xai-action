@@ -9,7 +9,7 @@ NOT applicable; this run exercises P2 core reconstruction, the duplicate-aware g
 preprocessing pipeline as the primary Palo Alto experiments (script 03_benchmark_baseline.py).
 """
 from __future__ import annotations
-import json, platform, time
+import json, os, platform, sys, time
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -22,7 +22,12 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from sklearn.tree import DecisionTreeClassifier
 
 SEED = 42
-CSV = "/home/ubuntu/uci_leaf/log2.csv"
+# Public UCI Internet Firewall dataset (log2.csv). Download from
+# https://archive.ics.uci.edu/dataset/542/internet+firewall+data and place it at
+# data/uci_internet_firewall/log2.csv, or pass the CSV path as the first CLI argument.
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CSV = sys.argv[1] if len(sys.argv) > 1 else os.path.join(_ROOT, "data", "uci_internet_firewall", "log2.csv")
+OUT = os.path.join(_ROOT, "results", "uci_leaf_instantiation", "uci_leaf_results.json")
 TARGET = "Action"
 
 def model_specs(rs):
@@ -113,8 +118,9 @@ def main():
                "holdout": holdout, "xgb_per_class": perclass, "xgb_confusion": cm, "cv_macro_f1": cv,
                "duplicate_row_fraction": dup_frac, "grouped_macro_f1": grouped,
                "grouped_median": float(np.median(grouped)), "majority_baseline": maj_row}
-    open("/home/ubuntu/uci_leaf/uci_leaf_results.json","w").write(json.dumps(payload, indent=2))
-    print("WROTE /home/ubuntu/uci_leaf/uci_leaf_results.json")
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    open(OUT, "w").write(json.dumps(payload, indent=2))
+    print("WROTE", OUT)
 
 if __name__ == "__main__":
     t=time.perf_counter(); main(); print("wall_seconds", round(time.perf_counter()-t,1))
