@@ -2,7 +2,7 @@
 
 Public reproducibility artifact for the manuscript:
 
-**LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement**
+**LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement**
 
 Short protocol/artifact name:
 
