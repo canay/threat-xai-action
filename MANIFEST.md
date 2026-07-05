@@ -4,7 +4,7 @@ Artifact short name: `threat-xai-action`
 
 Repository: `https://github.com/canay/threat-xai-action`
 
-Manuscript: "LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement"
+Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
 
 ## Public Contents
 

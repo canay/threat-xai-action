@@ -1,5 +1,5 @@
 ﻿cff-version: 1.2.0
-title: "LEAF: A Leakage-Aware, Explainable Protocol for Auditing Policy-Conditioned Firewall Enforcement"
+title: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
 message: "If you use this reproducibility package, please cite the associated paper and this repository."
 type: software
 authors:
