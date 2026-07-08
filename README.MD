@@ -218,6 +218,7 @@ Round-9 revision experiments:
 - `classweight_sensitivity.csv`: adding inverse-frequency sample weights to XGBoost changes stratified macro-F1 by at most 0.0008 (core 0.9976 to 0.9984; no-threat-descriptors 0.9906 to 0.9907) and slightly improves rare-class balanced accuracy, so the unweighted selection does not understate minority performance.
 - `sourceport_nearduplicate_ablation.csv`: `Source Port` is high-cardinality (10,345 distinct); grouping records by their signature excluding `Source Port` (which collapses 14,678 signature groups and raises the duplicate-row fraction from 0.854 to 0.923) still yields a median core macro-F1 of 0.9932 (range 0.924--0.997), so the reconstruction does not depend on a burst-level source-port pseudo-identifier.
 - `forward_chaining_chronological.csv`: expanding-window chronological folds (train earliest 60/70/80/90 percent, test the following 10 percent) show that within-day temporal performance is cutpoint-dependent rather than a single value, consistent with the class-mix shift documented for the 80/20 cut.
+- `category_code_order_sensitivity_summary.csv`: five random permutations of every categorical feature's training category-to-code map change selected-model macro-F1 by at most 0.0008 in the core setting and 0.0040 without threat descriptors, so the stratified selected-model conclusions are not driven by one arbitrary ordinal code assignment.
 
 ## Experimental Environment
 
@@ -333,6 +334,7 @@ Run the round-9 revision experiments (class-weight sensitivity, source-port near
 python code/13_classweight_sensitivity.py --data data/processed/threat_five_class.csv
 python code/14_sourceport_nearduplicate_ablation.py --data data/processed/threat_five_class.csv
 python code/15_forward_chaining_chronological.py --data data/processed/threat_five_class.csv
+python code/17_category_code_order_sensitivity.py --data data/processed/threat_five_class.csv
 ```
 
 ## Submission And Public Release Checklist

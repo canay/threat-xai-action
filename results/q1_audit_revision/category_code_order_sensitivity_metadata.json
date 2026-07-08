@@ -1,0 +1,69 @@
+{
+  "script": "code/17_category_code_order_sensitivity.py",
+  "data_path": "data\\processed\\threat_five_class.csv",
+  "rows": 177156,
+  "seed": 42,
+  "map_seeds": [
+    20260708,
+    20260709,
+    20260710,
+    20260711,
+    20260712
+  ],
+  "feature_sets": {
+    "core": [
+      "Threat/Content Type",
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Threat/Content Name",
+      "Category",
+      "Severity",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ],
+    "no_threat_descriptors": [
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Category",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ]
+  },
+  "model": {
+    "family": "XGBoost",
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.08,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "tree_method": "hist"
+  },
+  "outputs": [
+    "github-threat-xai-action\\results\\q1_audit_revision\\category_code_order_sensitivity.csv",
+    "github-threat-xai-action\\results\\q1_audit_revision\\category_code_order_sensitivity_summary.csv"
+  ]
+}
