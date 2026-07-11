@@ -222,8 +222,15 @@ def evaluate_split(
 
 
 def chronological_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, pd.Timestamp, pd.Timestamp]:
-    ordered = df.sort_values("Generate Time Parsed").index.to_numpy()
-    cut = int(len(ordered) * 0.8)
+    ordered = df.sort_values("Generate Time Parsed", kind="mergesort").index.to_numpy()
+    nominal_cut = int(len(ordered) * 0.8)
+    boundary_time = df.loc[ordered[nominal_cut], "Generate Time Parsed"]
+    boundary_positions = np.flatnonzero(
+        df.loc[ordered, "Generate Time Parsed"].to_numpy() == boundary_time.to_datetime64()
+    )
+    candidates = [int(boundary_positions[0]), int(boundary_positions[-1] + 1)]
+    candidates = [candidate for candidate in candidates if 0 < candidate < len(ordered)]
+    cut = min(candidates, key=lambda candidate: (abs(candidate - nominal_cut), candidate))
     return ordered[:cut], ordered[cut:], df.loc[ordered[:cut], "Generate Time Parsed"].max(), df.loc[ordered[cut:], "Generate Time Parsed"].min()
 
 
@@ -257,28 +264,31 @@ def shap_stability(df: pd.DataFrame, encoder: LabelEncoder, outdir: Path, seed: 
     baseline_values = None
     baseline_top = None
     rows = []
+    # Preserve the fitted multiclass vector intercept and let SHAP 0.51 parse
+    # it directly; changing Python built-ins or base_score changes semantics.
+    explainer = shap.TreeExplainer(
+        model,
+        data=None,
+        feature_perturbation="tree_path_dependent",
+        model_output="raw",
+    )
     for sample_seed in [11, 23, 42, 71, 97]:
-        sampled = (
-            test_df.assign(_encoded_target=encoder.transform(test_df["target"].astype(str)))
-            .groupby("_encoded_target", group_keys=False)
-            .apply(lambda part: part.sample(min(len(part), max(1, sample_size // len(labels))), random_state=sample_seed))
+        sampling_frame = test_df.assign(
+            _encoded_target=encoder.transform(test_df["target"].astype(str))
+        )
+        sampled = pd.concat(
+            [
+                part.sample(
+                    min(len(part), max(1, sample_size // len(labels))),
+                    random_state=sample_seed,
+                )
+                for _, part in sampling_frame.groupby("_encoded_target", sort=True)
+            ],
+            axis=0,
         )
         sample_positions = test_df.index.get_indexer(sampled.index)
         x_sample = transformed_test[sample_positions]
-        import shap.explainers._tree
-        _orig_float = float
-        def _patched_float(val):
-            if isinstance(val, str) and val.startswith('['):
-                return 0.5
-            return _orig_float(val)
-        
-        try:
-            builtins = __import__('builtins')
-            builtins.float = _patched_float
-            explainer = shap.TreeExplainer(model)
-        finally:
-            builtins.float = _orig_float
-        shap_values = explainer.shap_values(x_sample)
+        shap_values = explainer.shap_values(x_sample, check_additivity=True)
         shap_array = np.asarray(shap_values)
         if shap_array.ndim == 3 and shap_array.shape[0] == len(labels):
             shap_array = np.moveaxis(shap_array, 0, 2)
@@ -414,7 +424,13 @@ def main() -> None:
         "chronological_split": {
             "train_until": str(chrono_train_end),
             "test_from": str(chrono_test_start),
-            "note": "Single-day chronological holdout; this is a temporal stress check, not cross-period validation.",
+            "nominal_train_fraction": 0.8,
+            "actual_train_rows": int(len(chrono_train)),
+            "actual_test_rows": int(len(chrono_test)),
+            "timestamp_resolution": "one second",
+            "timezone": "device-local representation; source export provides no offset",
+            "tie_policy": "stable ordering; nominal cut moved to nearest boundary between distinct timestamps; earlier boundary wins an exact distance tie",
+            "note": "Within-day chronological holdout; this is a temporal stress check, not cross-period validation.",
         },
         "labels": labels,
         "feature_sets": FEATURE_SETS,

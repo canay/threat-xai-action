@@ -1,0 +1,47 @@
+{
+  "renderer": "19_render_manuscript_figures.py",
+  "renderer_version": "1.0.1",
+  "inputs": {
+    "processing_manifest": {
+      "basename": "threat_dataset_processing_manifest.json",
+      "sha256": "77CA3EFC384F7A62CAC457160303BFCDFCDD1B273144BFDE118146C3C7EE8E5F"
+    },
+    "core_holdout": {
+      "basename": "baseline_benchmark_threat_core_baseline.csv",
+      "sha256": "F87DDB92140B0BB4805114E6D9BC6FEEB5071AE94E04D5924CA9EC5645F43CE5"
+    },
+    "no_threat_holdout": {
+      "basename": "baseline_benchmark_threat_core_no_threat_descriptors.csv",
+      "sha256": "EE77EBD469C6F8A6840A3E019D443F8289FAB82E7A1220109C93E624BFC615A0"
+    },
+    "core_cv": {
+      "basename": "baseline_benchmark_threat_core_top_cv_cv_summary.csv",
+      "sha256": "F0F3A02932439F4DA67CD9C5809CCD462FCED621E8FEFC61A3F1862C18E47E1E"
+    },
+    "no_threat_cv": {
+      "basename": "baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv",
+      "sha256": "C8822699D26C4836F0B106237A9D3334C99B80C1C382AA6BAB82643573030C10"
+    },
+    "strengthening": {
+      "basename": "strengthening_summary.csv",
+      "sha256": "4176295264694F23CC3D392E558A63A6A23F526BDF10AEAFACB66D7E27E2F3D0"
+    }
+  },
+  "checks": {
+    "class_count_total": 177156,
+    "holdout_models": 6,
+    "cv_models": 4,
+    "feature_group_rows": 12
+  },
+  "outputs": {
+    "fig_class_distribution.png": {
+      "sha256": "03E7FFC8B4E404C06E89C11A27C9D00D510EDDD67F528168F920822FC5F7590F"
+    },
+    "fig_results_ablation_cv_combined.png": {
+      "sha256": "341FBB98E5DDE19CEEC0DADB1CFEF95A42B1C9C92CFDD193F080EE0875351F47"
+    },
+    "fig_feature_group_validation.png": {
+      "sha256": "128F2591ECF1AD0C448B1ED024B8BD0FFC1458046199A5316D897B5C83D8CBBC"
+    }
+  }
+}

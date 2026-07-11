@@ -1,116 +1,116 @@
-run_id,feature_set,context_column,context_value,true,predicted,count
-core__holdout_Source Zone=LAN,core,Source Zone,LAN,Deny,Deny,4257
-core__holdout_Source Zone=LAN,core,Source Zone,LAN,Drop,Drop,482
-core__holdout_Source Zone=LAN,core,Source Zone,LAN,Drop,Reset-Server,37
-core__holdout_Source Zone=LAN,core,Source Zone,LAN,Reset-Both,Drop,2463
-core__holdout_Source Zone=LAN,core,Source Zone,LAN,Reset-Both,Reset-Server,205
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Deny,Allow,255
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Deny,Deny,4002
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Drop,Allow,482
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Drop,Reset-Server,37
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Reset-Both,Allow,2463
-no_threat_descriptors__holdout_Source Zone=LAN,no_threat_descriptors,Source Zone,LAN,Reset-Both,Reset-Server,205
-core__holdout_Source Zone=DMZ,core,Source Zone,DMZ,Deny,Deny,5424
-core__holdout_Source Zone=DMZ,core,Source Zone,DMZ,Deny,Reset-Both,506
-core__holdout_Source Zone=DMZ,core,Source Zone,DMZ,Drop,Reset-Both,23
-no_threat_descriptors__holdout_Source Zone=DMZ,no_threat_descriptors,Source Zone,DMZ,Deny,Deny,5930
-no_threat_descriptors__holdout_Source Zone=DMZ,no_threat_descriptors,Source Zone,DMZ,Drop,Reset-Both,23
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Allow,Allow,282
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Deny,Deny,5930
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Drop,Allow,159994
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Drop,Drop,24
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Drop,Reset-Server,37
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Reset-Both,Deny,580
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Reset-Both,Reset-Both,1883
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Reset-Both,Reset-Server,205
-core__holdout_Destination Zone=WAN,core,Destination Zone,WAN,Reset-Server,Reset-Server,1
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Allow,Allow,282
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Deny,Deny,5930
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Drop,Allow,60483
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Drop,Drop,83081
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Drop,Reset-Both,72
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Drop,Reset-Server,16419
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Reset-Both,Allow,2487
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Reset-Both,Reset-Server,181
-no_threat_descriptors__holdout_Destination Zone=WAN,no_threat_descriptors,Destination Zone,WAN,Reset-Server,Reset-Server,1
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Allow,Allow,2195
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Deny,Deny,4257
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Drop,Allow,16
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Drop,Drop,119
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Drop,Reset-Both,466
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Reset-Both,Reset-Both,82
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Reset-Both,Reset-Server,20
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Reset-Server,Drop,2
-core__holdout_Destination Zone=DMZ,core,Destination Zone,DMZ,Reset-Server,Reset-Server,298
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Allow,Allow,2195
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Deny,Allow,2466
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Deny,Deny,1791
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Drop,Allow,482
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Drop,Deny,1
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Drop,Drop,85
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Drop,Reset-Server,33
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Both,Drop,2
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Both,Reset-Both,77
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Both,Reset-Server,23
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Server,Drop,19
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Server,Reset-Both,2
-no_threat_descriptors__holdout_Destination Zone=DMZ,no_threat_descriptors,Destination Zone,DMZ,Reset-Server,Reset-Server,279
-core__holdout_Category of app=general-internet,core,Category of app,general-internet,Drop,Drop,224
-core__holdout_Category of app=general-internet,core,Category of app,general-internet,Drop,Reset-Both,37
-core__holdout_Category of app=general-internet,core,Category of app,general-internet,Reset-Both,Drop,18
-core__holdout_Category of app=general-internet,core,Category of app,general-internet,Reset-Both,Reset-Both,218
-core__holdout_Category of app=general-internet,core,Category of app,general-internet,Reset-Server,Reset-Both,775
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Drop,Allow,17
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Drop,Drop,29
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Drop,Reset-Both,215
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Reset-Both,Allow,18
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Reset-Both,Reset-Both,218
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Reset-Server,Drop,33
-no_threat_descriptors__holdout_Category of app=general-internet,no_threat_descriptors,Category of app,general-internet,Reset-Server,Reset-Both,742
-core__holdout_Subcategory of app=ip-protocol,core,Subcategory of app,ip-protocol,Reset-Both,Drop,2463
-no_threat_descriptors__holdout_Subcategory of app=ip-protocol,no_threat_descriptors,Subcategory of app,ip-protocol,Reset-Both,Allow,317
-no_threat_descriptors__holdout_Subcategory of app=ip-protocol,no_threat_descriptors,Subcategory of app,ip-protocol,Reset-Both,Drop,2146
-core__holdout_Subcategory of app=internet-utility,core,Subcategory of app,internet-utility,Drop,Drop,224
-core__holdout_Subcategory of app=internet-utility,core,Subcategory of app,internet-utility,Drop,Reset-Both,37
-core__holdout_Subcategory of app=internet-utility,core,Subcategory of app,internet-utility,Reset-Both,Drop,18
-core__holdout_Subcategory of app=internet-utility,core,Subcategory of app,internet-utility,Reset-Both,Reset-Both,218
-core__holdout_Subcategory of app=internet-utility,core,Subcategory of app,internet-utility,Reset-Server,Reset-Both,775
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Drop,Allow,17
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Drop,Drop,29
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Drop,Reset-Both,215
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Reset-Both,Allow,18
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Reset-Both,Reset-Both,218
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Reset-Server,Drop,33
-no_threat_descriptors__holdout_Subcategory of app=internet-utility,no_threat_descriptors,Subcategory of app,internet-utility,Reset-Server,Reset-Both,742
-core__holdout_Application=json-rpc,core,Application,json-rpc,Reset-Both,Drop,2463
-no_threat_descriptors__holdout_Application=json-rpc,no_threat_descriptors,Application,json-rpc,Reset-Both,Allow,317
-no_threat_descriptors__holdout_Application=json-rpc,no_threat_descriptors,Application,json-rpc,Reset-Both,Drop,2146
-core__holdout_Application=web-browsing,core,Application,web-browsing,Drop,Drop,240
-core__holdout_Application=web-browsing,core,Application,web-browsing,Drop,Reset-Both,20
-core__holdout_Application=web-browsing,core,Application,web-browsing,Reset-Both,Drop,236
-core__holdout_Application=web-browsing,core,Application,web-browsing,Reset-Server,Drop,775
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Drop,Allow,17
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Drop,Drop,223
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Drop,Reset-Both,20
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Reset-Both,Allow,18
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Reset-Both,Drop,30
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Reset-Both,Reset-Both,188
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Reset-Server,Drop,770
-no_threat_descriptors__holdout_Application=web-browsing,no_threat_descriptors,Application,web-browsing,Reset-Server,Reset-Both,5
-core__holdout_Threat/Content Type=packet,core,Threat/Content Type,packet,Drop,Drop,159989
-core__holdout_Threat/Content Type=packet,core,Threat/Content Type,packet,Drop,Reset-Both,3
-no_threat_descriptors__holdout_Threat/Content Type=packet,no_threat_descriptors,Threat/Content Type,packet,Drop,Drop,60976
-no_threat_descriptors__holdout_Threat/Content Type=packet,no_threat_descriptors,Threat/Content Type,packet,Drop,Reset-Both,38436
-no_threat_descriptors__holdout_Threat/Content Type=packet,no_threat_descriptors,Threat/Content Type,packet,Drop,Reset-Server,60580
-core__holdout_Threat/Content Type=vulnerability,core,Threat/Content Type,vulnerability,Drop,Allow,251
-core__holdout_Threat/Content Type=vulnerability,core,Threat/Content Type,vulnerability,Drop,Deny,1
-core__holdout_Threat/Content Type=vulnerability,core,Threat/Content Type,vulnerability,Reset-Both,Allow,440
-core__holdout_Threat/Content Type=vulnerability,core,Threat/Content Type,vulnerability,Reset-Server,Allow,772
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Drop,Deny,1
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Drop,Drop,62
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Drop,Reset-Server,189
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Reset-Both,Allow,18
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Reset-Both,Drop,407
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Reset-Both,Reset-Server,15
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Reset-Server,Drop,498
-no_threat_descriptors__holdout_Threat/Content Type=vulnerability,no_threat_descriptors,Threat/Content Type,vulnerability,Reset-Server,Reset-Server,274
+"run_id","feature_set","context_column","context_value","true","predicted","count"
+"core__holdout_source_zone_ctx_02","core","Source Zone","source_zone_ctx_02","Deny","Deny","4257"
+"core__holdout_source_zone_ctx_02","core","Source Zone","source_zone_ctx_02","Drop","Drop","482"
+"core__holdout_source_zone_ctx_02","core","Source Zone","source_zone_ctx_02","Drop","Reset-Server","37"
+"core__holdout_source_zone_ctx_02","core","Source Zone","source_zone_ctx_02","Reset-Both","Drop","2463"
+"core__holdout_source_zone_ctx_02","core","Source Zone","source_zone_ctx_02","Reset-Both","Reset-Server","205"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Deny","Allow","255"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Deny","Deny","4002"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Drop","Allow","482"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Drop","Reset-Server","37"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Reset-Both","Allow","2463"
+"no_threat_descriptors__holdout_source_zone_ctx_02","no_threat_descriptors","Source Zone","source_zone_ctx_02","Reset-Both","Reset-Server","205"
+"core__holdout_source_zone_ctx_03","core","Source Zone","source_zone_ctx_03","Deny","Deny","5424"
+"core__holdout_source_zone_ctx_03","core","Source Zone","source_zone_ctx_03","Deny","Reset-Both","506"
+"core__holdout_source_zone_ctx_03","core","Source Zone","source_zone_ctx_03","Drop","Reset-Both","23"
+"no_threat_descriptors__holdout_source_zone_ctx_03","no_threat_descriptors","Source Zone","source_zone_ctx_03","Deny","Deny","5930"
+"no_threat_descriptors__holdout_source_zone_ctx_03","no_threat_descriptors","Source Zone","source_zone_ctx_03","Drop","Reset-Both","23"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Allow","Allow","282"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Deny","Deny","5930"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Drop","Allow","159994"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Drop","Drop","24"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Drop","Reset-Server","37"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Reset-Both","Deny","580"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Reset-Both","Reset-Both","1883"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Reset-Both","Reset-Server","205"
+"core__holdout_destination_zone_ctx_01","core","Destination Zone","destination_zone_ctx_01","Reset-Server","Reset-Server","1"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Allow","Allow","282"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Deny","Deny","5930"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Drop","Allow","60483"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Drop","Drop","83081"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Drop","Reset-Both","72"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Drop","Reset-Server","16419"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Reset-Both","Allow","2487"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Reset-Both","Reset-Server","181"
+"no_threat_descriptors__holdout_destination_zone_ctx_01","no_threat_descriptors","Destination Zone","destination_zone_ctx_01","Reset-Server","Reset-Server","1"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Allow","Allow","2195"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Deny","Deny","4257"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Drop","Allow","16"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Drop","Drop","119"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Drop","Reset-Both","466"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Reset-Both","Reset-Both","82"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Reset-Both","Reset-Server","20"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Reset-Server","Drop","2"
+"core__holdout_destination_zone_ctx_02","core","Destination Zone","destination_zone_ctx_02","Reset-Server","Reset-Server","298"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Allow","Allow","2195"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Deny","Allow","2466"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Deny","Deny","1791"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Drop","Allow","482"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Drop","Deny","1"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Drop","Drop","85"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Drop","Reset-Server","33"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Both","Drop","2"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Both","Reset-Both","77"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Both","Reset-Server","23"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Server","Drop","19"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Server","Reset-Both","2"
+"no_threat_descriptors__holdout_destination_zone_ctx_02","no_threat_descriptors","Destination Zone","destination_zone_ctx_02","Reset-Server","Reset-Server","279"
+"core__holdout_category_of_app_ctx_03","core","Category of app","category_of_app_ctx_03","Drop","Drop","224"
+"core__holdout_category_of_app_ctx_03","core","Category of app","category_of_app_ctx_03","Drop","Reset-Both","37"
+"core__holdout_category_of_app_ctx_03","core","Category of app","category_of_app_ctx_03","Reset-Both","Drop","18"
+"core__holdout_category_of_app_ctx_03","core","Category of app","category_of_app_ctx_03","Reset-Both","Reset-Both","218"
+"core__holdout_category_of_app_ctx_03","core","Category of app","category_of_app_ctx_03","Reset-Server","Reset-Both","775"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Drop","Allow","17"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Drop","Drop","29"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Drop","Reset-Both","215"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Reset-Both","Allow","18"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Reset-Both","Reset-Both","218"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Reset-Server","Drop","33"
+"no_threat_descriptors__holdout_category_of_app_ctx_03","no_threat_descriptors","Category of app","category_of_app_ctx_03","Reset-Server","Reset-Both","742"
+"core__holdout_subcategory_of_app_ctx_03","core","Subcategory of app","subcategory_of_app_ctx_03","Reset-Both","Drop","2463"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_03","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_03","Reset-Both","Allow","317"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_03","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_03","Reset-Both","Drop","2146"
+"core__holdout_subcategory_of_app_ctx_04","core","Subcategory of app","subcategory_of_app_ctx_04","Drop","Drop","224"
+"core__holdout_subcategory_of_app_ctx_04","core","Subcategory of app","subcategory_of_app_ctx_04","Drop","Reset-Both","37"
+"core__holdout_subcategory_of_app_ctx_04","core","Subcategory of app","subcategory_of_app_ctx_04","Reset-Both","Drop","18"
+"core__holdout_subcategory_of_app_ctx_04","core","Subcategory of app","subcategory_of_app_ctx_04","Reset-Both","Reset-Both","218"
+"core__holdout_subcategory_of_app_ctx_04","core","Subcategory of app","subcategory_of_app_ctx_04","Reset-Server","Reset-Both","775"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Drop","Allow","17"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Drop","Drop","29"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Drop","Reset-Both","215"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Reset-Both","Allow","18"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Reset-Both","Reset-Both","218"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Reset-Server","Drop","33"
+"no_threat_descriptors__holdout_subcategory_of_app_ctx_04","no_threat_descriptors","Subcategory of app","subcategory_of_app_ctx_04","Reset-Server","Reset-Both","742"
+"core__holdout_application_ctx_03","core","Application","application_ctx_03","Reset-Both","Drop","2463"
+"no_threat_descriptors__holdout_application_ctx_03","no_threat_descriptors","Application","application_ctx_03","Reset-Both","Allow","317"
+"no_threat_descriptors__holdout_application_ctx_03","no_threat_descriptors","Application","application_ctx_03","Reset-Both","Drop","2146"
+"core__holdout_application_ctx_04","core","Application","application_ctx_04","Drop","Drop","240"
+"core__holdout_application_ctx_04","core","Application","application_ctx_04","Drop","Reset-Both","20"
+"core__holdout_application_ctx_04","core","Application","application_ctx_04","Reset-Both","Drop","236"
+"core__holdout_application_ctx_04","core","Application","application_ctx_04","Reset-Server","Drop","775"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Drop","Allow","17"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Drop","Drop","223"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Drop","Reset-Both","20"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Reset-Both","Allow","18"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Reset-Both","Drop","30"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Reset-Both","Reset-Both","188"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Reset-Server","Drop","770"
+"no_threat_descriptors__holdout_application_ctx_04","no_threat_descriptors","Application","application_ctx_04","Reset-Server","Reset-Both","5"
+"core__holdout_threat_content_type_ctx_01","core","Threat/Content Type","threat_content_type_ctx_01","Drop","Drop","159989"
+"core__holdout_threat_content_type_ctx_01","core","Threat/Content Type","threat_content_type_ctx_01","Drop","Reset-Both","3"
+"no_threat_descriptors__holdout_threat_content_type_ctx_01","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_01","Drop","Drop","60976"
+"no_threat_descriptors__holdout_threat_content_type_ctx_01","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_01","Drop","Reset-Both","38436"
+"no_threat_descriptors__holdout_threat_content_type_ctx_01","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_01","Drop","Reset-Server","60580"
+"core__holdout_threat_content_type_ctx_04","core","Threat/Content Type","threat_content_type_ctx_04","Drop","Allow","251"
+"core__holdout_threat_content_type_ctx_04","core","Threat/Content Type","threat_content_type_ctx_04","Drop","Deny","1"
+"core__holdout_threat_content_type_ctx_04","core","Threat/Content Type","threat_content_type_ctx_04","Reset-Both","Allow","440"
+"core__holdout_threat_content_type_ctx_04","core","Threat/Content Type","threat_content_type_ctx_04","Reset-Server","Allow","772"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Drop","Deny","1"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Drop","Drop","62"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Drop","Reset-Server","189"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Reset-Both","Allow","18"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Reset-Both","Drop","407"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Reset-Both","Reset-Server","15"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Reset-Server","Drop","498"
+"no_threat_descriptors__holdout_threat_content_type_ctx_04","no_threat_descriptors","Threat/Content Type","threat_content_type_ctx_04","Reset-Server","Reset-Server","274"

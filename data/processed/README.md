@@ -2,7 +2,7 @@
 
 The full event-level processed dataset used in the manuscript is not included in this public artifact. This directory includes a 1,000-row anonymized public smoke-test sample for schema inspection and lightweight script checks.
 
-The original data were derived from institutional firewall logs and may contain privacy-sensitive, organization-specific, or security-sensitive operational context even after processing. The raw firewall exports are not redistributed. The processed event-level CSV should be shared only if the relevant institutional authority confirms that public redistribution is permitted after privacy and security review.
+The original data were derived from institutional firewall logs and may contain organization-specific or security-sensitive operational context even after processing. The calendar date, 14 May 2026, is intentionally disclosed with author approval; organization identity, topology, policy names, raw exports, and full event-level data remain protected. The processed event-level CSV should be shared only if the relevant institutional authority confirms that redistribution is permitted after privacy and security review.
 
 For local reproduction by authorized researchers, place the approved processed file at:
 
@@ -16,6 +16,15 @@ Controlled processed file identity for authorized reruns:
 - Header rows: 1
 - Size: 44,929,133 bytes
 - SHA-256: `1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724`
+
+Aggregate cohort construction:
+
+- Observation: 6 h 30 min 26 s on one high-volume weekday
+- Raw threat-log rows: 186,271
+- Excluded `alert` rows: 9,115
+- Five-class output rows: 177,156
+- Row-level deduplication: none
+- Audit: `threat_dataset_processing_manifest.json`
 
 Public anonymized smoke-test sample:
 
@@ -34,6 +43,4 @@ Public helper files in this directory:
 - `schema.csv`: expected columns and release notes.
 - `public_anonymized_sample_1000.csv`: anonymized smoke-test sample for parser and workflow checks only.
 - `public_anonymized_sample_1000.audit.json`: sample generation and anonymization audit.
-- `synthetic_schema_example.csv`: fake schema-compatible rows for inspection only.
-
-The synthetic example is not used for the reported manuscript results.
+- `threat_dataset_processing_manifest.json`: aggregate conversion counts and processed checksum.

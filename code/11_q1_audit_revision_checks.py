@@ -15,6 +15,7 @@ fitted-model output; it is not a repeated-training uncertainty estimate. Pass
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -27,6 +28,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 CORE_FEATURES = [
@@ -113,7 +122,14 @@ def parse_args() -> argparse.Namespace:
 
 def chronological_indices(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     ordered = df.sort_values(["Generate Time Parsed"], kind="mergesort").index.to_numpy()
-    cut = int(len(ordered) * 0.8)
+    nominal_cut = int(len(ordered) * 0.8)
+    boundary_time = df.loc[ordered[nominal_cut], "Generate Time Parsed"]
+    boundary_positions = np.flatnonzero(
+        df.loc[ordered, "Generate Time Parsed"].to_numpy() == boundary_time.to_datetime64()
+    )
+    candidates = [int(boundary_positions[0]), int(boundary_positions[-1] + 1)]
+    candidates = [candidate for candidate in candidates if 0 < candidate < len(ordered)]
+    cut = min(candidates, key=lambda candidate: (abs(candidate - nominal_cut), candidate))
     return ordered[:cut], ordered[cut:]
 
 
@@ -485,7 +501,8 @@ def main() -> None:
             "seed": args.seed,
             "bootstrap_iterations": args.bootstrap_iters,
             "labels": labels,
-            "xgb_ci_source": str(args.confusions),
+            "xgb_ci_source": args.confusions.name,
+            "xgb_ci_source_sha256": sha256(args.confusions),
             "note": "Confusion-only mode samples saved fixed-model confusion-cell counts and does not read controlled data.",
         }
         (args.outdir / "q1_audit_revision_metadata.json").write_text(
@@ -556,11 +573,13 @@ def main() -> None:
         xgb_metric_ci = pd.concat(metric_ci_frames, ignore_index=True)
         xgb_class_ci = pd.concat(class_ci_frames, ignore_index=True)
         xgb_source = "local_refit"
+        xgb_source_sha256 = None
     else:
         xgb_summary, xgb_metric_ci, xgb_class_ci = xgb_ci_from_saved_confusions(
             args.confusions, labels, args.seed, args.bootstrap_iters
         )
-        xgb_source = str(args.confusions)
+        xgb_source = args.confusions.name
+        xgb_source_sha256 = sha256(args.confusions)
 
     xgb_summary.to_csv(args.outdir / "xgb_fixed_model_summary.csv", index=False)
     xgb_metric_ci.to_csv(args.outdir / "xgb_fixed_model_bootstrap_ci.csv", index=False)
@@ -574,7 +593,12 @@ def main() -> None:
         "feature_sets": FEATURE_SETS,
         "context_baselines": CONTEXT_BASELINES,
         "xgb_ci_source": xgb_source,
-        "note": "Bootstrap intervals sample saved fixed-model test outputs; they do not refit models unless --fit-xgb is used.",
+        "xgb_ci_source_sha256": xgb_source_sha256,
+        "note": (
+            "With --fit-xgb, one model is fitted per split and feature set; bootstrap iterations "
+            "resample that model's fixed test predictions and do not refit the model. Without "
+            "--fit-xgb, the same fixed-prediction scope is reconstructed from saved confusions."
+        ),
     }
     (args.outdir / "q1_audit_revision_metadata.json").write_text(
         json.dumps(metadata, indent=2), encoding="utf-8"

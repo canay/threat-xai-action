@@ -1,8 +1,7 @@
 {
-  "started_at": "2026-05-24T03:36:30.452364",
-  "ended_at": "2026-05-24T03:44:48.014592",
   "wall_seconds": 497.56261759996414,
-  "data": "data\\processed\\threat_five_class.csv",
+  "data_identifier": "threat_five_class.csv",
+  "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
   "rows": 177156,
   "rule_groups": 15,
   "candidate_rule_groups": 8,

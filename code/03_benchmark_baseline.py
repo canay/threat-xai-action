@@ -249,7 +249,6 @@ def evaluate_holdout(name: str, pipe: Pipeline, X_train, X_test, y_train, y_test
 
 
 def main() -> None:
-    run_started_epoch = time.time()
     run_started_perf = time.perf_counter()
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", choices=DATASETS.keys(), default="threat")
@@ -327,12 +326,10 @@ def main() -> None:
         "dataset": args.dataset,
         "feature_set": args.feature_set,
         "sample_per_class": args.sample_per_class,
-        "data_override": str(args.data_override) if args.data_override else None,
+        "data_identifier": args.data_override.name if args.data_override else args.dataset,
         "tag": args.tag,
         "exclude_features": sorted(exclude_features),
         "run_timing": {
-            "started_epoch": run_started_epoch,
-            "ended_epoch": time.time(),
             "wall_seconds": time.perf_counter() - run_started_perf,
         },
         "runtime": {

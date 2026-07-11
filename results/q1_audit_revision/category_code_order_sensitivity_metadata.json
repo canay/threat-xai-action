@@ -1,6 +1,7 @@
 {
   "script": "code/17_category_code_order_sensitivity.py",
-  "data_path": "data\\processed\\threat_five_class.csv",
+  "data_identifier": "threat_five_class.csv",
+  "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
   "rows": 177156,
   "seed": 42,
   "map_seeds": [
@@ -10,6 +11,13 @@
     20260711,
     20260712
   ],
+  "preprocessing_contract": {
+    "categorical_imputation": "training-partition most frequent value",
+    "numeric_imputation": "training-partition median",
+    "unknown_category_code": -1,
+    "transformed_feature_order": "categorical features in manuscript order, then Source Port, Destination Port, Risk of app",
+    "controlled_factor": "training category-to-code order only"
+  },
   "feature_sets": {
     "core": [
       "Threat/Content Type",
@@ -63,7 +71,7 @@
     "tree_method": "hist"
   },
   "outputs": [
-    "github-threat-xai-action\\results\\q1_audit_revision\\category_code_order_sensitivity.csv",
-    "github-threat-xai-action\\results\\q1_audit_revision\\category_code_order_sensitivity_summary.csv"
+    "category_code_order_sensitivity.csv",
+    "category_code_order_sensitivity_summary.csv"
   ]
 }

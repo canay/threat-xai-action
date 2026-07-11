@@ -8,24 +8,26 @@ Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Condi
 
 ## Public Contents
 
-- `code/`: benchmark, validation, explainability, policy-context, review-queue, entropy, and Q1 audit revision scripts.
-- `scripts/`: paper-level helper scripts retained from the research workspace.
+- `code/`: the controlled-data conversion entry point and every benchmark, validation, explainability, policy-context, review-queue, entropy, revision, and manuscript-figure script used by the manuscript (`02`--`20`).
+- `scripts/create_public_sample.py`: the only retained helper script; it creates the privacy-audited public smoke-test sample from an authorized local copy.
 - `results/`: aggregate CSV/JSON outputs and generated explanation artifacts used for manuscript reporting.
 - `data/processed/README.md`: controlled-data access note.
 - `data/processed/schema.csv`: column-level schema and release notes.
 - `data/processed/public_anonymized_sample_1000.csv`: 1,000-row anonymized public smoke-test sample, not used for reported metrics.
 - `data/processed/public_anonymized_sample_1000.audit.json`: sample generation, checksum, class-count, and anonymization audit record.
-- `data/processed/synthetic_schema_example.csv`: small fake schema-compatible example, not used for reported results.
-- `scripts/create_public_sample.py`: reproducible helper used to create the public anonymized smoke-test sample from an authorized local copy.
+- `data/processed/threat_dataset_processing_manifest.json`: aggregate raw-to-processed step counts, class counts, observation scope, and processed-file checksum.
 - `TRACEABILITY.md`: table/figure-to-command/output mapping and controlled processed-file checksum for authorized reruns.
-- `requirements.txt`: Python dependency specification.
+- `SEED_MANIFEST.json`: explicit random seeds and resampling scope.
+- `requirements.txt`: portable minimum compatible versions.
+- `requirements-lock.txt`: exact direct packages from the submission-facing Windows x86-64 CPU rerun.
+- `requirements-lock-primary-linux-aarch64.txt`: full platform-labelled resolution from the original Linux/aarch64 run.
 - `CITATION.cff` and `LICENSE`: citation metadata and software/artifact license.
 
 ## Controlled Or Excluded Contents
 
 - Raw enterprise firewall exports are not included.
 - The full event-level processed file `data/processed/threat_five_class.csv` is not included.
-- Event-level review-queue records are not included by default.
+- Event-level review-queue records are not included. `code/09` writes aggregate outputs by default and refuses to place an optional private queue inside this repository.
 - Manuscript drafts, private review notes, credentials, and local environment files are not part of the public package.
 
 Controlled processed file identity for authorized reruns:
@@ -38,7 +40,9 @@ Controlled processed file identity for authorized reruns:
 
 ## Reproduction Contract
 
-The public package supports inspection of code, command recipes, aggregate outputs, validation summaries, traceability notes, explanation artifacts, and a 1,000-row anonymized smoke-test sample. A full rerun requires an institutionally approved copy of `data/processed/threat_five_class.csv` placed at the expected path. The public sample is suitable for schema and parser checks only and must not be used to reproduce the manuscript metrics.
+The public package supports inspection of code, command recipes, aggregate outputs, validation summaries, traceability notes, explanation artifacts, and a 1,000-row anonymized smoke-test sample. A full rerun requires an institutionally approved copy of `data/processed/threat_five_class.csv` placed at the expected path. The public sample is suitable for schema and parser checks only and must not be used to reproduce the manuscript metrics. The calendar date, 14 May 2026, is intentionally disclosed with author approval; organization identity, topology, policy names, raw exports, full event-level data, and event-level review queues remain excluded.
+
+The four submission-facing benchmark JSON files retain the canonical rerun metrics and wall times but use release-facing `tag` values that reproduce their public filenames with the commands in `README.MD`; the experiment folder preserves the byte-exact original JSON outputs and hashes.
 
 Before public archival release:
 
@@ -46,11 +50,11 @@ Before public archival release:
 2. Run the command recipes in `README.MD` against an authorized processed dataset.
 3. Confirm that aggregate outputs in `results/` match the manuscript tables and figures listed in `TRACEABILITY.md`.
 4. Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.
-5. Record the final Git commit, release tag, and optional repository DOI in this manifest.
+5. Record the final Git commit and release tag in this manifest; a repository DOI is intentionally deferred until the submission-stage Zenodo decision.
 6. Archive only the approved public package.
 
 ## Release Identifiers
 
-- Final public commit: `TO-BE-FILLED-AT-RELEASE`
-- Release tag: `TO-BE-FILLED-AT-RELEASE`
-- Repository DOI: `TO-BE-FILLED-IF-ARCHIVED`
+- Final public commit: resolve with `git rev-parse jnca-submission-r0`
+- Release tag: `jnca-submission-r0`
+- Repository DOI: `DEFERRED-PENDING-SUBMISSION-DECISION`

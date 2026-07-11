@@ -156,9 +156,9 @@ def write_audit(
 ) -> None:
     audit = {
         "purpose": "public smoke-test sample; not used for reported manuscript metrics",
-        "source_path": str(source),
+        "source_identifier": source.name,
         "source_sha256": sha256_file(source),
-        "output_path": str(output),
+        "output_identifier": output.name,
         "output_sha256": sha256_file(output),
         "seed": seed,
         "rows": sum(sample_counts.values()),

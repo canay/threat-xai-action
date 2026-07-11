@@ -5,7 +5,9 @@ inside each training partition. This script tests whether the reported
 stratified selected-model results depend on that arbitrary code order by
 holding the train/test split and XGBoost configuration fixed, then refitting the
 model after random permutations of every categorical feature's training
-category-to-code map.
+category-to-code map. Missing categorical values are imputed with the
+training-partition mode before either the reference or permuted map is fitted,
+matching the canonical selected-model preprocessing contract.
 
 The event-level CSV is controlled-access and must be passed explicitly with
 --data. Outputs are aggregate metrics only; no event-level records are written.
@@ -13,6 +15,7 @@ The event-level CSV is controlled-access and must be passed explicitly with
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -25,6 +28,14 @@ from xgboost import XGBClassifier
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 CORE_FEATURES = [
     "Threat/Content Type", "Application", "Source Zone", "Destination Zone",
@@ -43,7 +54,8 @@ FEATURE_SETS = {
     ],
 }
 
-NUMERIC_COLUMNS = {"Source Port", "Destination Port", "Risk of app"}
+NUMERIC_COLUMN_ORDER = ["Source Port", "Destination Port", "Risk of app"]
+NUMERIC_COLUMNS = set(NUMERIC_COLUMN_ORDER)
 
 
 def resolve_data(path: Path) -> Path:
@@ -87,10 +99,13 @@ def fit_category_maps(
     for col in features:
         if col in NUMERIC_COLUMNS:
             continue
-        series = train[col].astype("string").fillna("__MISSING__")
-        mode = series.mode(dropna=False)
-        fill_values[col] = str(mode.iloc[0]) if not mode.empty else "__MISSING__"
-        categories = sorted(series.unique().tolist())
+        series = train[col].astype("string")
+        mode = series.mode(dropna=True)
+        if mode.empty:
+            raise ValueError(f"Categorical feature has no observed training value: {col}")
+        fill_values[col] = str(mode.iloc[0])
+        imputed = series.fillna(fill_values[col])
+        categories = sorted(imputed.unique().tolist())
         codes = np.arange(len(categories), dtype=int)
         if variant == "permuted":
             if rng is None:
@@ -109,7 +124,12 @@ def transform(
     numeric_medians: dict[str, float],
 ) -> np.ndarray:
     columns = []
-    for col in features:
+    # Match the canonical ColumnTransformer exactly: all categorical columns
+    # in manuscript feature order, followed by numeric columns in the fixed
+    # Source Port / Destination Port / Risk of app order.
+    categorical_order = [col for col in features if col not in NUMERIC_COLUMNS]
+    numeric_order = [col for col in NUMERIC_COLUMN_ORDER if col in features]
+    for col in categorical_order + numeric_order:
         if col in NUMERIC_COLUMNS:
             values = pd.to_numeric(frame[col], errors="coerce").fillna(numeric_medians[col]).to_numpy(dtype=float)
         else:
@@ -176,7 +196,7 @@ def main() -> None:
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, default=REPO_ROOT / "results/q1_audit_revision")
     parser.add_argument("--seed", type=int, default=42, help="Train/test split and model seed.")
-    parser.add_argument("--map-seeds", type=int, nargs="+", default=list(range(20260708, 20260718)))
+    parser.add_argument("--map-seeds", type=int, nargs="+", default=list(range(20260708, 20260713)))
     args = parser.parse_args()
 
     data_path = resolve_data(args.data)
@@ -261,10 +281,18 @@ def main() -> None:
 
     metadata = {
         "script": "code/17_category_code_order_sensitivity.py",
-        "data_path": str(data_path),
+        "data_identifier": data_path.name,
+        "data_sha256": sha256(data_path),
         "rows": int(len(df)),
         "seed": args.seed,
         "map_seeds": args.map_seeds,
+        "preprocessing_contract": {
+            "categorical_imputation": "training-partition most frequent value",
+            "numeric_imputation": "training-partition median",
+            "unknown_category_code": -1,
+            "transformed_feature_order": "categorical features in manuscript order, then Source Port, Destination Port, Risk of app",
+            "controlled_factor": "training category-to-code order only",
+        },
         "feature_sets": {k: v for k, v in FEATURE_SETS.items()},
         "model": {
             "family": "XGBoost",
@@ -275,7 +303,7 @@ def main() -> None:
             "colsample_bytree": 0.9,
             "tree_method": "hist",
         },
-        "outputs": [str(detail_path), str(summary_path)],
+        "outputs": [detail_path.name, summary_path.name],
     }
     metadata_path.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
 

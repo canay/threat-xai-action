@@ -1,0 +1,17 @@
+{
+  "renderer": "20_render_methodology_workflow.py",
+  "renderer_version": "1.0.0",
+  "input": {
+    "basename": "threat_dataset_processing_manifest.json",
+    "sha256": "77CA3EFC384F7A62CAC457160303BFCDFCDD1B273144BFDE118146C3C7EE8E5F"
+  },
+  "cohort_checks": {
+    "rows_in": 186271,
+    "excluded_alert": 9115,
+    "rows_out": 177156
+  },
+  "output": {
+    "basename": "fig_methodology_workflow.png",
+    "sha256": "0DE62DD4298902E68A816A5EEC2B39A1DD3E720E05DD809EC9AE48404E7A4F54"
+  }
+}

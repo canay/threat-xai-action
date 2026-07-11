@@ -9,7 +9,11 @@ NOT applicable; this run exercises P2 core reconstruction, the duplicate-aware g
 preprocessing pipeline as the primary Palo Alto experiments (script 03_benchmark_baseline.py).
 """
 from __future__ import annotations
-import json, os, platform, sys, time
+import argparse
+import json
+import platform
+import time
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -21,14 +25,19 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from sklearn.tree import DecisionTreeClassifier
 
-SEED = 42
 # Public UCI Internet Firewall dataset (log2.csv). Download from
 # https://archive.ics.uci.edu/dataset/542/internet+firewall+data and place it at
-# data/uci_internet_firewall/log2.csv, or pass the CSV path as the first CLI argument.
-_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSV = sys.argv[1] if len(sys.argv) > 1 else os.path.join(_ROOT, "data", "uci_internet_firewall", "log2.csv")
-OUT = os.path.join(_ROOT, "results", "uci_leaf_instantiation", "uci_leaf_results.json")
+# data/uci_internet_firewall/log2.csv, or pass an explicit --data path.
+ROOT = Path(__file__).resolve().parents[1]
 TARGET = "Action"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data", type=Path, default=ROOT / "data/uci_internet_firewall/log2.csv")
+    parser.add_argument("--outdir", type=Path, default=ROOT / "results/uci_leaf_instantiation")
+    parser.add_argument("--seed", type=int, default=42)
+    return parser.parse_args()
 
 def model_specs(rs):
     specs = {
@@ -59,17 +68,18 @@ def make_pipe(est, X):
     return Pipeline([("pre", pre), ("model", est)])
 
 def main():
-    df = pd.read_csv(CSV, low_memory=False)
+    args = parse_args()
+    df = pd.read_csv(args.data, low_memory=False)
     y_text = df[TARGET].astype(str)
     X = df.drop(columns=[TARGET])
     enc = LabelEncoder(); y = enc.fit_transform(y_text); labels = list(enc.classes_)
     print("rows", len(df), "features", list(X.columns))
     print("class_counts", y_text.value_counts().to_dict())
-    Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=SEED, stratify=y)
+    Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=args.seed, stratify=y)
 
     # P2 core reconstruction: stratified holdout, six tree probes
     holdout = []
-    for name, est in model_specs(SEED).items():
+    for name, est in model_specs(args.seed).items():
         pipe = make_pipe(est, X); pipe.fit(Xtr, ytr); pred = pipe.predict(Xte)
         row = {"model": name, "acc": accuracy_score(yte, pred), "bacc": balanced_accuracy_score(yte, pred),
                "macro_f1": f1_score(yte, pred, average="macro", zero_division=0),
@@ -78,15 +88,15 @@ def main():
         holdout.append(row); print("HOLDOUT", name, {k: round(v,4) if isinstance(v,float) else v for k,v in row.items()})
 
     # per-class for XGBoost
-    xgb = make_pipe(model_specs(SEED)["XGBoost"], X); xgb.fit(Xtr, ytr); xpred = xgb.predict(Xte)
+    xgb = make_pipe(model_specs(args.seed)["XGBoost"], X); xgb.fit(Xtr, ytr); xpred = xgb.predict(Xte)
     perclass = classification_report(yte, xpred, target_names=labels, zero_division=0, output_dict=True)
     cm = confusion_matrix(yte, xpred).tolist()
 
     # 5-fold CV macro-F1 for leading models
     cv = {}
-    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
+    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=args.seed)
     for name in ["LightGBM", "XGBoost", "CatBoost", "Extra Trees"]:
-        pipe = make_pipe(model_specs(SEED)[name], X)
+        pipe = make_pipe(model_specs(args.seed)[name], X)
         sc = cross_val_score(pipe, X, y, cv=skf, scoring="f1_macro", n_jobs=1)
         cv[name] = {"mean": float(np.mean(sc)), "std": float(np.std(sc))}
         print("CV", name, round(cv[name]["mean"],4), "+/-", round(cv[name]["std"],4))
@@ -95,10 +105,10 @@ def main():
     sig = X.astype(str).agg("|".join, axis=1)
     dup_frac = float((sig.map(sig.value_counts()) > 1).mean())
     groups = LabelEncoder().fit_transform(sig)
-    gss = GroupShuffleSplit(n_splits=5, test_size=0.2, random_state=SEED)
+    gss = GroupShuffleSplit(n_splits=5, test_size=0.2, random_state=args.seed)
     grouped = []
     for tri, tei in gss.split(X, y, groups):
-        pipe = make_pipe(model_specs(SEED)["XGBoost"], X)
+        pipe = make_pipe(model_specs(args.seed)["XGBoost"], X)
         pipe.fit(X.iloc[tri], y[tri]); gp = pipe.predict(X.iloc[tei])
         grouped.append(float(f1_score(y[tei], gp, average="macro", zero_division=0)))
     print("duplicate_row_fraction", round(dup_frac,4))
@@ -114,13 +124,14 @@ def main():
 
     payload = {"dataset": "UCI Internet Firewall", "rows": len(df), "features": list(X.columns),
                "labels": labels, "class_counts": {k:int(v) for k,v in y_text.value_counts().to_dict().items()},
-               "seed": SEED, "runtime": {"python": platform.python_version(), "platform": platform.platform()},
+               "seed": args.seed, "runtime": {"python": platform.python_version(), "platform": platform.platform()},
                "holdout": holdout, "xgb_per_class": perclass, "xgb_confusion": cm, "cv_macro_f1": cv,
                "duplicate_row_fraction": dup_frac, "grouped_macro_f1": grouped,
                "grouped_median": float(np.median(grouped)), "majority_baseline": maj_row}
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    open(OUT, "w").write(json.dumps(payload, indent=2))
-    print("WROTE", OUT)
+    args.outdir.mkdir(parents=True, exist_ok=True)
+    output = args.outdir / "uci_leaf_results.json"
+    output.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print("WROTE", output)
 
 if __name__ == "__main__":
     t=time.perf_counter(); main(); print("wall_seconds", round(time.perf_counter()-t,1))

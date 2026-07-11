@@ -41,9 +41,32 @@ def build_pipe():
     return Pipeline([("pre",pre),("model",m)])
 
 
+def distinct_timestamp_cut(df: pd.DataFrame, order: np.ndarray, fraction: float) -> int:
+    if not 0.0 <= fraction <= 1.0:
+        raise ValueError("fraction must be in [0, 1]")
+    if fraction == 0.0:
+        return 0
+    if fraction == 1.0:
+        return len(order)
+    nominal_cut = int(len(order) * fraction)
+    boundary_time = df.loc[order[nominal_cut], "_gt"]
+    boundary_positions = np.flatnonzero(
+        df.loc[order, "_gt"].to_numpy() == boundary_time.to_datetime64()
+    )
+    candidates = [int(boundary_positions[0]), int(boundary_positions[-1] + 1)]
+    candidates = [candidate for candidate in candidates if 0 < candidate < len(order)]
+    return min(candidates, key=lambda candidate: (abs(candidate - nominal_cut), candidate))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, required=True, help="Path to the controlled processed CSV.")
+    parser.add_argument(
+        "--outdir",
+        type=Path,
+        default=REPO_ROOT / "results/q1_audit_revision",
+        help="Directory for aggregate output.",
+    )
     args = parser.parse_args()
     if not args.data.is_file():
         raise SystemExit("Controlled processed CSV not found. Pass --data <path>.")
@@ -51,15 +74,15 @@ def main():
     df = pd.read_csv(args.data, low_memory=False)
     df["target"] = df["target"].astype(str)
     df["_gt"] = pd.to_datetime(df["Generate Time"], errors="coerce")
-    order = df.sort_values("_gt").index.to_numpy()
+    order = df.sort_values("_gt", kind="mergesort").index.to_numpy()
     n = len(order)
     le = LabelEncoder().fit(df["target"])  # all five classes, consistent encoding
     y_all = le.transform(df["target"])
 
     rows = []
     for train_pct in (60, 70, 80, 90):
-        tr_end = int(n * train_pct/100)
-        te_end = int(n * (train_pct+10)/100)
+        tr_end = distinct_timestamp_cut(df, order, train_pct/100)
+        te_end = distinct_timestamp_cut(df, order, (train_pct+10)/100)
         tr_idx = order[:tr_end]
         te_idx = order[tr_end:te_end] if te_end > tr_end else order[tr_end:]
         pipe = build_pipe()
@@ -78,7 +101,7 @@ def main():
     arr = out["macro_f1"].to_numpy()
     print(f"\nforward-chaining core macro-F1: median={np.median(arr):.4f} "
           f"range={arr.min():.4f}-{arr.max():.4f} mean={arr.mean():.4f}+/-{arr.std():.4f}")
-    outdir = REPO_ROOT / "results/q1_audit_revision"
+    outdir = args.outdir
     outdir.mkdir(parents=True, exist_ok=True)
     out.to_csv(outdir / "forward_chaining_chronological.csv", index=False)
     print(f"Wrote: {outdir / 'forward_chaining_chronological.csv'}")

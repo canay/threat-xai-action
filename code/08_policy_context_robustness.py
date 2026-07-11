@@ -13,6 +13,7 @@ same-dataset robustness audit for local policy-context sensitivity.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -25,6 +26,14 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 CORE_FEATURES = [
@@ -277,7 +286,6 @@ def aggregate_predictions(
 
 def main() -> None:
     args = parse_args()
-    started_at = pd.Timestamp.now().isoformat()
     wall_start = time.perf_counter()
     args.outdir.mkdir(parents=True, exist_ok=True)
     df = prepare_data(args.data)
@@ -314,10 +322,9 @@ def main() -> None:
         )
 
     metadata = {
-        "started_at": started_at,
-        "ended_at": pd.Timestamp.now().isoformat(),
         "wall_seconds": float(time.perf_counter() - wall_start),
-        "data": str(args.data),
+        "data_identifier": args.data.name,
+        "data_sha256": sha256(args.data),
         "rows": int(len(df)),
         "rule_groups": int(df["Rule Group"].nunique()),
         "candidate_rule_groups": int(len(candidate_rules)),

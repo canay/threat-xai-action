@@ -19,7 +19,9 @@ substitute for cross-enterprise or independent-period validation.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import re
 import time
 from pathlib import Path
 
@@ -91,6 +93,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
     parser.add_argument("--min-context-rows", type=int, default=1000)
     parser.add_argument("--max-contexts-per-column", type=int, default=8)
+    parser.add_argument(
+        "--private-records-out",
+        type=Path,
+        default=None,
+        help="Optional event-level queue CSV. The resolved path must be outside the public repository.",
+    )
     return parser.parse_args()
 
 
@@ -274,30 +282,35 @@ def review_queue_detail_rows(
     return detail
 
 
+def public_context_alias(column: str, ordinal: int) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "_", column.lower()).strip("_")
+    return f"{slug}_ctx_{ordinal:02d}"
+
+
 def context_candidates(df: pd.DataFrame, args: argparse.Namespace) -> list[tuple[str, str, np.ndarray]]:
     candidates = []
     for column in CONTEXT_COLUMNS:
         counts = df[column].astype("string").fillna("__MISSING__").value_counts()
         counts = counts[counts >= args.min_context_rows].head(args.max_contexts_per_column)
-        for value in counts.index:
+        for ordinal, value in enumerate(counts.index, start=1):
             mask = df[column].astype("string").fillna("__MISSING__").eq(value).to_numpy()
-            candidates.append((column, str(value), mask))
+            candidates.append((column, public_context_alias(column, ordinal), mask))
     return candidates
 
 
 def run_context_holdouts(df: pd.DataFrame, args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame]:
     rows = []
     confusions = []
-    for column, value, test_mask in context_candidates(df, args):
+    for column, context_alias, test_mask in context_candidates(df, args):
         train_idx = np.flatnonzero(~test_mask)
         test_idx = np.flatnonzero(test_mask)
         for feature_set, features in FEATURE_SETS.items():
-            run_id = f"{feature_set}__holdout_{column}={value}"
+            run_id = f"{feature_set}__holdout_{context_alias}"
             prefix = {
                 "run_id": run_id,
                 "feature_set": feature_set,
                 "context_column": column,
-                "context_value": value,
+                "context_value": context_alias,
                 "train_rows": int(len(train_idx)),
                 "test_rows": int(len(test_idx)),
             }
@@ -321,7 +334,7 @@ def run_context_holdouts(df: pd.DataFrame, args: argparse.Namespace) -> tuple[pd
                                 "run_id": run_id,
                                 "feature_set": feature_set,
                                 "context_column": column,
-                                "context_value": value,
+                                "context_value": context_alias,
                                 "true": true_label,
                                 "predicted": pred_label,
                                 "count": int(count),
@@ -386,9 +399,11 @@ def main() -> None:
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
     wall_start = time.perf_counter()
-    started_at = pd.Timestamp.now().isoformat()
     df = pd.read_csv(args.data, low_memory=False)
     df["target"] = df["target"].astype(str)
+    for column in ["Source Port", "Destination Port", "Risk of app"]:
+        if column in df.columns:
+            df[column] = pd.to_numeric(df[column], errors="coerce")
 
     review_summary, review_queue, review_detail = run_review_queue(df, args)
     context_results, context_confusions = run_context_holdouts(df, args)
@@ -396,22 +411,36 @@ def main() -> None:
 
     review_summary.to_csv(args.outdir / "operational_review_model_summary.csv", index=False)
     review_queue.to_csv(args.outdir / "operational_review_queue_summary.csv", index=False)
-    review_detail.to_csv(args.outdir / "operational_review_queue_records.csv", index=False)
+    private_records_written = False
+    if args.private_records_out is not None:
+        repository_root = Path(__file__).resolve().parents[1]
+        private_path = args.private_records_out.expanduser().resolve()
+        try:
+            private_path.relative_to(repository_root)
+        except ValueError:
+            pass
+        else:
+            raise ValueError("--private-records-out must resolve outside the public repository")
+        private_path.parent.mkdir(parents=True, exist_ok=True)
+        review_detail.to_csv(private_path, index=False)
+        private_records_written = True
     context_results.to_csv(args.outdir / "context_holdout_results.csv", index=False)
     context_confusions.to_csv(args.outdir / "context_holdout_confusions.csv", index=False)
     context_aggregate.to_csv(args.outdir / "context_holdout_aggregate.csv", index=False)
 
     metadata = {
-        "started_at": started_at,
-        "ended_at": pd.Timestamp.now().isoformat(),
         "wall_seconds": float(time.perf_counter() - wall_start),
-        "data": str(args.data),
+        "data_identifier": "controlled_processed_dataset",
+        "data_sha256": hashlib.sha256(args.data.read_bytes()).hexdigest().upper(),
         "rows": int(len(df)),
         "device": args.device,
         "n_estimators": args.n_estimators,
         "max_depth": args.max_depth,
         "min_context_rows": args.min_context_rows,
         "max_contexts_per_column": args.max_contexts_per_column,
+        "public_context_values": "deterministic aliases; private value-to-alias mapping is not written",
+        "public_default": "aggregate-only",
+        "private_records_written": private_records_written,
         "note": (
             "Review queue simulation uses observed action as an audit reference. "
             "Leave-one-context-out checks are same-dataset stress tests, not independent external validation."

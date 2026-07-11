@@ -1,0 +1,17 @@
+{
+  "primary_holdout_and_model_fits": [42],
+  "stratified_cross_validation": [42],
+  "ten_seed_holdouts": [42, 43, 44, 45, 46, 47, 48, 49, 50, 51],
+  "category_code_map_seeds": [20260708, 20260709, 20260710, 20260711, 20260712],
+  "shap_stability_sample_seeds": [11, 23, 42, 71, 97],
+  "bootstrap": {
+    "base_seed": 42,
+    "iterations": 1000,
+    "scope": "conditional fixed-model record resampling"
+  },
+  "grouped_splits": {
+    "base_seed": 42,
+    "n_splits": 5,
+    "implementation": "scikit-learn GroupShuffleSplit"
+  }
+}

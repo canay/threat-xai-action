@@ -6,11 +6,9 @@
   "device": "cpu",
   "n_estimators": 300,
   "max_depth": 6,
-  "started_at": "2026-05-29T21:05:11.953535",
-  "ended_at": "2026-05-29T21:10:54.438753",
-  "wall_seconds": 342.4854736999987,
-  "sum_fit_seconds": 313.192352699989,
-  "sum_predict_seconds": 21.377919300022768,
+  "wall_seconds": 923.9909623999847,
+  "sum_fit_seconds": 873.2069923998788,
+  "sum_predict_seconds": 36.69213890004903,
   "note": "Temporal splits are within-day forward-shift stress tests, not long-term temporal validation.",
   "feature_groups": {
     "threat_descriptors": [
@@ -44,12 +42,15 @@
       "Direction"
     ]
   },
-  "outputs": [
+  "outputs_in_public_release": [
     "strengthening_summary.csv",
     "strengthening_confusions.csv",
     "selective_prediction.csv",
-    "confidence_deciles.csv",
+    "confidence_deciles.csv"
+  ],
+  "diagnostic_figures_omitted_from_public_release": [
     "fig_feature_group_ablation.png",
     "fig_selective_prediction.png"
-  ]
+  ],
+  "manuscript_figure": "../manuscript_figures/fig_feature_group_validation.png"
 }

@@ -2,7 +2,8 @@
 
 The script uses the processed paper-specific dataset and the core feature
 configuration. It retrains the XGBoost model with the manuscript parameters,
-then writes global SHAP, class-wise SHAP, summary swarm SHAP, and local LIME outputs.
+then writes aggregate SHAP artifacts and deidentified manuscript-facing LIME figures.
+Row-level local-surrogate tables remain controlled and are not written.
 """
 
 from __future__ import annotations
@@ -18,9 +19,12 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 import shap
+import xgboost
 from lime.lime_tabular import LimeTabularExplainer
+from scipy.special import softmax
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
@@ -147,10 +151,11 @@ def save_global_shap(outdir: Path, feature_names: list[str], shap_array: np.ndar
     for yi in y_pos[1::2]:
         ax.axhspan(yi - 0.5, yi + 0.5, color=GRAY_BG, zorder=0, lw=0)
 
-    ax.barh(top["feature"], top["mean_abs_shap"], color=PRIMARY, edgecolor="white", linewidth=0.8, zorder=3)
+    ax.barh(y_pos, top["mean_abs_shap"], color=PRIMARY, edgecolor="white", linewidth=0.8, zorder=3)
     ax.set_xlabel("Mean Absolute SHAP Value", fontweight="bold")
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
     ax.set_axisbelow(True)
+    ax.set_yticks(y_pos)
     ax.set_yticklabels(top["feature"], fontweight="bold")
 
     fig.tight_layout()
@@ -248,7 +253,7 @@ def save_shap_summary_swarm(
     ax.set_yticklabels(top_features, fontweight="bold", color=GRAY_TEXT, fontsize=9)
     ax.set_ylim(len(top_idx) - 0.5, -0.5)
     ax.set_xlim(-1.12 * max_abs, 1.12 * max_abs)
-    ax.set_xlabel("SHAP Value for Predicted Class", fontweight="bold", fontsize=10)
+    ax.set_xlabel("SHAP Value for Predicted-Class Raw Margin", fontweight="bold", fontsize=10)
     
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
     ax.set_axisbelow(True)
@@ -332,11 +337,12 @@ def main() -> None:
         tree_method="hist",
         objective="multi:softprob",
         num_class=len(class_names),
-        base_score=0.5,
         eval_metric="mlogloss",
         random_state=args.seed,
-        n_jobs=4,
+        n_jobs=-1,
     )
+    # Preserve XGBoost's fitted multiclass vector intercept. Overriding
+    # base_score would create a different model from the canonical benchmark.
     model.fit(x_train_enc, y_train)
     y_pred = model.predict(x_test_enc)
 
@@ -347,33 +353,45 @@ def main() -> None:
         shap_indices.extend(rng.choice(idx, size=take, replace=False).tolist())
     shap_indices = np.array(sorted(shap_indices))
 
-    import shap.explainers._tree
-    original_decode = getattr(shap.explainers._tree, "decode_ubjson_buffer", None)
-    
-    if original_decode:
-        def patched_decode(*args, **kwargs):
-            jmodel = original_decode(*args, **kwargs)
-            try:
-                base_score = jmodel["learner"]["learner_model_param"]["base_score"]
-                if isinstance(base_score, str) and base_score.startswith("["):
-                    jmodel["learner"]["learner_model_param"]["base_score"] = "0.5"
-            except KeyError:
-                pass
-            return jmodel
-        shap.explainers._tree.decode_ubjson_buffer = patched_decode
-
-    try:
-        explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(x_test_enc[shap_indices])
-    finally:
-        if original_decode:
-            shap.explainers._tree.decode_ubjson_buffer = original_decode
+    # SHAP 0.51 reads the XGBoost 3.2 multiclass vector base score directly;
+    # no parser monkeypatch or intercept substitution is applied.
+    explainer = shap.TreeExplainer(
+        model,
+        data=None,
+        feature_perturbation="tree_path_dependent",
+        model_output="raw",
+    )
+    shap_values = explainer.shap_values(
+        x_test_enc[shap_indices],
+        check_additivity=True,
+    )
     if isinstance(shap_values, list):
         shap_array = np.stack(shap_values, axis=2)
     else:
         shap_array = np.asarray(shap_values)
         if shap_array.shape[1] != len(feature_names) and shap_array.shape[2] == len(feature_names):
             shap_array = np.transpose(shap_array, (0, 2, 1))
+
+    # Durable semantic check: TreeSHAP values must reconstruct the class-wise
+    # pre-softmax XGBoost margins. The probability check separately verifies
+    # that softmax(raw margins) matches predict_proba.
+    n_diag = min(64, len(shap_indices))
+    x_diag = np.asarray(x_test_enc[shap_indices[:n_diag]])
+    phi_diag = np.asarray(shap_array[:n_diag])
+    raw_margin = np.asarray(model.predict(x_diag, output_margin=True))
+    expected_value = np.asarray(explainer.expected_value, dtype=float)
+    if expected_value.ndim == 0:
+        expected_value = np.repeat(expected_value, len(class_names))
+    expected_value = expected_value.reshape(1, -1)
+    reconstructed_margin = phi_diag.sum(axis=1) + expected_value
+    probability_from_margin = softmax(raw_margin, axis=1)
+    predicted_probability = np.asarray(model.predict_proba(x_diag))
+    max_additivity_error = float(np.max(np.abs(reconstructed_margin - raw_margin)))
+    max_probability_error = float(np.max(np.abs(probability_from_margin - predicted_probability)))
+    if not np.allclose(reconstructed_margin, raw_margin, rtol=1e-4, atol=1e-4):
+        raise RuntimeError(f"TreeSHAP raw-margin additivity check failed: {max_additivity_error:.3e}")
+    if not np.allclose(probability_from_margin, predicted_probability, rtol=1e-6, atol=1e-6):
+        raise RuntimeError(f"XGBoost raw-margin probability check failed: {max_probability_error:.3e}")
 
     global_df = save_global_shap(args.outdir, feature_names, shap_array)
     save_classwise_shap(args.outdir, feature_names, class_names, shap_array, global_df)
@@ -402,11 +420,12 @@ def main() -> None:
     for cls, class_name in enumerate(class_names):
         idx = np.where((y_test == cls) & (y_pred == cls))[0]
         if len(idx):
-            selected.append((cls, class_name, int(idx[0])))
+            example_id = f"lime_{class_name.lower().replace('-', '_')}_01"
+            selected.append((cls, class_name, int(idx[0]), example_id))
 
     lime_records = []
     x_test_np = np.asarray(x_test_enc)
-    for cls, class_name, idx in selected:
+    for cls, class_name, idx, example_id in selected:
         explanation = lime_explainer.explain_instance(
             x_test_np[idx],
             lambda rows: model.predict_proba(np.asarray(rows)),
@@ -416,11 +435,10 @@ def main() -> None:
         )
         values = explanation.as_list(label=cls)
         lime_records.extend(
-            {"class": class_name, "test_index": idx, "feature_rule": name, "weight": weight}
+            {"class": class_name, "example_id": example_id, "feature_rule": name, "weight": weight}
             for name, weight in values
         )
     lime_df = pd.DataFrame(lime_records)
-    lime_df.to_csv(args.outdir / "xai_lime_local_examples.csv", index=False)
     save_lime_group(
         args.outdir,
         lime_df,
@@ -435,6 +453,13 @@ def main() -> None:
         "fig_xai_lime_local_reset.png",
         (3.6, 4.0),
     )
+    save_lime_group(
+        args.outdir,
+        lime_df,
+        ["Reset-Server"],
+        "fig_lime_local_explanation.png",
+        (3.6, 2.2),
+    )
 
     summary = {
         "model": "XGBoost",
@@ -442,8 +467,38 @@ def main() -> None:
         "shap_sample_size": int(len(shap_indices)),
         "lime_training_sample_size": int(train_sample_size),
         "classes": class_names,
+        "selected_model_holdout_check": {
+            "test_rows": int(len(y_test)),
+            "accuracy": float(accuracy_score(y_test, y_pred)),
+            "balanced_accuracy": float(balanced_accuracy_score(y_test, y_pred)),
+            "macro_f1": float(f1_score(y_test, y_pred, average="macro")),
+            "errors": int(np.sum(y_test != y_pred)),
+        },
         "top_global_shap_features": global_df.head(10).to_dict(orient="records"),
-        "lime_selected_classes": [class_name for _, class_name, _ in selected],
+        "lime_selected_classes": [class_name for _, class_name, _, _ in selected],
+        "lime_release_boundary": "deidentified figures only; row-level local-surrogate table not written",
+        "shap_semantics": {
+            "shap_version": shap.__version__,
+            "xgboost_version": xgboost.__version__,
+            "feature_perturbation": "tree_path_dependent",
+            "model_output": "raw",
+            "background_rows": 0,
+            "explained_output": "class-wise pre-softmax margin",
+            "aggregation_global": "mean absolute SHAP over records and classes",
+            "aggregation_classwise": "mean absolute SHAP over records for each class",
+            "beeswarm": "signed SHAP for each record's predicted class",
+        },
+        "shap_additivity_diagnostic": {
+            "rows": n_diag,
+            "phi_shape": list(phi_diag.shape),
+            "raw_margin_shape": list(raw_margin.shape),
+            "expected_value_shape": list(expected_value.shape),
+            "max_abs_margin_reconstruction_error": max_additivity_error,
+            "max_abs_probability_error": max_probability_error,
+            "margin_tolerance": {"rtol": 1e-4, "atol": 1e-4},
+            "probability_tolerance": {"rtol": 1e-6, "atol": 1e-6},
+            "passed": True,
+        },
     }
     (args.outdir / "xai_generation_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
 

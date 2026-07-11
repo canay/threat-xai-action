@@ -1,8 +1,14 @@
 {
   "chronological_split": {
     "train_until": "2026-05-14 17:07:15",
-    "test_from": "2026-05-14 17:07:15",
-    "note": "Single-day chronological holdout; this is a temporal stress check, not cross-period validation."
+    "test_from": "2026-05-14 17:07:16",
+    "nominal_train_fraction": 0.8,
+    "actual_train_rows": 141725,
+    "actual_test_rows": 35431,
+    "timestamp_resolution": "one second",
+    "timezone": "device-local representation; source export provides no offset",
+    "tie_policy": "stable ordering; nominal cut moved to nearest boundary between distinct timestamps; earlier boundary wins an exact distance tie",
+    "note": "Within-day chronological holdout; this is a temporal stress check, not cross-period validation."
   },
   "labels": [
     "Allow",

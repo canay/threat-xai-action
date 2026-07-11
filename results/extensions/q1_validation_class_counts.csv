@@ -11,11 +11,11 @@ stratified_holdout,test,Reset-Both,581
 stratified_holdout,test,Reset-Server,155
 chronological_holdout,train,Allow,79
 chronological_holdout,train,Deny,7478
-chronological_holdout,train,Drop,131415
+chronological_holdout,train,Drop,131416
 chronological_holdout,train,Reset-Both,2611
 chronological_holdout,train,Reset-Server,141
 chronological_holdout,test,Allow,2423
 chronological_holdout,test,Deny,2709
-chronological_holdout,test,Drop,29373
+chronological_holdout,test,Drop,29372
 chronological_holdout,test,Reset-Both,292
 chronological_holdout,test,Reset-Server,635

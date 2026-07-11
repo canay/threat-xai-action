@@ -1,8 +1,8 @@
 {
   "purpose": "public smoke-test sample; not used for reported manuscript metrics",
-  "source_path": "data\\processed\\threat_five_class.csv",
+  "source_identifier": "threat_five_class.csv",
   "source_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
-  "output_path": "github-threat-xai-action\\data\\processed\\public_anonymized_sample_1000.csv",
+  "output_identifier": "public_anonymized_sample_1000.csv",
   "output_sha256": "52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08",
   "seed": 20260701,
   "rows": 1000,

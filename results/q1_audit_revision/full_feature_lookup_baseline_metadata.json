@@ -1,0 +1,5 @@
+{
+  "seed": 42,
+  "n_records": 177156,
+  "note": "Full-feature exact-signature majority lookup vs published context lookups; verbatim reuse of code/11 evaluation logic. Aggregate-only."
+}

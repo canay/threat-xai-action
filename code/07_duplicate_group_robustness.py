@@ -24,6 +24,14 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from xgboost import XGBClassifier
 
 
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
 CORE_FEATURES = [
     "Threat/Content Type",
     "Application",
@@ -204,7 +212,6 @@ def evaluate_split(df: pd.DataFrame, features: list[str], groups: pd.Series, fea
 
 
 def main() -> None:
-    started_at = pd.Timestamp.now().isoformat()
     wall_start = time.perf_counter()
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -242,10 +249,9 @@ def main() -> None:
     grouped_results.to_csv(args.outdir / "duplicate_group_split_results.csv", index=False)
     grouped_summary.to_csv(args.outdir / "duplicate_group_split_summary.csv", index=False)
     metadata = {
-        "started_at": started_at,
-        "ended_at": pd.Timestamp.now().isoformat(),
         "wall_seconds": float(time.perf_counter() - wall_start),
-        "data": str(args.data),
+        "data_identifier": args.data.name,
+        "data_sha256": sha256(args.data),
         "rows": int(len(df)),
         "splits": args.splits,
         "test_size": args.test_size,

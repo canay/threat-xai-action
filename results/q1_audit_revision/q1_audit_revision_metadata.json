@@ -1,6 +1,7 @@
 {
   "seed": 42,
   "bootstrap_iterations": 1000,
+  "data_rows_after_timestamp_filter": 177156,
   "labels": [
     "Allow",
     "Deny",
@@ -8,6 +9,84 @@
     "Reset-Both",
     "Reset-Server"
   ],
-  "xgb_ci_source": "github-threat-xai-action\\results\\extensions\\q1_validation_confusions.csv",
-  "note": "Confusion-only mode samples saved fixed-model confusion-cell counts and does not read controlled data."
+  "feature_sets": {
+    "core": [
+      "Threat/Content Type",
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Threat/Content Name",
+      "Category",
+      "Severity",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ],
+    "no_threat_descriptors": [
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Category",
+      "Direction",
+      "Subcategory of app",
+      "Category of app",
+      "Technology of app",
+      "Risk of app",
+      "SaaS of app"
+    ],
+    "minimal_context": [
+      "Application",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Source Port",
+      "Destination Port",
+      "Source Country",
+      "Destination Country",
+      "Direction"
+    ]
+  },
+  "context_baselines": {
+    "train_majority": [],
+    "context_majority_app_dir_zones": [
+      "Application",
+      "Direction",
+      "Source Zone",
+      "Destination Zone"
+    ],
+    "context_majority_operational_minimal": [
+      "Application",
+      "Direction",
+      "Source Zone",
+      "Destination Zone",
+      "Inbound Interface",
+      "Outbound Interface",
+      "IP Protocol",
+      "Destination Port",
+      "Source Country",
+      "Destination Country"
+    ]
+  },
+  "xgb_ci_source": "local_refit",
+  "xgb_ci_source_sha256": null,
+  "note": "With --fit-xgb, one model is fitted per split and feature set; bootstrap iterations resample that model's fixed test predictions and do not refit the model. Without --fit-xgb, the same fixed-prediction scope is reconstructed from saved confusions."
 }

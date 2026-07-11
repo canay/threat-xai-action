@@ -1,13 +1,15 @@
 {
-  "started_at": "2026-07-04T01:42:39.625831",
-  "ended_at": "2026-07-04T01:56:50.101115",
   "wall_seconds": 850.476150500006,
-  "data": "C:\\DOCS\\AKADEMIK\\CALISMALAR\\50_GONDERIME_HAZIR\\fw1_threat_xai_action\\data\\processed\\threat_five_class.csv",
+  "data_identifier": "controlled_processed_dataset",
+  "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
   "rows": 177156,
   "device": "cpu",
   "n_estimators": 300,
   "max_depth": 6,
   "min_context_rows": 1000,
   "max_contexts_per_column": 6,
+  "public_context_values": "deterministic aliases; private value-to-alias mapping is not written",
+  "public_default": "aggregate-only",
+  "private_records_written": false,
   "note": "Review queue simulation uses observed action as an audit reference. Leave-one-context-out checks are same-dataset stress tests, not independent external validation."
 }

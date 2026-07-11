@@ -2,4 +2,4 @@
 
 This directory contains aggregate summaries for the operational review-queue and unseen-context audits.
 
-The detailed event-level review queue file (`operational_review_queue_records.csv`) is intentionally not included in the public artifact. It can expose institutional security posture and event-specific firewall context even after processing. Authorized reruns of `code/09_operational_review_and_context_audit.py` will regenerate that file locally when an approved controlled-access copy of `data/processed/threat_five_class.csv` is available.
+The detailed event-level review queue is intentionally not included. The script's public default is aggregate-only, and public context values are deterministic aliases rather than raw operational values. An authorized rerun writes event-level records only when `--private-records-out <path>` is supplied; that path must resolve outside the public repository or the script stops.

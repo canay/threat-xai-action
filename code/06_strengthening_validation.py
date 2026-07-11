@@ -243,25 +243,36 @@ def fit_predict(
     return PredictionBundle(y_test, y_pred, proba, list(encoder.classes_), fit_seconds, predict_seconds)
 
 
+def distinct_timestamp_cut(df: pd.DataFrame, ordered: np.ndarray, train_fraction: float) -> int:
+    nominal_cut = int(len(ordered) * train_fraction)
+    boundary_time = df.loc[ordered[nominal_cut], "Generate Time Parsed"]
+    boundary_positions = np.flatnonzero(
+        df.loc[ordered, "Generate Time Parsed"].to_numpy() == boundary_time.to_datetime64()
+    )
+    candidates = [int(boundary_positions[0]), int(boundary_positions[-1] + 1)]
+    candidates = [candidate for candidate in candidates if 0 < candidate < len(ordered)]
+    return min(candidates, key=lambda candidate: (abs(candidate - nominal_cut), candidate))
+
+
 def chronological_indices(df: pd.DataFrame, train_fraction: float = 0.8) -> tuple[np.ndarray, np.ndarray]:
-    ordered = df.sort_values("Generate Time Parsed").index.to_numpy()
-    cut = int(len(ordered) * train_fraction)
+    ordered = df.sort_values("Generate Time Parsed", kind="mergesort").index.to_numpy()
+    cut = distinct_timestamp_cut(df, ordered, train_fraction)
     return ordered[:cut], ordered[cut:]
 
 
 def make_forward_splits(df: pd.DataFrame, min_test_rows: int = 5000) -> list[tuple[str, np.ndarray, np.ndarray]]:
     rows = []
     quantiles = [0.50, 0.60, 0.70, 0.80]
-    ordered = df.sort_values("Generate Time Parsed").index.to_numpy()
+    ordered = df.sort_values("Generate Time Parsed", kind="mergesort").index.to_numpy()
     for q in quantiles:
-        cut = int(len(ordered) * q)
+        cut = distinct_timestamp_cut(df, ordered, q)
         train_idx = ordered[:cut]
         test_idx = ordered[cut:]
         if len(test_idx) < min_test_rows:
             continue
         train_end = df.loc[train_idx, "Generate Time Parsed"].max()
         test_start = df.loc[test_idx, "Generate Time Parsed"].min()
-        name = f"forward_q{int(q * 100)}_train_until_{train_end:%H%M}_test_from_{test_start:%H%M}"
+        name = f"forward_train{int(q * 100)}_test{int((1.0 - q) * 100)}"
         rows.append((name, train_idx, test_idx))
     return rows
 
@@ -422,7 +433,6 @@ def save_figures(summary: pd.DataFrame, selective: pd.DataFrame, outdir: Path) -
 
 def main() -> None:
     wall_start = time.perf_counter()
-    wall_start_iso = pd.Timestamp.now().isoformat()
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
     df = load_data(args.data, args.sample_rows, args.seed)
@@ -488,8 +498,6 @@ def main() -> None:
         "device": args.device,
         "n_estimators": args.n_estimators,
         "max_depth": args.max_depth,
-        "started_at": wall_start_iso,
-        "ended_at": pd.Timestamp.now().isoformat(),
         "wall_seconds": float(time.perf_counter() - wall_start),
         "sum_fit_seconds": float(summary["fit_seconds"].sum()),
         "sum_predict_seconds": float(summary["predict_seconds"].sum()),

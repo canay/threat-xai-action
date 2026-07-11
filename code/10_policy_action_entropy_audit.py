@@ -11,6 +11,7 @@ policy-path lookup is not sufficient and analyst review remains relevant.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -21,6 +22,7 @@ import pandas as pd
 
 MISSING_RULE = "__MISSING_RULE__"
 LABEL_ORDER = ["Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"]
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 AUDIT_LEVELS = {
     "rule_context": ["Rule Group"],
@@ -29,6 +31,14 @@ AUDIT_LEVELS = {
     "rule_context_plus_application": ["Rule Group", "Application"],
     "rule_context_plus_threat_type_direction": ["Rule Group", "Threat/Content Type", "Direction"],
 }
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 def parse_args() -> argparse.Namespace:
@@ -134,6 +144,10 @@ def summarize_groups(
 
 def main() -> None:
     args = parse_args()
+    if args.no_anonymize_rules and args.outdir.resolve().is_relative_to(REPO_ROOT):
+        raise SystemExit(
+            "Non-anonymized rule outputs must be written outside the public repository."
+        )
     args.outdir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.data, low_memory=False)
@@ -155,7 +169,8 @@ def main() -> None:
     )
 
     metadata = {
-        "data": str(args.data),
+        "data_identifier": args.data.name,
+        "data_sha256": sha256(args.data),
         "rows": int(len(df)),
         "target_labels": labels,
         "anonymize_rules": not args.no_anonymize_rules,
