@@ -4,23 +4,86 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib import font_manager
+from matplotlib.patches import FancyArrowPatch, Rectangle
+from PIL import Image, ImageChops
 
 
 INK = "#243342"
-PRIMARY = "#00539C"
-TEAL = "#008080"
-PHASE_FILL = "#F5F8FB"
+PRIMARY = "#00629B"
+BOUNDARY = "#5F6B73"
+PHASE_FILL = "#F7F9FB"
 BOX_FILL = "#FFFFFF"
 PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.0.0"
+RENDERER_VERSION = "1.2.0"
+PNG_DPI = 600
+CROP_PADDING_PIXELS = 12
+
+
+def register_additional_fonts() -> None:
+    """Register publication fonts that Matplotlib may not cache automatically."""
+    kpsewhich = shutil.which("kpsewhich")
+    if kpsewhich:
+        for filename in ("SourceSans3-Regular.otf", "SourceSans3-Semibold.otf"):
+            completed = subprocess.run(
+                [kpsewhich, filename],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            font_path = Path(completed.stdout.strip())
+            if completed.returncode == 0 and font_path.is_file():
+                font_manager.fontManager.addfont(font_path)
+
+    for font_path in font_manager.findSystemFonts():
+        filename = Path(font_path).name.lower()
+        if filename.startswith("inter-") and "italic" not in filename:
+            font_manager.fontManager.addfont(font_path)
+
+
+def resolve_font() -> tuple[str, Path, Path]:
+    """Choose a refined sans-serif family with real regular and semibold faces."""
+    register_additional_fonts()
+    for family in ("Source Sans 3", "Open Sans", "Lato", "DejaVu Sans"):
+        try:
+            regular = Path(
+                font_manager.findfont(
+                    font_manager.FontProperties(family=family, weight="normal"),
+                    fallback_to_default=False,
+                )
+            )
+            emphasis = Path(
+                font_manager.findfont(
+                    font_manager.FontProperties(family=family, weight=600),
+                    fallback_to_default=False,
+                )
+            )
+            if regular.resolve() == emphasis.resolve():
+                continue
+            return family, regular, emphasis
+        except ValueError:
+            continue
+    raise RuntimeError("No supported sans-serif font was found.")
+
+
+FONT_FAMILY, FONT_PATH, FONT_EMPHASIS_PATH = resolve_font()
+matplotlib.rcParams.update(
+    {
+        "font.family": FONT_FAMILY,
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    }
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,7 +109,16 @@ def sha256(path: Path) -> str:
     return digest.hexdigest().upper()
 
 
-def add_phase(ax: plt.Axes, x: float, y: float, width: float, height: float, label: str) -> None:
+def add_phase(
+    ax: plt.Axes,
+    x: float,
+    y: float,
+    width: float,
+    height: float,
+    label: str,
+    *,
+    label_x: float | None = None,
+) -> None:
     ax.add_patch(
         Rectangle(
             (x, y),
@@ -54,19 +126,19 @@ def add_phase(ax: plt.Axes, x: float, y: float, width: float, height: float, lab
             height,
             facecolor=PHASE_FILL,
             edgecolor=PHASE_EDGE,
-            linewidth=1.0,
+            linewidth=0.8,
             linestyle=(0, (4, 3)),
             zorder=0,
         )
     )
     ax.text(
-        x + 0.12,
+        x + 0.12 if label_x is None else label_x,
         y + height - 0.13,
         label,
         ha="left",
         va="top",
-        fontsize=8.2,
-        fontweight="bold",
+        fontsize=7.8,
+        fontweight=600,
         color=INK,
         zorder=3,
     )
@@ -82,14 +154,13 @@ def add_box(
     body: str,
 ) -> tuple[float, float, float, float]:
     ax.add_patch(
-        FancyBboxPatch(
+        Rectangle(
             (x, y),
             width,
             height,
-            boxstyle="round,pad=0.025,rounding_size=0.05",
             facecolor=BOX_FILL,
             edgecolor=INK,
-            linewidth=1.15,
+            linewidth=0.9,
             zorder=2,
         )
     )
@@ -99,8 +170,8 @@ def add_box(
         title,
         ha="center",
         va="center",
-        fontsize=8.0,
-        fontweight="bold",
+        fontsize=7.6,
+        fontweight=600,
         color=INK,
         zorder=3,
     )
@@ -110,9 +181,9 @@ def add_box(
         body,
         ha="center",
         va="center",
-        fontsize=7.2,
+        fontsize=7.0,
         color=INK,
-        linespacing=1.25,
+        linespacing=1.20,
         zorder=3,
     )
     return x, y, width, height
@@ -141,10 +212,10 @@ def add_arrow(
             start,
             end,
             arrowstyle="-|>",
-            mutation_scale=11,
-            linewidth=1.25,
+            mutation_scale=9.5,
+            linewidth=1.0,
             linestyle="--" if dashed else "-",
-            color=TEAL if dashed else PRIMARY,
+            color=BOUNDARY if dashed else PRIMARY,
             shrinkA=3,
             shrinkB=3,
             zorder=4,
@@ -152,7 +223,57 @@ def add_arrow(
     )
 
 
-def render(manifest_path: Path, output: Path) -> dict:
+def save_content_cropped_png(fig: plt.Figure, output: Path) -> dict:
+    """Rasterize, then physically crop white margins around the drawn content."""
+    buffer = io.BytesIO()
+    fig.savefig(
+        buffer,
+        format="png",
+        dpi=PNG_DPI,
+        bbox_inches="tight",
+        pad_inches=0,
+        facecolor="white",
+        edgecolor="none",
+    )
+    buffer.seek(0)
+    with Image.open(buffer) as rendered:
+        image = rendered.convert("RGB")
+
+    background = Image.new("RGB", image.size, "white")
+    content_bbox = ImageChops.difference(image, background).getbbox()
+    if content_bbox is None:
+        raise RuntimeError("Rendered methodology workflow contains no visible content.")
+
+    left, top, right, bottom = content_bbox
+    crop_bbox = (
+        max(0, left - CROP_PADDING_PIXELS),
+        max(0, top - CROP_PADDING_PIXELS),
+        min(image.width, right + CROP_PADDING_PIXELS),
+        min(image.height, bottom + CROP_PADDING_PIXELS),
+    )
+    cropped = image.crop(crop_bbox)
+    cropped.save(output, format="PNG", dpi=(PNG_DPI, PNG_DPI), optimize=True)
+    return {
+        "uncropped_pixels": {"width": image.width, "height": image.height},
+        "content_bbox_pixels": {
+            "left": left,
+            "top": top,
+            "right": right,
+            "bottom": bottom,
+        },
+        "crop_bbox_pixels": {
+            "left": crop_bbox[0],
+            "top": crop_bbox[1],
+            "right": crop_bbox[2],
+            "bottom": crop_bbox[3],
+        },
+        "final_pixels": {"width": cropped.width, "height": cropped.height},
+        "padding_pixels": CROP_PADDING_PIXELS,
+        "dpi": PNG_DPI,
+    }
+
+
+def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     rows_in = int(manifest["rows_in"])
     rows_out = int(manifest["rows_out"])
@@ -167,7 +288,15 @@ def render(manifest_path: Path, output: Path) -> dict:
 
     add_phase(ax, 0.12, 4.13, 9.76, 1.68, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN")
     add_phase(ax, 0.12, 2.18, 9.76, 1.68, "PHASE II: RECONSTRUCTION AND STRESS AUDIT")
-    add_phase(ax, 0.12, 0.23, 9.76, 1.68, "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY")
+    add_phase(
+        ax,
+        0.12,
+        0.23,
+        9.76,
+        1.68,
+        "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY",
+        label_x=3.61,
+    )
 
     width = 2.78
     height = 1.08
@@ -235,16 +364,16 @@ def render(manifest_path: Path, output: Path) -> dict:
         ax,
         0.40,
         row3_y,
-        3.55,
+        width,
         height,
         "7. Selected-model inspection",
         "TreeSHAP on class-wise raw margins\nCategorical-aware LIME local surrogates",
     )
     b8 = add_box(
         ax,
-        4.37,
+        3.61,
         row3_y,
-        5.23,
+        5.99,
         height,
         "8. Interpretation and release boundary",
         "Retrospective policy audit; non-causal and non-autonomous\nPublic code/aggregates; event-level data under controlled access",
@@ -258,28 +387,44 @@ def render(manifest_path: Path, output: Path) -> dict:
     add_arrow(ax, side(b6, "bottom"), side(b7, "top"))
     add_arrow(ax, side(b7, "right"), side(b8, "left"), dashed=True)
 
-    fig.savefig(output, dpi=600, bbox_inches="tight", pad_inches=0.06, facecolor="white")
+    crop_metadata = save_content_cropped_png(fig, output)
     plt.close(fig)
-    return {
-        "rows_in": rows_in,
-        "excluded_alert": excluded_alert,
-        "rows_out": rows_out,
-    }
+    return (
+        {
+            "rows_in": rows_in,
+            "excluded_alert": excluded_alert,
+            "rows_out": rows_out,
+        },
+        crop_metadata,
+    )
 
 
 def main() -> None:
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
     output = args.outdir / "fig_methodology_workflow.png"
-    checks = render(args.processing_manifest, output)
+    checks, crop_metadata = render(args.processing_manifest, output)
     metadata = {
         "renderer": Path(__file__).name,
         "renderer_version": RENDERER_VERSION,
+        "render_style": {
+            "font_family": FONT_FAMILY,
+            "regular_font_file_basename": FONT_PATH.name,
+            "regular_font_file_sha256": sha256(FONT_PATH),
+            "semibold_font_file_basename": FONT_EMPHASIS_PATH.name,
+            "semibold_font_file_sha256": sha256(FONT_EMPHASIS_PATH),
+            "phase_font_points": 7.8,
+            "box_title_font_points": 7.6,
+            "box_body_font_points": 7.0,
+            "box_corner_style": "square",
+            "content_aware_png_crop": True,
+        },
         "input": {
             "basename": args.processing_manifest.name,
             "sha256": sha256(args.processing_manifest),
         },
         "cohort_checks": checks,
+        "crop": crop_metadata,
         "output": {"basename": output.name, "sha256": sha256(output)},
     }
     (args.outdir / "methodology_workflow_render_metadata.json").write_text(

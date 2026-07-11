@@ -389,6 +389,8 @@ Render the manuscript methodology workflow from the aggregate cohort manifest:
 python code/20_render_methodology_workflow.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --outdir results/manuscript_figures
 ```
 
+The workflow renderer prefers the open-source Source Sans 3 Regular/Semibold faces when available, records the resolved font-file hashes, and applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin. Open Sans, Lato, and DejaVu Sans are deterministic fallback families.
+
 ## Submission And Public Release Checklist
 
 Before archival public release:
