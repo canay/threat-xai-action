@@ -90,7 +90,8 @@ def set_q1_style() -> None:
         "text.color": GRAY_TEXT,
         "savefig.dpi": 600,
         "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.05,
+        # At 600 dpi, 0.02 inches gives a physical 12-pixel outer margin.
+        "savefig.pad_inches": 0.02,
     })
 
 
@@ -300,7 +301,7 @@ def save_lime_group(
         ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
         ax.set_axisbelow(True)
 
-    axes[-1].set_xlabel("LIME Local Surrogate Weight", fontweight="bold")
+    axes[-1].set_xlabel("LIME surrogate weight", fontweight="bold")
     fig.tight_layout()
     fig.savefig(outdir / filename)
     plt.close(fig)

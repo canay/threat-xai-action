@@ -131,11 +131,24 @@ def build_pipeline(features: list[str], args: argparse.Namespace) -> Pipeline:
     return Pipeline(steps=[("preprocess", preprocessor), ("model", model)])
 
 
-def prepare_data(path: Path) -> pd.DataFrame:
+def add_rule_groups(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+    """Replace enterprise rule names with deterministic support-ranked aliases."""
+    raw_rules = df["Rule"].astype("string")
+    non_missing = raw_rules.dropna().astype(str)
+    counts = non_missing.value_counts().to_dict()
+    ordered_rules = sorted(counts, key=lambda value: (-counts[value], str(value)))
+    aliases = {rule: f"rule_context_{idx:02d}" for idx, rule in enumerate(ordered_rules, start=1)}
+    grouped = raw_rules.map(aliases).fillna(MISSING_RULE).astype(str)
+    result = df.copy()
+    result["Rule Group"] = grouped
+    return result, len(aliases)
+
+
+def prepare_data(path: Path) -> tuple[pd.DataFrame, int]:
     df = pd.read_csv(path, low_memory=False)
     df["target"] = df["target"].astype(str)
-    df["Rule Group"] = df["Rule"].astype("string").fillna(MISSING_RULE).astype(str)
-    return df.reset_index(drop=True)
+    df, alias_count = add_rule_groups(df)
+    return df.reset_index(drop=True), alias_count
 
 
 def summarize_rules(df: pd.DataFrame) -> pd.DataFrame:
@@ -288,7 +301,7 @@ def main() -> None:
     args = parse_args()
     wall_start = time.perf_counter()
     args.outdir.mkdir(parents=True, exist_ok=True)
-    df = prepare_data(args.data)
+    df, rule_alias_count = prepare_data(args.data)
     all_labels = sorted(df["target"].unique())
 
     rule_summary = summarize_rules(df)
@@ -327,12 +340,14 @@ def main() -> None:
         "data_sha256": sha256(args.data),
         "rows": int(len(df)),
         "rule_groups": int(df["Rule Group"].nunique()),
+        "rule_contexts_anonymized": True,
+        "rule_alias_count": int(rule_alias_count),
         "candidate_rule_groups": int(len(candidate_rules)),
         "min_rule_rows": int(args.min_rule_rows),
         "device": args.device,
         "n_estimators": args.n_estimators,
         "max_depth": args.max_depth,
-        "note": "Rule is used only as a held-out group variable and is not included in any feature set.",
+        "note": "Rule is used only as a held-out group variable, is not included in any feature set, and is written only as a deterministic support-ranked alias.",
     }
     (args.outdir / "policy_context_robustness_metadata.json").write_text(
         json.dumps(metadata, indent=2), encoding="utf-8"

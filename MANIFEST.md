@@ -19,8 +19,8 @@ Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Condi
 - `TRACEABILITY.md`: table/figure-to-command/output mapping and controlled processed-file checksum for authorized reruns.
 - `SEED_MANIFEST.json`: explicit random seeds and resampling scope.
 - `requirements.txt`: portable minimum compatible versions.
-- `requirements-lock.txt`: exact direct packages from the submission-facing Windows x86-64 CPU rerun.
-- `requirements-lock-primary-linux-aarch64.txt`: full platform-labelled resolution from the original Linux/aarch64 run.
+- `requirements-lock-primary-linux-aarch64.txt`: exact complete resolution for the canonical Linux/aarch64 VPS evidence.
+- `requirements-lock.txt`: platform-labelled Windows x86-64 diagnostic environment retained for provenance only.
 - `CITATION.cff` and `LICENSE`: citation metadata and software/artifact license.
 
 ## Controlled Or Excluded Contents
@@ -42,7 +42,7 @@ Controlled processed file identity for authorized reruns:
 
 The public package supports inspection of code, command recipes, aggregate outputs, validation summaries, traceability notes, explanation artifacts, and a 1,000-row anonymized smoke-test sample. A full rerun requires an institutionally approved copy of `data/processed/threat_five_class.csv` placed at the expected path. The public sample is suitable for schema and parser checks only and must not be used to reproduce the manuscript metrics. The calendar date, 14 May 2026, is intentionally disclosed with author approval; organization identity, topology, policy names, raw exports, full event-level data, and event-level review queues remain excluded.
 
-The four submission-facing benchmark JSON files retain the canonical rerun metrics and wall times but use release-facing `tag` values that reproduce their public filenames with the commands in `README.MD`; the experiment folder preserves the byte-exact original JSON outputs and hashes.
+The public benchmark CSV/JSON artifacts preserve the original Linux/aarch64 VPS evidence. The registered dependent evidence bundle `2026-07-13_codex_vps_selected_model_canonicalization` first reproduced the XGBoost core and no-threat-descriptors holdouts exactly, then regenerated the model-dependent validation, explanation, grouped-split, policy-context, review-queue, seed, bootstrap, encoding-sensitivity, and public UCI schema-transfer aggregates under the same locked environment. Public policy-context outputs replace enterprise rule names with deterministic support-ranked aliases. The Windows rerun is retained only as historical diagnostic provenance.
 
 Before public archival release:
 
@@ -55,7 +55,7 @@ Before public archival release:
 
 ## Release Identifiers
 
-- Final public commit: resolve with `git rev-parse jnca-submission-r0.2`
-- Release tag: `jnca-submission-r0.2`
-- Preserved prior tags: `jnca-submission-r0` (scientific release) and `jnca-submission-r0.1` (Figure 1 typography/crop patch)
+- Final public commit: resolve with `git rev-parse jnca-submission-r0.3`
+- Release tag: `jnca-submission-r0.3`
+- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, and `jnca-submission-r0.2`
 - Repository DOI: `DEFERRED-PENDING-SUBMISSION-DECISION`

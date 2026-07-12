@@ -12,51 +12,51 @@
   ],
   "selected_model_holdout_check": {
     "test_rows": 35432,
-    "accuracy": 0.9999153307744412,
-    "balanced_accuracy": 0.998021209261007,
-    "macro_f1": 0.9975539436842062,
-    "errors": 3
+    "accuracy": 0.9999435538496274,
+    "balanced_accuracy": 0.9993115318416523,
+    "macro_f1": 0.9983731211317419,
+    "errors": 2
   },
   "top_global_shap_features": [
     {
       "feature": "Threat/Content Type",
-      "mean_abs_shap": 1.0648889541625977
+      "mean_abs_shap": 1.0391783714294434
     },
     {
       "feature": "Direction",
-      "mean_abs_shap": 0.9681519865989685
+      "mean_abs_shap": 0.9574977159500122
     },
     {
       "feature": "Subcategory of app",
-      "mean_abs_shap": 0.8126729130744934
+      "mean_abs_shap": 0.803722620010376
     },
     {
       "feature": "Threat/Content Name",
-      "mean_abs_shap": 0.6848462820053101
+      "mean_abs_shap": 0.6469796895980835
     },
     {
       "feature": "Severity",
-      "mean_abs_shap": 0.5478671789169312
+      "mean_abs_shap": 0.5070505738258362
     },
     {
       "feature": "Source Country",
-      "mean_abs_shap": 0.35133251547813416
+      "mean_abs_shap": 0.347374826669693
     },
     {
       "feature": "Category of app",
-      "mean_abs_shap": 0.2713465988636017
-    },
-    {
-      "feature": "Category",
-      "mean_abs_shap": 0.2471534013748169
+      "mean_abs_shap": 0.33968502283096313
     },
     {
       "feature": "Application",
-      "mean_abs_shap": 0.2279587686061859
+      "mean_abs_shap": 0.2369968444108963
+    },
+    {
+      "feature": "Category",
+      "mean_abs_shap": 0.2219567447900772
     },
     {
       "feature": "Source Port",
-      "mean_abs_shap": 0.2025594562292099
+      "mean_abs_shap": 0.1757185012102127
     }
   ],
   "lime_selected_classes": [
@@ -93,7 +93,7 @@
       1,
       5
     ],
-    "max_abs_margin_reconstruction_error": 6.4373016357421875e-06,
+    "max_abs_margin_reconstruction_error": 8.821487426757812e-06,
     "max_abs_probability_error": 1.1920928955078125e-07,
     "margin_tolerance": {
       "rtol": 0.0001,

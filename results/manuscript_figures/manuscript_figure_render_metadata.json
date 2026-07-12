@@ -1,6 +1,6 @@
 {
   "renderer": "19_render_manuscript_figures.py",
-  "renderer_version": "1.0.1",
+  "renderer_version": "1.0.2",
   "inputs": {
     "processing_manifest": {
       "basename": "threat_dataset_processing_manifest.json",
@@ -8,25 +8,26 @@
     },
     "core_holdout": {
       "basename": "baseline_benchmark_threat_core_baseline.csv",
-      "sha256": "F87DDB92140B0BB4805114E6D9BC6FEEB5071AE94E04D5924CA9EC5645F43CE5"
+      "sha256": "CB7EFA5A3A25FB36CF800374AD651E3E2D45B18715944348EE2AFCF780C6B288"
     },
     "no_threat_holdout": {
       "basename": "baseline_benchmark_threat_core_no_threat_descriptors.csv",
-      "sha256": "EE77EBD469C6F8A6840A3E019D443F8289FAB82E7A1220109C93E624BFC615A0"
+      "sha256": "58FC0AA4C5B13DBAF059CBA5E67241D4F428A5594FA7029B8A15E36A6AD0FD04"
     },
     "core_cv": {
       "basename": "baseline_benchmark_threat_core_top_cv_cv_summary.csv",
-      "sha256": "F0F3A02932439F4DA67CD9C5809CCD462FCED621E8FEFC61A3F1862C18E47E1E"
+      "sha256": "7E20AAD627D8D4F6FD506A267DCAB2523E64E743FB4F000D8E3A81F6A0D11290"
     },
     "no_threat_cv": {
       "basename": "baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv",
-      "sha256": "C8822699D26C4836F0B106237A9D3334C99B80C1C382AA6BAB82643573030C10"
+      "sha256": "C14F5F9A6CB78CB636DC14B6DFFD47A5427244628654E5A3DE5ECE98160E69DE"
     },
     "strengthening": {
       "basename": "strengthening_summary.csv",
-      "sha256": "4176295264694F23CC3D392E558A63A6A23F526BDF10AEAFACB66D7E27E2F3D0"
+      "sha256": "69D2400A24F9D90CF6CF437E46C686A11CF0FCEB7DDC2EB4FC06CD8AB6F868C9"
     }
   },
+  "input_hash_semantics": "SHA-256 after normalizing CRLF/CR text inputs to LF, matching Git blob bytes.",
   "checks": {
     "class_count_total": 177156,
     "holdout_models": 6,
@@ -35,13 +36,13 @@
   },
   "outputs": {
     "fig_class_distribution.png": {
-      "sha256": "03E7FFC8B4E404C06E89C11A27C9D00D510EDDD67F528168F920822FC5F7590F"
+      "sha256": "3DA734AEAFE92AB14A49B26A9B273DCD9EB5C811C35CF4BD7E08358CB74D54A3"
     },
     "fig_results_ablation_cv_combined.png": {
-      "sha256": "341FBB98E5DDE19CEEC0DADB1CFEF95A42B1C9C92CFDD193F080EE0875351F47"
+      "sha256": "C2BF306F01174119EBD0E142FFCCFC137E0DD569F089FB0FB084BC4F7A598ADC"
     },
     "fig_feature_group_validation.png": {
-      "sha256": "128F2591ECF1AD0C448B1ED024B8BD0FFC1458046199A5316D897B5C83D8CBBC"
+      "sha256": "DF8552DA638D4CF313A2FA34E51DC3DA52670D1AA8BAB7D97F1E5DC3219BE4C9"
     }
   }
 }

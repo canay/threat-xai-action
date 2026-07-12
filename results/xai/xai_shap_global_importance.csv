@@ -1,21 +1,21 @@
 feature,mean_abs_shap
-Threat/Content Type,1.064889
-Direction,0.968152
-Subcategory of app,0.8126729
-Threat/Content Name,0.6848463
-Severity,0.5478672
-Source Country,0.35133252
-Category of app,0.2713466
-Category,0.2471534
-Application,0.22795877
-Source Port,0.20255946
-Destination Zone,0.14449836
-Destination Country,0.11665068
-Outbound Interface,0.10684787
-Technology of app,0.0489606
-IP Protocol,0.036209304
-Destination Port,0.028556146
-Source Zone,0.013273351
-Risk of app,0.0081215715
+Threat/Content Type,1.0391784
+Direction,0.9574977
+Subcategory of app,0.8037226
+Threat/Content Name,0.6469797
+Severity,0.5070506
+Source Country,0.34737483
+Category of app,0.33968502
+Application,0.23699684
+Category,0.22195674
+Source Port,0.1757185
+Destination Zone,0.15193649
+Destination Country,0.14006057
+Outbound Interface,0.13064532
+Technology of app,0.056507736
+Destination Port,0.04305032
+IP Protocol,0.024830999
+Source Zone,0.008271518
+Risk of app,0.0080484785
 Inbound Interface,0.0
 SaaS of app,0.0

@@ -80,7 +80,7 @@ def main():
     # P2 core reconstruction: stratified holdout, six tree probes
     holdout = []
     for name, est in model_specs(args.seed).items():
-        pipe = make_pipe(est, X); pipe.fit(Xtr, ytr); pred = pipe.predict(Xte)
+        pipe = make_pipe(est, X); pipe.fit(Xtr, ytr); pred = np.asarray(pipe.predict(Xte)).reshape(-1)
         row = {"model": name, "acc": accuracy_score(yte, pred), "bacc": balanced_accuracy_score(yte, pred),
                "macro_f1": f1_score(yte, pred, average="macro", zero_division=0),
                "w_f1": f1_score(yte, pred, average="weighted", zero_division=0),
@@ -88,7 +88,7 @@ def main():
         holdout.append(row); print("HOLDOUT", name, {k: round(v,4) if isinstance(v,float) else v for k,v in row.items()})
 
     # per-class for XGBoost
-    xgb = make_pipe(model_specs(args.seed)["XGBoost"], X); xgb.fit(Xtr, ytr); xpred = xgb.predict(Xte)
+    xgb = make_pipe(model_specs(args.seed)["XGBoost"], X); xgb.fit(Xtr, ytr); xpred = np.asarray(xgb.predict(Xte)).reshape(-1)
     perclass = classification_report(yte, xpred, target_names=labels, zero_division=0, output_dict=True)
     cm = confusion_matrix(yte, xpred).tolist()
 
@@ -109,7 +109,7 @@ def main():
     grouped = []
     for tri, tei in gss.split(X, y, groups):
         pipe = make_pipe(model_specs(args.seed)["XGBoost"], X)
-        pipe.fit(X.iloc[tri], y[tri]); gp = pipe.predict(X.iloc[tei])
+        pipe.fit(X.iloc[tri], y[tri]); gp = np.asarray(pipe.predict(X.iloc[tei])).reshape(-1)
         grouped.append(float(f1_score(y[tei], gp, average="macro", zero_division=0)))
     print("duplicate_row_fraction", round(dup_frac,4))
     print("grouped_macro_f1", [round(v,4) for v in grouped], "median", round(float(np.median(grouped)),4))

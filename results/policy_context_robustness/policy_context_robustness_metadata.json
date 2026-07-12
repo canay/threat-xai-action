@@ -1,5 +1,5 @@
 {
-  "wall_seconds": 497.56261759996414,
+  "wall_seconds": 183.39387565897778,
   "data_identifier": "threat_five_class.csv",
   "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
   "rows": 177156,
@@ -9,5 +9,7 @@
   "device": "cpu",
   "n_estimators": 300,
   "max_depth": 6,
-  "note": "Rule is used only as a held-out group variable and is not included in any feature set."
+  "note": "Rule is used only as a held-out group variable, is not included in any feature set, and is written only as a deterministic support-ranked alias.",
+  "rule_contexts_anonymized": true,
+  "rule_alias_count": 14
 }

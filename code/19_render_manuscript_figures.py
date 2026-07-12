@@ -44,7 +44,7 @@ FEATURE_SET_ORDER = [
     "drop_direction",
 ]
 EXPECTED_CLASSES = {"Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"}
-RENDERER_VERSION = "1.0.1"
+RENDERER_VERSION = "1.0.2"
 
 
 def parse_args() -> argparse.Namespace:
@@ -88,7 +88,8 @@ def set_style() -> None:
             "text.color": GRAY_TEXT,
             "savefig.dpi": 600,
             "savefig.bbox": "tight",
-            "savefig.pad_inches": 0.05,
+            # At 600 dpi, 0.02 inches gives a physical 12-pixel outer margin.
+            "savefig.pad_inches": 0.02,
         }
     )
 
@@ -118,8 +119,12 @@ def require_probability_scores(frame: pd.DataFrame, columns: list[str], source: 
         raise ValueError(f"{source} contains non-finite values or scores outside [0, 1].")
 
 
-def sha256(path: Path) -> str:
+def sha256(path: Path, *, normalize_text_eol: bool = False) -> str:
     digest = hashlib.sha256()
+    if normalize_text_eol:
+        payload = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+        digest.update(payload)
+        return digest.hexdigest().upper()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
@@ -387,9 +392,10 @@ def main() -> None:
         "renderer": Path(__file__).name,
         "renderer_version": RENDERER_VERSION,
         "inputs": {
-            name: {"basename": path.name, "sha256": sha256(path)}
+            name: {"basename": path.name, "sha256": sha256(path, normalize_text_eol=True)}
             for name, path in input_paths.items()
         },
+        "input_hash_semantics": "SHA-256 after normalizing CRLF/CR text inputs to LF, matching Git blob bytes.",
         "checks": {
             "class_count_total": sum(
                 json.loads(args.processing_manifest.read_text(encoding="utf-8"))["class_counts"].values()

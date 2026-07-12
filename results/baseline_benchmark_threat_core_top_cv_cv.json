@@ -1,517 +1,516 @@
-﻿{
-    "dataset":  "threat",
-    "feature_set":  "core",
-    "sample_per_class":  null,
-    "data_identifier":  "threat_five_class.csv",
-    "tag":  "top_cv",
-    "exclude_features":  [
-
-                         ],
-    "run_timing":  {
-                       "wall_seconds":  570.0188691000221
-                   },
-    "runtime":  {
-                    "python":  "3.12.12",
-                    "platform":  "Windows-11-10.0.26200-SP0",
-                    "processor":  "Intel64 Family 6 Model 158 Stepping 9, GenuineIntel"
-                },
-    "rows":  177156,
-    "train_rows":  141724,
-    "test_rows":  35432,
-    "features":  [
-                     "Threat/Content Type",
-                     "Application",
-                     "Source Zone",
-                     "Destination Zone",
-                     "Inbound Interface",
-                     "Outbound Interface",
-                     "IP Protocol",
-                     "Source Port",
-                     "Destination Port",
-                     "Source Country",
-                     "Destination Country",
-                     "Threat/Content Name",
-                     "Category",
-                     "Severity",
-                     "Direction",
-                     "Subcategory of app",
-                     "Category of app",
-                     "Technology of app",
-                     "Risk of app",
-                     "SaaS of app"
-                 ],
-    "labels":  [
-                   "Allow",
-                   "Deny",
-                   "Drop",
-                   "Reset-Both",
-                   "Reset-Server"
-               ],
-    "class_counts":  {
-                         "Drop":  160788,
-                         "Deny":  10187,
-                         "Reset-Both":  2903,
-                         "Allow":  2502,
-                         "Reset-Server":  776
-                     },
-    "holdout":  [
-                    {
-                        "model":  "Extra Trees",
-                        "fit_seconds":  6.528713300009258,
-                        "predict_seconds":  0.49079640000127256,
-                        "total_model_seconds":  7.019509700010531,
-                        "predict_ms_per_1000_rows":  13.851783698387688,
-                        "accuracy":  0.9998588846240687,
-                        "balanced_accuracy":  0.9954405640997168,
-                        "precision_weighted":  0.9998586635703937,
-                        "recall_weighted":  0.9998588846240687,
-                        "f1_weighted":  0.9998587169507277,
-                        "f1_macro":  0.9959039088174485,
-                        "classification_report":  {
-                                                      "Allow":  {
-                                                                    "precision":  1.0,
-                                                                    "recall":  1.0,
-                                                                    "f1-score":  1.0,
-                                                                    "support":  500.0
-                                                                },
-                                                      "Deny":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  2038.0
-                                                               },
-                                                      "Drop":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  32158.0
-                                                               },
-                                                      "Reset-Both":  {
-                                                                         "precision":  0.9948453608247423,
-                                                                         "recall":  0.9965576592082617,
-                                                                         "f1-score":  0.9957007738607051,
-                                                                         "support":  581.0
-                                                                     },
-                                                      "Reset-Server":  {
-                                                                           "precision":  0.987012987012987,
-                                                                           "recall":  0.9806451612903225,
-                                                                           "f1-score":  0.9838187702265372,
-                                                                           "support":  155.0
-                                                                       },
-                                                      "accuracy":  0.9998588846240687,
-                                                      "macro avg":  {
-                                                                        "precision":  0.9963716695675459,
-                                                                        "recall":  0.9954405640997168,
-                                                                        "f1-score":  0.9959039088174485,
-                                                                        "support":  35432.0
-                                                                    },
-                                                      "weighted avg":  {
-                                                                           "precision":  0.9998586635703937,
-                                                                           "recall":  0.9998588846240687,
-                                                                           "f1-score":  0.9998587169507277,
-                                                                           "support":  35432.0
-                                                                       }
-                                                  },
-                        "confusion_matrix":  [
-                                                 [
-                                                     500,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     2038,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     32158,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     579,
-                                                     2
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     3,
-                                                     152
-                                                 ]
-                                             ]
-                    },
-                    {
-                        "model":  "XGBoost",
-                        "fit_seconds":  32.69215949997306,
-                        "predict_seconds":  0.6405244000488892,
-                        "total_model_seconds":  33.33268390002195,
-                        "predict_ms_per_1000_rows":  18.077568301221756,
-                        "accuracy":  0.9999153307744412,
-                        "balanced_accuracy":  0.998021209261007,
-                        "precision_weighted":  0.9999156439482639,
-                        "recall_weighted":  0.9999153307744412,
-                        "f1_weighted":  0.9999154304346767,
-                        "f1_macro":  0.9975539436842062,
-                        "classification_report":  {
-                                                      "Allow":  {
-                                                                    "precision":  1.0,
-                                                                    "recall":  1.0,
-                                                                    "f1-score":  1.0,
-                                                                    "support":  500.0
-                                                                },
-                                                      "Deny":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  2038.0
-                                                               },
-                                                      "Drop":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  32158.0
-                                                               },
-                                                      "Reset-Both":  {
-                                                                         "precision":  0.9982758620689656,
-                                                                         "recall":  0.9965576592082617,
-                                                                         "f1-score":  0.9974160206718347,
-                                                                         "support":  581.0
-                                                                     },
-                                                      "Reset-Server":  {
-                                                                           "precision":  0.9871794871794872,
-                                                                           "recall":  0.9935483870967742,
-                                                                           "f1-score":  0.9903536977491961,
-                                                                           "support":  155.0
-                                                                       },
-                                                      "accuracy":  0.9999153307744412,
-                                                      "macro avg":  {
-                                                                        "precision":  0.9970910698496904,
-                                                                        "recall":  0.998021209261007,
-                                                                        "f1-score":  0.9975539436842062,
-                                                                        "support":  35432.0
-                                                                    },
-                                                      "weighted avg":  {
-                                                                           "precision":  0.9999156439482639,
-                                                                           "recall":  0.9999153307744412,
-                                                                           "f1-score":  0.9999154304346767,
-                                                                           "support":  35432.0
-                                                                       }
-                                                  },
-                        "confusion_matrix":  [
-                                                 [
-                                                     500,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     2038,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     32158,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     579,
-                                                     2
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     1,
-                                                     154
-                                                 ]
-                                             ]
-                    },
-                    {
-                        "model":  "LightGBM",
-                        "fit_seconds":  28.397960799979046,
-                        "predict_seconds":  1.2067653000121936,
-                        "total_model_seconds":  29.60472609999124,
-                        "predict_ms_per_1000_rows":  34.05862779442858,
-                        "accuracy":  0.9999435538496274,
-                        "balanced_accuracy":  0.9993115318416523,
-                        "precision_weighted":  0.9999442729088679,
-                        "recall_weighted":  0.9999435538496274,
-                        "f1_weighted":  0.9999436861063017,
-                        "f1_macro":  0.9983731211317419,
-                        "classification_report":  {
-                                                      "Allow":  {
-                                                                    "precision":  1.0,
-                                                                    "recall":  1.0,
-                                                                    "f1-score":  1.0,
-                                                                    "support":  500.0
-                                                                },
-                                                      "Deny":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  2038.0
-                                                               },
-                                                      "Drop":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  32158.0
-                                                               },
-                                                      "Reset-Both":  {
-                                                                         "precision":  1.0,
-                                                                         "recall":  0.9965576592082617,
-                                                                         "f1-score":  0.9982758620689656,
-                                                                         "support":  581.0
-                                                                     },
-                                                      "Reset-Server":  {
-                                                                           "precision":  0.9872611464968153,
-                                                                           "recall":  1.0,
-                                                                           "f1-score":  0.9935897435897436,
-                                                                           "support":  155.0
-                                                                       },
-                                                      "accuracy":  0.9999435538496274,
-                                                      "macro avg":  {
-                                                                        "precision":  0.997452229299363,
-                                                                        "recall":  0.9993115318416523,
-                                                                        "f1-score":  0.9983731211317419,
-                                                                        "support":  35432.0
-                                                                    },
-                                                      "weighted avg":  {
-                                                                           "precision":  0.9999442729088679,
-                                                                           "recall":  0.9999435538496274,
-                                                                           "f1-score":  0.9999436861063017,
-                                                                           "support":  35432.0
-                                                                       }
-                                                  },
-                        "confusion_matrix":  [
-                                                 [
-                                                     500,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     2038,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     32158,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     579,
-                                                     2
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     155
-                                                 ]
-                                             ]
-                    },
-                    {
-                        "model":  "CatBoost",
-                        "fit_seconds":  27.518157099955715,
-                        "predict_seconds":  0.40484570001717657,
-                        "total_model_seconds":  27.923002799972892,
-                        "predict_ms_per_1000_rows":  11.425990630423813,
-                        "accuracy":  0.9999435538496274,
-                        "balanced_accuracy":  0.9993115318416523,
-                        "precision_weighted":  0.9999442729088679,
-                        "recall_weighted":  0.9999435538496274,
-                        "f1_weighted":  0.9999436861063017,
-                        "f1_macro":  0.9983731211317419,
-                        "classification_report":  {
-                                                      "Allow":  {
-                                                                    "precision":  1.0,
-                                                                    "recall":  1.0,
-                                                                    "f1-score":  1.0,
-                                                                    "support":  500.0
-                                                                },
-                                                      "Deny":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  2038.0
-                                                               },
-                                                      "Drop":  {
-                                                                   "precision":  1.0,
-                                                                   "recall":  1.0,
-                                                                   "f1-score":  1.0,
-                                                                   "support":  32158.0
-                                                               },
-                                                      "Reset-Both":  {
-                                                                         "precision":  1.0,
-                                                                         "recall":  0.9965576592082617,
-                                                                         "f1-score":  0.9982758620689656,
-                                                                         "support":  581.0
-                                                                     },
-                                                      "Reset-Server":  {
-                                                                           "precision":  0.9872611464968153,
-                                                                           "recall":  1.0,
-                                                                           "f1-score":  0.9935897435897436,
-                                                                           "support":  155.0
-                                                                       },
-                                                      "accuracy":  0.9999435538496274,
-                                                      "macro avg":  {
-                                                                        "precision":  0.997452229299363,
-                                                                        "recall":  0.9993115318416523,
-                                                                        "f1-score":  0.9983731211317419,
-                                                                        "support":  35432.0
-                                                                    },
-                                                      "weighted avg":  {
-                                                                           "precision":  0.9999442729088679,
-                                                                           "recall":  0.9999435538496274,
-                                                                           "f1-score":  0.9999436861063017,
-                                                                           "support":  35432.0
-                                                                       }
-                                                  },
-                        "confusion_matrix":  [
-                                                 [
-                                                     500,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     2038,
-                                                     0,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     32158,
-                                                     0,
-                                                     0
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     579,
-                                                     2
-                                                 ],
-                                                 [
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     0,
-                                                     155
-                                                 ]
-                                             ]
-                    }
-                ],
-    "cv":  [
-               {
-                   "model":  "Extra Trees",
-                   "test_accuracy":  {
-                                         "mean":  0.999819367539421,
-                                         "std":  9.5462210807405713E-05
-                                     },
-                   "test_balanced_accuracy":  {
-                                                  "mean":  0.9952843581594385,
-                                                  "std":  0.0031251092238431676
-                                              },
-                   "test_f1_weighted":  {
-                                            "mean":  0.9998193910089419,
-                                            "std":  9.5441541957432121E-05
-                                        },
-                   "test_f1_macro":  {
-                                         "mean":  0.995017527303785,
-                                         "std":  0.002547047506095128
-                                     }
-               },
-               {
-                   "model":  "XGBoost",
-                   "test_accuracy":  {
-                                         "mean":  0.9998645257342224,
-                                         "std":  0.00011204579635678142
-                                     },
-                   "test_balanced_accuracy":  {
-                                                  "mean":  0.9969705575892887,
-                                                  "std":  0.0022109744567964606
-                                              },
-                   "test_f1_weighted":  {
-                                            "mean":  0.9998648059210753,
-                                            "std":  0.00011160143511316665
-                                        },
-                   "test_f1_macro":  {
-                                         "mean":  0.9964085190975949,
-                                         "std":  0.002665227506788137
-                                     }
-               },
-               {
-                   "model":  "LightGBM",
-                   "test_accuracy":  {
-                                         "mean":  0.9998758151236096,
-                                         "std":  8.1017942046172109E-05
-                                     },
-                   "test_balanced_accuracy":  {
-                                                  "mean":  0.9978633490610098,
-                                                  "std":  0.0016172214062829208
-                                              },
-                   "test_f1_weighted":  {
-                                            "mean":  0.9998762286667671,
-                                            "std":  8.0531106048167134E-05
-                                        },
-                   "test_f1_macro":  {
-                                         "mean":  0.9966739223177703,
-                                         "std":  0.001951139703671385
-                                     }
-               },
-               {
-                   "model":  "CatBoost",
-                   "test_accuracy":  {
-                                         "mean":  0.9998475914111717,
-                                         "std":  9.37783606803262E-05
-                                     },
-                   "test_balanced_accuracy":  {
-                                                  "mean":  0.9981139503104032,
-                                                  "std":  0.0012079289792647607
-                                              },
-                   "test_f1_weighted":  {
-                                            "mean":  0.9998480814048282,
-                                            "std":  9.3225623941439926E-05
-                                        },
-                   "test_f1_macro":  {
-                                         "mean":  0.9966295095403119,
-                                         "std":  0.0019302501179518543
-                                     }
-               }
-           ]
+{
+  "dataset": "threat",
+  "feature_set": "core",
+  "sample_per_class": null,
+  "tag": "top_cv",
+  "exclude_features": [],
+  "run_timing": {
+    "started_epoch": 1778850769.052185,
+    "ended_epoch": 1778850913.9323518,
+    "wall_seconds": 144.8801669239765
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+    "processor": "aarch64"
+  },
+  "rows": 177156,
+  "train_rows": 141724,
+  "test_rows": 35432,
+  "features": [
+    "Threat/Content Type",
+    "Application",
+    "Source Zone",
+    "Destination Zone",
+    "Inbound Interface",
+    "Outbound Interface",
+    "IP Protocol",
+    "Source Port",
+    "Destination Port",
+    "Source Country",
+    "Destination Country",
+    "Threat/Content Name",
+    "Category",
+    "Severity",
+    "Direction",
+    "Subcategory of app",
+    "Category of app",
+    "Technology of app",
+    "Risk of app",
+    "SaaS of app"
+  ],
+  "labels": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "class_counts": {
+    "Drop": 160788,
+    "Deny": 10187,
+    "Reset-Both": 2903,
+    "Allow": 2502,
+    "Reset-Server": 776
+  },
+  "holdout": [
+    {
+      "model": "Extra Trees",
+      "fit_seconds": 2.4168789399554953,
+      "predict_seconds": 0.21535133803263307,
+      "total_model_seconds": 2.6322302779881284,
+      "predict_ms_per_1000_rows": 6.077877004759344,
+      "accuracy": 0.9998588846240687,
+      "balanced_accuracy": 0.9954405640997168,
+      "precision_weighted": 0.9998586635703937,
+      "recall_weighted": 0.9998588846240687,
+      "f1_weighted": 0.9998587169507277,
+      "f1_macro": 0.9959039088174485,
+      "classification_report": {
+        "Allow": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 500.0
+        },
+        "Deny": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 2038.0
+        },
+        "Drop": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 32158.0
+        },
+        "Reset-Both": {
+          "precision": 0.9948453608247423,
+          "recall": 0.9965576592082617,
+          "f1-score": 0.9957007738607051,
+          "support": 581.0
+        },
+        "Reset-Server": {
+          "precision": 0.987012987012987,
+          "recall": 0.9806451612903225,
+          "f1-score": 0.9838187702265372,
+          "support": 155.0
+        },
+        "accuracy": 0.9998588846240687,
+        "macro avg": {
+          "precision": 0.9963716695675459,
+          "recall": 0.9954405640997168,
+          "f1-score": 0.9959039088174485,
+          "support": 35432.0
+        },
+        "weighted avg": {
+          "precision": 0.9998586635703937,
+          "recall": 0.9998588846240687,
+          "f1-score": 0.9998587169507277,
+          "support": 35432.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          500,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2038,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          32158,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          579,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          152
+        ]
+      ]
+    },
+    {
+      "model": "XGBoost",
+      "fit_seconds": 5.103809738066047,
+      "predict_seconds": 0.24156022700481117,
+      "total_model_seconds": 5.345369965070859,
+      "predict_ms_per_1000_rows": 6.8175724487697895,
+      "accuracy": 0.9999435538496274,
+      "balanced_accuracy": 0.9993115318416523,
+      "precision_weighted": 0.9999442729088679,
+      "recall_weighted": 0.9999435538496274,
+      "f1_weighted": 0.9999436861063017,
+      "f1_macro": 0.9983731211317419,
+      "classification_report": {
+        "Allow": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 500.0
+        },
+        "Deny": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 2038.0
+        },
+        "Drop": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 32158.0
+        },
+        "Reset-Both": {
+          "precision": 1.0,
+          "recall": 0.9965576592082617,
+          "f1-score": 0.9982758620689656,
+          "support": 581.0
+        },
+        "Reset-Server": {
+          "precision": 0.9872611464968153,
+          "recall": 1.0,
+          "f1-score": 0.9935897435897436,
+          "support": 155.0
+        },
+        "accuracy": 0.9999435538496274,
+        "macro avg": {
+          "precision": 0.997452229299363,
+          "recall": 0.9993115318416523,
+          "f1-score": 0.9983731211317419,
+          "support": 35432.0
+        },
+        "weighted avg": {
+          "precision": 0.9999442729088679,
+          "recall": 0.9999435538496274,
+          "f1-score": 0.9999436861063017,
+          "support": 35432.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          500,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2038,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          32158,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          579,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          155
+        ]
+      ]
+    },
+    {
+      "model": "LightGBM",
+      "fit_seconds": 4.081069604959339,
+      "predict_seconds": 1.0752717880532146,
+      "total_model_seconds": 5.1563413930125535,
+      "predict_ms_per_1000_rows": 30.347476519903324,
+      "accuracy": 0.9999435538496274,
+      "balanced_accuracy": 0.9993115318416523,
+      "precision_weighted": 0.9999442729088679,
+      "recall_weighted": 0.9999435538496274,
+      "f1_weighted": 0.9999436861063017,
+      "f1_macro": 0.9983731211317419,
+      "classification_report": {
+        "Allow": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 500.0
+        },
+        "Deny": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 2038.0
+        },
+        "Drop": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 32158.0
+        },
+        "Reset-Both": {
+          "precision": 1.0,
+          "recall": 0.9965576592082617,
+          "f1-score": 0.9982758620689656,
+          "support": 581.0
+        },
+        "Reset-Server": {
+          "precision": 0.9872611464968153,
+          "recall": 1.0,
+          "f1-score": 0.9935897435897436,
+          "support": 155.0
+        },
+        "accuracy": 0.9999435538496274,
+        "macro avg": {
+          "precision": 0.997452229299363,
+          "recall": 0.9993115318416523,
+          "f1-score": 0.9983731211317419,
+          "support": 35432.0
+        },
+        "weighted avg": {
+          "precision": 0.9999442729088679,
+          "recall": 0.9999435538496274,
+          "f1-score": 0.9999436861063017,
+          "support": 35432.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          500,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2038,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          32158,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          579,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          155
+        ]
+      ]
+    },
+    {
+      "model": "CatBoost",
+      "fit_seconds": 10.39660121302586,
+      "predict_seconds": 0.16031815099995583,
+      "total_model_seconds": 10.556919364025816,
+      "predict_ms_per_1000_rows": 4.524671229395908,
+      "accuracy": 0.9999435538496274,
+      "balanced_accuracy": 0.9993115318416523,
+      "precision_weighted": 0.9999442729088679,
+      "recall_weighted": 0.9999435538496274,
+      "f1_weighted": 0.9999436861063017,
+      "f1_macro": 0.9983731211317419,
+      "classification_report": {
+        "Allow": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 500.0
+        },
+        "Deny": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 2038.0
+        },
+        "Drop": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 32158.0
+        },
+        "Reset-Both": {
+          "precision": 1.0,
+          "recall": 0.9965576592082617,
+          "f1-score": 0.9982758620689656,
+          "support": 581.0
+        },
+        "Reset-Server": {
+          "precision": 0.9872611464968153,
+          "recall": 1.0,
+          "f1-score": 0.9935897435897436,
+          "support": 155.0
+        },
+        "accuracy": 0.9999435538496274,
+        "macro avg": {
+          "precision": 0.997452229299363,
+          "recall": 0.9993115318416523,
+          "f1-score": 0.9983731211317419,
+          "support": 35432.0
+        },
+        "weighted avg": {
+          "precision": 0.9999442729088679,
+          "recall": 0.9999435538496274,
+          "f1-score": 0.9999436861063017,
+          "support": 35432.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          500,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2038,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          32158,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          579,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          155
+        ]
+      ]
+    }
+  ],
+  "cv": [
+    {
+      "model": "Extra Trees",
+      "test_accuracy": {
+        "mean": 0.999819367539421,
+        "std": 9.546221080740571e-05
+      },
+      "test_balanced_accuracy": {
+        "mean": 0.9952843581594385,
+        "std": 0.0031251092238431676
+      },
+      "test_f1_weighted": {
+        "mean": 0.9998193910089419,
+        "std": 9.544154195743212e-05
+      },
+      "test_f1_macro": {
+        "mean": 0.995017527303785,
+        "std": 0.002547047506095128
+      }
+    },
+    {
+      "model": "XGBoost",
+      "test_accuracy": {
+        "mean": 0.9998645258935351,
+        "std": 9.512768346867902e-05
+      },
+      "test_balanced_accuracy": {
+        "mean": 0.9969722118490074,
+        "std": 0.001670652907855174
+      },
+      "test_f1_weighted": {
+        "mean": 0.9998648364866355,
+        "std": 9.457937413556213e-05
+      },
+      "test_f1_macro": {
+        "mean": 0.9963425981949177,
+        "std": 0.0022822374334197436
+      }
+    },
+    {
+      "model": "LightGBM",
+      "test_accuracy": {
+        "mean": 0.9998758151236096,
+        "std": 8.101794204617211e-05
+      },
+      "test_balanced_accuracy": {
+        "mean": 0.9978633490610098,
+        "std": 0.0016172214062829208
+      },
+      "test_f1_weighted": {
+        "mean": 0.9998762286667671,
+        "std": 8.053110604816713e-05
+      },
+      "test_f1_macro": {
+        "mean": 0.9966739223177703,
+        "std": 0.001951139703671385
+      }
+    },
+    {
+      "model": "CatBoost",
+      "test_accuracy": {
+        "mean": 0.9998475914111717,
+        "std": 9.37783606803262e-05
+      },
+      "test_balanced_accuracy": {
+        "mean": 0.9981139503104032,
+        "std": 0.0012079289792647607
+      },
+      "test_f1_weighted": {
+        "mean": 0.9998480814048282,
+        "std": 9.322562394143993e-05
+      },
+      "test_f1_macro": {
+        "mean": 0.9966295095403119,
+        "std": 0.0019302501179518543
+      }
+    }
+  ]
 }

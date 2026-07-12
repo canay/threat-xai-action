@@ -72,8 +72,8 @@ This repository is the author-managed code-and-output replication package for th
 - `data/processed/`: controlled-data access and schema notes, the aggregate processing manifest, and a 1,000-row anonymized public smoke-test sample with audit
 - `results/`: CSV/JSON aggregate evaluation outputs, reproducible explanation artifacts, and additional validation outputs
 - `requirements.txt`: portable minimum compatible dependencies
-- `requirements-lock.txt`: exact direct dependencies from the submission-facing Windows x86-64 CPU rerun
-- `requirements-lock-primary-linux-aarch64.txt`: complete platform-labelled resolution from the original Linux/aarch64 run
+- `requirements-lock-primary-linux-aarch64.txt`: exact complete resolution for the canonical Linux/aarch64 VPS evidence
+- `requirements-lock.txt`: platform-labelled Windows x86-64 diagnostic environment retained for provenance only
 - `SEED_MANIFEST.json`: explicit random seeds and resampling scope
 - `CITATION.cff`: citation metadata for this artifact
 - `MANIFEST.md`: release contract and public/controlled-content checklist
@@ -144,46 +144,46 @@ Public schema aids:
 
 Core holdout benchmark:
 
-- Leading two-error profile: LightGBM and CatBoost
+- Leading two-error profile: LightGBM, CatBoost, and XGBoost
 - Leading-profile accuracy: 0.999944
 - Leading-profile balanced accuracy: 0.999312
 - Leading-profile macro-F1: 0.998373
 - Leading-profile weighted-F1: 0.999944
-- Downstream XGBoost reference: three reset-boundary errors
-- XGBoost accuracy: 0.999915
-- XGBoost balanced accuracy: 0.998021
-- XGBoost macro-F1: 0.997554
-- XGBoost weighted-F1: 0.999915
+- Downstream XGBoost reference: two reset-boundary errors
+- XGBoost accuracy: 0.999944
+- XGBoost balanced accuracy: 0.999312
+- XGBoost macro-F1: 0.998373
+- XGBoost weighted-F1: 0.999944
 
 Core five-fold cross-validation macro-F1:
 
 - LightGBM: 0.996674 +/- 0.001951
 - CatBoost: 0.996630 +/- 0.001930
-- XGBoost: 0.996409 +/- 0.002665
+- XGBoost: 0.996343 +/- 0.002282
 - Extra Trees: 0.995018 +/- 0.002547
 
 Leakage-aware ablation without direct threat descriptors:
 
 - Removed fields: `Threat/Content Name`, `Threat/Content Type`, `Severity`
 - LightGBM holdout macro-F1: 0.993126
-- XGBoost holdout macro-F1: 0.990588
+- XGBoost holdout macro-F1: 0.990091
 
 No-threat-descriptors cross-validation:
 
-- XGBoost CV macro-F1 mean: 0.986297
+- XGBoost CV macro-F1 mean: 0.986870
 - LightGBM CV macro-F1 mean: 0.985312
 - Extra Trees CV macro-F1 mean: 0.981459
 - CatBoost CV macro-F1 mean: 0.976976
 
 Additional XGBoost validation checks:
 
-- Minimal-context stratified holdout macro-F1: 0.982613
-- Core chronological holdout macro-F1: 0.866385
-- No-threat-descriptors chronological holdout macro-F1: 0.833761
-- Core chronological holdout ECE, 10 bins: 0.004823
+- Minimal-context stratified holdout macro-F1: 0.982091
+- Core chronological holdout macro-F1: 0.866740
+- No-threat-descriptors chronological holdout macro-F1: 0.836739
+- Core chronological holdout ECE, 10 bins: 0.004593
 - SHAP top-10 feature overlap across repeated stratified samples: 1.000000
-- The canonical SHAP rerun reproduces the selected XGBoost holdout at 0.997554 macro-F1 with three errors.
-- A 64-record diagnostic reconstructs raw margins within 0.00000644 maximum absolute error and probabilities within 0.00000012.
+- The canonical SHAP rerun reproduces the selected XGBoost holdout at 0.998373 macro-F1 with two errors.
+- A 64-record diagnostic reconstructs raw margins within 0.00000882 maximum absolute error and probabilities within 0.00000012.
 - The public XAI release includes aggregate SHAP evidence and three deidentified manuscript figures; no row-level LIME table is released.
 
 Model-independent policy-action entropy audit:
@@ -198,25 +198,25 @@ Model-independent policy-action entropy audit:
 Strengthening checks:
 
 - Feature-group ablation results are in `results/strengthening/`.
-- Chronological core macro-F1 in the feature-group audit: 0.866385.
-- Chronological no-threat-descriptors macro-F1 in the feature-group audit: 0.833761.
-- Chronological no-application-context macro-F1: 0.969289.
-- Confidence-based referral on chronological core retains 97.51% of records with 10 retained-set errors and 0.981524 macro-F1.
+- Chronological core macro-F1 in the feature-group audit: 0.866740.
+- Chronological no-threat-descriptors macro-F1 in the feature-group audit: 0.836739.
+- Chronological no-application-context macro-F1: 0.941499.
+- Confidence-based referral on chronological core retains 97.45% of records with 9 retained-set errors and 0.9829 macro-F1.
 - These temporal results are within-day forward-shift stress tests, not long-term temporal validation.
 
 Duplicate-aware grouped-split stress test:
 
 - Exact feature signatures are grouped so the same structured feature vector cannot appear in both train and test partitions.
 - Core feature signatures: 47,047 unique signatures; 151,361 duplicate rows (85.44%).
-- No-threat-descriptors grouped split macro-F1: 0.983254 +/- 0.004835.
-- Minimal-context grouped split macro-F1: 0.977105 +/- 0.007005.
-- Core grouped split macro-F1: 0.959371 +/- 0.084590, with higher variance caused by one more difficult grouped partition.
+- No-threat-descriptors grouped split macro-F1: 0.983299 +/- 0.004429.
+- Minimal-context grouped split macro-F1: 0.977351 +/- 0.006797.
+- Core grouped split macro-F1: 0.996657 +/- 0.000804 (range 0.9953--0.9974).
 
 Held-out policy-context stress test:
 
 - `Rule` is used only as a held-out grouping variable and is not included as a predictor.
-- Among seven named rule contexts with at least 50 records, the core model reached 0.808266 support-weighted accuracy and 0.654679 support-weighted observed-class macro-F1.
-- The no-threat-descriptors and minimal-context settings reached 0.376787 and 0.371638 support-weighted observed-class macro-F1, respectively.
+- Among seven named rule contexts with at least 50 records, the core model reached 0.804460 support-weighted accuracy and 0.653076 support-weighted observed-class macro-F1.
+- The no-threat-descriptors and minimal-context settings reached 0.378214 and 0.372487 support-weighted observed-class macro-F1, respectively.
 - These results are a stress audit for local policy-context sensitivity, not evidence of cross-organization generalization.
 
 Operational review and unseen-context audit:
@@ -224,9 +224,9 @@ Operational review and unseen-context audit:
 - Outputs are in `results/operational_review_context_audit/`.
 - The saved operational review aggregate is generated with the 300-tree selected-model configuration (`--n-estimators 300`), so its model-log disagreement counts match the selected-model validation table.
 - Aggregate queue summaries and aliased per-context results are public; detailed event-level queue records are not distributed.
-- In the stratified core setting, a review queue triggered by reset-related records or the lowest 1% confidence records routed 939 of 35,432 test records (2.65%) to review and contained all 3 model-log disagreements.
-- In the no-threat-descriptors setting, the same review rule routed 903 records (2.55%) and contained all 14 model-log disagreements.
-- A broader rule using model-log disagreement, lowest 5% confidence, or reset-related records routed 1,802 core records (5.09%) and 2,019 no-threat-descriptors records (5.70%).
+- In the stratified core setting, a review queue triggered by reset-related records or the lowest 1% confidence records routed 941 of 35,432 test records (2.66%) to review and contained both model-log disagreements.
+- In the no-threat-descriptors setting, the same review rule routed 920 records (2.60%) and contained all 15 model-log disagreements.
+- A broader rule using model-log disagreement, lowest 5% confidence, or reset-related records routed 1,802 core records (5.09%) and 2,231 no-threat-descriptors records (6.30%).
 - The exploratory unseen-context holdout audit shows that performance can deteriorate sharply when entire high-support categorical values are absent from training. Treat this as a deployment-boundary stress test, not as independent external validation.
 
 Q1 audit revision checks:
@@ -236,22 +236,22 @@ Q1 audit revision checks:
 - A non-rule, non-direct-descriptor app-direction-zone context lookup reaches 0.953460 stratified macro-F1 but falls to 0.748216 under chronological ordering.
 - A richer minimal operational context lookup reaches 0.976840 stratified macro-F1 and 0.620468 chronological macro-F1.
 - A fair 20-feature exact-signature lookup reaches only 0.511682 stratified macro-F1 and 0.225351 chronological macro-F1 because unmatched high-cardinality signatures fall back to the training-majority action; the learned model's performance is therefore not reproduced by exact-signature memorization.
-- Test-record bootstrap intervals from saved fixed-model XGBoost outputs give chronological core macro-F1 0.866385 with 95% interval 0.853189--0.879027.
-- The corresponding chronological no-threat-descriptors macro-F1 is 0.833761 with a 95% interval of 0.819881--0.848151.
+- Test-record bootstrap intervals from saved fixed-model XGBoost outputs give chronological core macro-F1 0.866740 with 95% interval 0.8537--0.8792.
+- The corresponding chronological no-threat-descriptors macro-F1 is 0.836739 with a 95% interval of 0.8224--0.8508.
 
 Round-9 revision experiments:
 
-- Outputs are in `results/q1_audit_revision/`. All use the 300-tree, seed-42 selected-model pipeline. The submission-facing benchmark and selected-model checks were regenerated under one locked Windows x86-64 CPU environment so that the reported XGBoost rows share the same preprocessing, library, split, and model contract.
-- `classweight_sensitivity.csv`: adding inverse-frequency sample weights to XGBoost changes stratified macro-F1 by at most 0.0008 (core 0.9976 to 0.9984; no-threat-descriptors 0.9906 to 0.9907) and slightly improves rare-class balanced accuracy, so the unweighted selection does not understate minority performance.
+- Outputs are in `results/q1_audit_revision/`. All use the 300-tree, seed-42 selected-model pipeline. The benchmark and every model-dependent selected-model check were generated under one locked Linux/aarch64 VPS environment so that the reported XGBoost rows share the same preprocessing, library, split, and model contract.
+- `classweight_sensitivity.csv`: adding inverse-frequency sample weights leaves core macro-F1 unchanged at 0.9984; in the no-threat-descriptors setting, macro-F1 rises from 0.9901 to 0.9907 and balanced accuracy from 0.9928 to 0.9967, with the same 15 errors. The selected-model conclusion is stable under this tested weighting change.
 - `sourceport_nearduplicate_ablation.csv`: `Source Port` is high-cardinality (10,345 distinct); grouping records by their signature excluding `Source Port` (which collapses 14,678 signature groups and raises the duplicate-row fraction from 0.854 to 0.923) still yields a median core macro-F1 of 0.9932 (range 0.924--0.997), so the reconstruction evidence does not collapse when burst-level source-port variation is removed from grouping.
 - `forward_chaining_chronological.csv`: expanding-window chronological folds (train earliest 60/70/80/90 percent, test the following 10 percent) show that within-day temporal performance is cutpoint-dependent rather than a single value, consistent with the class-mix shift documented for the 80/20 cut.
-- `category_code_order_sensitivity_summary.csv`: under canonical most-frequent categorical imputation and fixed transformed-feature order, five category-map permutations change selected-model macro-F1 by at most 0.0008 in the core setting and 0.0020 without threat descriptors.
+- `category_code_order_sensitivity_summary.csv`: under canonical most-frequent categorical imputation and fixed transformed-feature order, five category-map permutations change selected-model macro-F1 by at most 0.0016 in the core setting and 0.0017 without threat descriptors.
 
 ## Experimental Environment
 
-The original benchmark queue ran on an Oracle Cloud Ampere Linux aarch64 virtual private server with 4 OCPU, 24 GB RAM, and Python 3.12.3. The submission-facing benchmark, timestamp-safe validations, and explanation artifacts were regenerated on a Windows x86-64 CPU workstation with Python 3.12.12 and no specialized accelerator. Inference latency, throughput, and live deployment performance were not evaluated.
+The enterprise-data benchmark, its model-dependent validation and explanation analyses, and the public UCI schema-transfer instantiation ran on an Oracle Cloud Ampere Linux aarch64 virtual private server with 4 OCPU, 24 GB RAM, and Python 3.12.3, without a specialized accelerator. The registered canonical evidence bundle is `2026-07-13_codex_vps_selected_model_canonicalization`; it reproduced the original XGBoost benchmark profile before the dependent battery was accepted. Inference latency, throughput, and live deployment performance were not evaluated.
 
-The exact direct dependencies for the submission-facing Python 3.12.12 Windows x86-64 CPU rerun are recorded in `requirements-lock.txt`, and the full resolved Python 3.12.3 Linux/aarch64 environment from the original queue is preserved in `requirements-lock-primary-linux-aarch64.txt`. `requirements.txt` remains the portable minimum-version installer. Round 15 canonical reruns additionally record their exact local environment and output hashes in the experiment manifests.
+The exact complete Python 3.12.3 Linux/aarch64 environment is recorded in `requirements-lock-primary-linux-aarch64.txt` and was reverified byte-for-byte for the canonical evidence bundle. `requirements-lock.txt` preserves the later Windows diagnostic environment for provenance only, and `requirements.txt` remains the portable minimum-version installer.
 
 ## Reproducing With Authorized Processed Data
 
@@ -263,7 +263,7 @@ Install dependencies:
 python -m pip install -r requirements.txt
 ```
 
-For exact inspection, use the direct Windows rerun lock for the submission-facing outputs and the platform-labelled Linux lock only for the preserved original queue; neither file is a cross-platform installer.
+For exact inspection of the reported outputs, use the platform-labelled Linux/aarch64 lock. The Windows lock is historical diagnostic provenance; neither lock file is a cross-platform installer.
 
 Build the controlled five-class dataset and write an aggregate manifest (all controlled paths must remain outside this public repository):
 
@@ -348,7 +348,7 @@ python code/08_policy_context_robustness.py --data data/processed/threat_five_cl
 Run operational review-queue and unseen-context audit:
 
 ```bash
-python code/09_operational_review_and_context_audit.py --data data/processed/threat_five_class.csv --outdir results/operational_review_context_audit --n-estimators 300
+python code/09_operational_review_and_context_audit.py --data data/processed/threat_five_class.csv --outdir results/operational_review_context_audit --n-estimators 300 --max-contexts-per-column 6
 ```
 
 Run model-independent policy-action entropy audit:
@@ -371,12 +371,12 @@ python code/11_q1_audit_revision_checks.py --outdir results/q1_audit_revision --
 
 Run the additional robustness and audit experiments:
 
-The public UCI Internet Firewall dataset is not duplicated in this repository. Download `log2.csv` from the official [UCI Internet Firewall Data page](https://archive.ics.uci.edu/dataset/542/internet+firewall+data) (DOI: [10.24432/C5131M](https://doi.org/10.24432/C5131M); CC BY 4.0), place it at `data/uci_internet_firewall/log2.csv`, and retain the required UCI attribution. The local `data/uci_internet_firewall/` directory is ignored to prevent an accidental data commit.
+The public UCI Internet Firewall dataset is not duplicated in this repository. Download `log2.csv` from the official [UCI Internet Firewall Data page](https://archive.ics.uci.edu/dataset/542/internet+firewall+data) (DOI: [10.24432/C5131M](https://doi.org/10.24432/C5131M); CC BY 4.0), place it at `data/uci_internet_firewall/log2.csv`, and retain the required UCI attribution. The canonical input SHA-256 is `0b42e7eb9a4d7c314f65810c447ebf7f09d5e3e106ec14d36950a9ebac61e9c0`. The local `data/uci_internet_firewall/` directory is ignored to prevent an accidental data commit.
 
 ```bash
 python code/12_repeated_seed_robustness.py --data data/processed/threat_five_class.csv
 python code/13_classweight_sensitivity.py --data data/processed/threat_five_class.csv
-python code/14_sourceport_nearduplicate_ablation.py --data data/processed/threat_five_class.csv
+python code/14_sourceport_nearduplicate_ablation.py --data data/processed/threat_five_class.csv --outdir results/q1_audit_revision
 python code/15_forward_chaining_chronological.py --data data/processed/threat_five_class.csv --outdir results/q1_audit_revision
 python code/16_uci_leaf_instantiation.py --data data/uci_internet_firewall/log2.csv --outdir results/uci_leaf_instantiation --seed 42
 python code/17_category_code_order_sensitivity.py --data data/processed/threat_five_class.csv --outdir results/q1_audit_revision
