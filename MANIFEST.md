@@ -55,6 +55,7 @@ Before public archival release:
 
 ## Release Identifiers
 
-- Final public commit: resolve with `git rev-parse jnca-submission-r0`
-- Release tag: `jnca-submission-r0`
+- Final public commit: resolve with `git rev-parse jnca-submission-r0.2`
+- Release tag: `jnca-submission-r0.2`
+- Preserved prior tags: `jnca-submission-r0` (scientific release) and `jnca-submission-r0.1` (Figure 1 typography/crop patch)
 - Repository DOI: `DEFERRED-PENDING-SUBMISSION-DECISION`

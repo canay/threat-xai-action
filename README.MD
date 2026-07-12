@@ -145,11 +145,15 @@ Public schema aids:
 Core holdout benchmark:
 
 - Leading two-error profile: LightGBM and CatBoost
-- Downstream reference: XGBoost, with three reset-boundary errors
-- Accuracy: 0.999944
-- Balanced accuracy: 0.999312
-- Macro-F1: 0.998373
-- Weighted-F1: 0.999944
+- Leading-profile accuracy: 0.999944
+- Leading-profile balanced accuracy: 0.999312
+- Leading-profile macro-F1: 0.998373
+- Leading-profile weighted-F1: 0.999944
+- Downstream XGBoost reference: three reset-boundary errors
+- XGBoost accuracy: 0.999915
+- XGBoost balanced accuracy: 0.998021
+- XGBoost macro-F1: 0.997554
+- XGBoost weighted-F1: 0.999915
 
 Core five-fold cross-validation macro-F1:
 
@@ -366,6 +370,8 @@ python code/11_q1_audit_revision_checks.py --outdir results/q1_audit_revision --
 ```
 
 Run the additional robustness and audit experiments:
+
+The public UCI Internet Firewall dataset is not duplicated in this repository. Download `log2.csv` from the official [UCI Internet Firewall Data page](https://archive.ics.uci.edu/dataset/542/internet+firewall+data) (DOI: [10.24432/C5131M](https://doi.org/10.24432/C5131M); CC BY 4.0), place it at `data/uci_internet_firewall/log2.csv`, and retain the required UCI attribution. The local `data/uci_internet_firewall/` directory is ignored to prevent an accidental data commit.
 
 ```bash
 python code/12_repeated_seed_robustness.py --data data/processed/threat_five_class.csv

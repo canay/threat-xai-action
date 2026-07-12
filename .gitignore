@@ -6,6 +6,7 @@ venv/
 .DS_Store
 Thumbs.db
 data/raw/
+data/uci_internet_firewall/
 data/processed/*.csv
 !data/processed/README.md
 !data/processed/schema.csv
