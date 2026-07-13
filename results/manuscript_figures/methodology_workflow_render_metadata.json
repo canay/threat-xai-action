@@ -1,16 +1,22 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.2.0",
+  "renderer_version": "1.3.0",
   "render_style": {
-    "font_family": "Source Sans 3",
-    "regular_font_file_basename": "SourceSans3-Regular.otf",
-    "regular_font_file_sha256": "08DF266400933D3178D081A45F94A08814C3E55B4B7DD2E0FF69CB1329F13AB6",
-    "semibold_font_file_basename": "SourceSans3-Semibold.otf",
-    "semibold_font_file_sha256": "36F1CD2C344AA3109E64429BCE41A41E4B2B923BEB2DB19B8DBF9BB56F05A4F9",
+    "font_family": "Inter",
+    "regular_font_file_basename": "Inter-Regular.ttf",
+    "regular_font_file_sha256": "7A91DCAC07E502BAA8BF03BB1564B41E7D7DF099AE9B754736CE441B1E29B4E2",
+    "semibold_font_file_basename": "Inter-SemiBold.ttf",
+    "semibold_font_file_sha256": "38645AC6A41FE142018E5E811BDC62A16563951E0E1F9B168C3B07A2A8E0AEF1",
     "phase_font_points": 7.8,
     "box_title_font_points": 7.6,
     "box_body_font_points": 7.0,
     "box_corner_style": "square",
+    "box_height_inches": 0.92,
+    "phase_label_alignment": [
+      "left",
+      "center",
+      "right"
+    ],
     "content_aware_png_crop": true
   },
   "input": {
@@ -29,25 +35,25 @@
     },
     "content_bbox_pixels": {
       "left": 53,
-      "top": 85,
+      "top": 404,
       "right": 4598,
       "bottom": 2670
     },
     "crop_bbox_pixels": {
       "left": 41,
-      "top": 73,
+      "top": 392,
       "right": 4610,
       "bottom": 2682
     },
     "final_pixels": {
       "width": 4569,
-      "height": 2609
+      "height": 2290
     },
     "padding_pixels": 12,
     "dpi": 600
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "39E0628AAA1AE9DA91079E04BC5075DE072B6A961B9378F7FD8BC86657C5DA26"
+    "sha256": "9D9CD77799F042FC60E6BF1FDC15B8CCD62ABDE74A139C701B7DD263419ED251"
   }
 }

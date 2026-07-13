@@ -395,7 +395,7 @@ Render the manuscript methodology workflow from the aggregate cohort manifest:
 python code/20_render_methodology_workflow.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --outdir results/manuscript_figures
 ```
 
-The workflow renderer prefers the open-source Source Sans 3 Regular/Semibold faces when available, records the resolved font-file hashes, and applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin. Open Sans, Lato, and DejaVu Sans are deterministic fallback families.
+The workflow renderer prefers Inter Regular/Semibold. When an installed Inter variable face is found, it materializes static 400/600 weights with `fontTools`; the release figure records the resolved filenames and SHA-256 hashes in `methodology_workflow_render_metadata.json`. Exact pixel reproduction requires the recorded Inter faces; Source Sans 3, Open Sans, Lato, and DejaVu Sans are documented fallbacks. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
 
 ## Submission And Public Release Checklist
 

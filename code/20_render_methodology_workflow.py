@@ -25,13 +25,55 @@ BOUNDARY = "#5F6B73"
 PHASE_FILL = "#F7F9FB"
 BOX_FILL = "#FFFFFF"
 PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.2.0"
+RENDERER_VERSION = "1.3.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
 
+def ensure_inter_static_fonts() -> None:
+    """Instantiate static Inter Regular/SemiBold faces from an installed
+    variable font so Matplotlib can select real weights."""
+    variable_source = None
+    for font_path in font_manager.findSystemFonts():
+        name = Path(font_path).name.lower()
+        if name.startswith("inter-variablefont") and "italic" not in name:
+            variable_source = Path(font_path)
+            break
+    if variable_source is None:
+        return
+    try:
+        from fontTools.ttLib import TTFont
+        from fontTools.varLib.instancer import instantiateVariableFont
+    except ImportError:
+        return
+    import tempfile
+
+    cache_dir = Path(tempfile.gettempdir()) / "leaf_inter_static"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    for weight, subfamily in ((400, "Regular"), (600, "SemiBold")):
+        target = cache_dir / f"Inter-{subfamily}.ttf"
+        if not target.is_file():
+            font = TTFont(str(variable_source))
+            pins = {axis.axisTag: axis.defaultValue for axis in font["fvar"].axes}
+            pins["wght"] = weight
+            instantiateVariableFont(font, pins, inplace=True, updateFontNames=True)
+            name_table = font["name"]
+            for name_id, value in (
+                (1, "Inter"),
+                (2, subfamily),
+                (4, f"Inter {subfamily}"),
+                (6, f"Inter-{subfamily}"),
+                (16, "Inter"),
+                (17, subfamily),
+            ):
+                name_table.setName(value, name_id, 3, 1, 0x409)
+            font.save(str(target))
+        font_manager.fontManager.addfont(str(target))
+
+
 def register_additional_fonts() -> None:
     """Register publication fonts that Matplotlib may not cache automatically."""
+    ensure_inter_static_fonts()
     kpsewhich = shutil.which("kpsewhich")
     if kpsewhich:
         for filename in ("SourceSans3-Regular.otf", "SourceSans3-Semibold.otf"):
@@ -47,14 +89,18 @@ def register_additional_fonts() -> None:
 
     for font_path in font_manager.findSystemFonts():
         filename = Path(font_path).name.lower()
-        if filename.startswith("inter-") and "italic" not in filename:
+        if (
+            filename.startswith("inter-")
+            and "italic" not in filename
+            and "variablefont" not in filename
+        ):
             font_manager.fontManager.addfont(font_path)
 
 
 def resolve_font() -> tuple[str, Path, Path]:
     """Choose a refined sans-serif family with real regular and semibold faces."""
     register_additional_fonts()
-    for family in ("Source Sans 3", "Open Sans", "Lato", "DejaVu Sans"):
+    for family in ("Inter", "Source Sans 3", "Open Sans", "Lato", "DejaVu Sans"):
         try:
             regular = Path(
                 font_manager.findfont(
@@ -117,7 +163,7 @@ def add_phase(
     height: float,
     label: str,
     *,
-    label_x: float | None = None,
+    align: str = "left",
 ) -> None:
     ax.add_patch(
         Rectangle(
@@ -131,11 +177,18 @@ def add_phase(
             zorder=0,
         )
     )
+    inset = 0.12
+    if align == "center":
+        text_x, ha = x + width / 2, "center"
+    elif align == "right":
+        text_x, ha = x + width - inset, "right"
+    else:
+        text_x, ha = x + inset, "left"
     ax.text(
-        x + 0.12 if label_x is None else label_x,
+        text_x,
         y + height - 0.13,
         label,
-        ha="left",
+        ha=ha,
         va="top",
         fontsize=7.8,
         fontweight=600,
@@ -286,23 +339,23 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
     ax.set_ylim(0, 6)
     ax.axis("off")
 
-    add_phase(ax, 0.12, 4.13, 9.76, 1.68, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN")
-    add_phase(ax, 0.12, 2.18, 9.76, 1.68, "PHASE II: RECONSTRUCTION AND STRESS AUDIT")
+    add_phase(ax, 0.12, 3.67, 9.76, 1.45, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN", align="left")
+    add_phase(ax, 0.12, 1.95, 9.76, 1.45, "PHASE II: RECONSTRUCTION AND STRESS AUDIT", align="center")
     add_phase(
         ax,
         0.12,
         0.23,
         9.76,
-        1.68,
+        1.45,
         "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY",
-        label_x=3.61,
+        align="right",
     )
 
     width = 2.78
-    height = 1.08
-    row1_y = 4.40
-    row2_y = 2.45
-    row3_y = 0.50
+    height = 0.92
+    row1_y = 3.83
+    row2_y = 2.11
+    row3_y = 0.39
 
     b1 = add_box(
         ax,
@@ -417,6 +470,8 @@ def main() -> None:
             "box_title_font_points": 7.6,
             "box_body_font_points": 7.0,
             "box_corner_style": "square",
+            "box_height_inches": 0.92,
+            "phase_label_alignment": ["left", "center", "right"],
             "content_aware_png_crop": True,
         },
         "input": {

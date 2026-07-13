@@ -55,7 +55,7 @@ Before public archival release:
 
 ## Release Identifiers
 
-- Final public commit: resolve with `git rev-parse jnca-submission-r0.3`
-- Release tag: `jnca-submission-r0.3`
-- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, and `jnca-submission-r0.2`
+- Final public commit: resolve with `git rev-parse jnca-submission-r0.4`
+- Release tag: `jnca-submission-r0.4`
+- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, `jnca-submission-r0.2`, and `jnca-submission-r0.3`
 - Repository DOI: `DEFERRED-PENDING-SUBMISSION-DECISION`
