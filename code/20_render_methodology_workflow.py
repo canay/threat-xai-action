@@ -25,7 +25,7 @@ BOUNDARY = "#5F6B73"
 PHASE_FILL = "#F7F9FB"
 BOX_FILL = "#FFFFFF"
 PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.4.0"
+RENDERER_VERSION = "1.5.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
@@ -89,7 +89,9 @@ def register_additional_fonts() -> None:
 
     for font_path in font_manager.findSystemFonts():
         filename = Path(font_path).name.lower()
-        if (
+        if filename.startswith(("lato-", "liberationsans-")):
+            font_manager.fontManager.addfont(font_path)
+        elif (
             filename.startswith("inter-")
             and "italic" not in filename
             and "variablefont" not in filename
@@ -97,35 +99,35 @@ def register_additional_fonts() -> None:
             font_manager.fontManager.addfont(font_path)
 
 
-def resolve_font() -> tuple[str, Path, Path]:
-    """Choose a refined sans-serif family with real regular and semibold faces."""
+def resolve_fonts() -> tuple[str, Path, str, Path]:
+    """Resolve the author-selected title and summary font faces."""
     register_additional_fonts()
-    for family in ("Inter", "Source Sans 3", "Open Sans", "Lato", "DejaVu Sans"):
-        try:
-            regular = Path(
-                font_manager.findfont(
-                    font_manager.FontProperties(family=family, weight="normal"),
-                    fallback_to_default=False,
-                )
+    title_family = "Lato"
+    summary_family = "Liberation Sans"
+    try:
+        title_path = Path(
+            font_manager.findfont(
+                font_manager.FontProperties(family=title_family, weight="bold"),
+                fallback_to_default=False,
             )
-            emphasis = Path(
-                font_manager.findfont(
-                    font_manager.FontProperties(family=family, weight=600),
-                    fallback_to_default=False,
-                )
+        )
+        summary_path = Path(
+            font_manager.findfont(
+                font_manager.FontProperties(family=summary_family, weight="normal"),
+                fallback_to_default=False,
             )
-            if regular.resolve() == emphasis.resolve():
-                continue
-            return family, regular, emphasis
-        except ValueError:
-            continue
-    raise RuntimeError("No supported sans-serif font was found.")
+        )
+    except ValueError as exc:
+        raise RuntimeError(
+            "Figure 1 requires Lato Bold and Liberation Sans Regular."
+        ) from exc
+    return title_family, title_path, summary_family, summary_path
 
 
-FONT_FAMILY, FONT_PATH, FONT_EMPHASIS_PATH = resolve_font()
+TITLE_FONT_FAMILY, TITLE_FONT_PATH, SUMMARY_FONT_FAMILY, SUMMARY_FONT_PATH = resolve_fonts()
 matplotlib.rcParams.update(
     {
-        "font.family": FONT_FAMILY,
+        "font.family": SUMMARY_FONT_FAMILY,
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
     }
@@ -191,7 +193,8 @@ def add_phase(
         ha=ha,
         va="top",
         fontsize=7.8,
-        fontweight=600,
+        fontfamily=TITLE_FONT_FAMILY,
+        fontweight="bold",
         color=INK,
         zorder=3,
     )
@@ -224,7 +227,8 @@ def add_box(
         ha="center",
         va="center",
         fontsize=7.6,
-        fontweight=600,
+        fontfamily=TITLE_FONT_FAMILY,
+        fontweight="bold",
         color=INK,
         zorder=3,
     )
@@ -235,6 +239,7 @@ def add_box(
         ha="center",
         va="center",
         fontsize=6.8,
+        fontfamily=SUMMARY_FONT_FAMILY,
         color=INK,
         zorder=3,
     )
@@ -464,11 +469,14 @@ def main() -> None:
         "renderer": Path(__file__).name,
         "renderer_version": RENDERER_VERSION,
         "render_style": {
-            "font_family": FONT_FAMILY,
-            "regular_font_file_basename": FONT_PATH.name,
-            "regular_font_file_sha256": sha256(FONT_PATH),
-            "semibold_font_file_basename": FONT_EMPHASIS_PATH.name,
-            "semibold_font_file_sha256": sha256(FONT_EMPHASIS_PATH),
+            "title_font_family": TITLE_FONT_FAMILY,
+            "title_font_weight": "bold",
+            "title_font_file_basename": TITLE_FONT_PATH.name,
+            "title_font_file_sha256": sha256(TITLE_FONT_PATH),
+            "summary_font_family": SUMMARY_FONT_FAMILY,
+            "summary_font_weight": "regular",
+            "summary_font_file_basename": SUMMARY_FONT_PATH.name,
+            "summary_font_file_sha256": sha256(SUMMARY_FONT_PATH),
             "phase_font_points": 7.8,
             "box_title_font_points": 7.6,
             "box_body_font_points": 6.8,
