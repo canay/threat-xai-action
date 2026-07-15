@@ -315,7 +315,7 @@ Generate the SHAP and LIME explanation artifacts used for the manuscript figures
 python code/04_xai_explanations.py --data data/processed/threat_five_class.csv --outdir results/xai
 ```
 
-The XAI renderer uses Lato Regular at normal weight for axis and colorbar-axis titles and Inter Regular at normal weight for all internal plot text; no internal label is bold. Set `LEAF_LATO_REGULAR` and `LEAF_INTER_REGULAR` to explicit font-file paths when those faces are not discoverable through the host font registry. The resolved filenames and SHA-256 hashes are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
+The XAI renderer uses 8-point Lato Regular at normal weight for axis and colorbar-axis titles and 8-point Inter Regular at normal weight for axis tick/feature labels; no internal label is bold. Set `LEAF_LATO_REGULAR` and `LEAF_INTER_REGULAR` to explicit font-file paths when those faces are not discoverable through the host font registry. The resolved filenames, SHA-256 hashes, and locked sizes are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
 
 Run the additional validation checks:
 

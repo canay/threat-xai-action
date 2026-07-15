@@ -45,7 +45,9 @@ GRAY_BG = "#F8FAFC"
 
 SHAP_CMAP = LinearSegmentedColormap.from_list("q1_shap", [PRIMARY, "#DCE4EE", CRIMSON])
 HEATMAP_CMAP = LinearSegmentedColormap.from_list("q1_heat", [GRAY_BG, "#80B7D8", PRIMARY])
-RENDERER_VERSION = "1.2.0"
+RENDERER_VERSION = "1.3.0"
+AXIS_LABEL_SIZE_PT = 8
+AXIS_TICK_SIZE_PT = 8
 
 
 def resolve_lato_regular() -> tuple[font_manager.FontProperties, Path]:
@@ -124,11 +126,11 @@ def set_q1_style() -> None:
         "font.family": "sans-serif",
         "font.sans-serif": [INTERNAL_TEXT_FAMILY, "DejaVu Sans"],
         "font.size": 8,
-        "axes.labelsize": 9,
+        "axes.labelsize": AXIS_LABEL_SIZE_PT,
         "axes.titlesize": 9,
         "axes.titleweight": "normal",
-        "xtick.labelsize": 8,
-        "ytick.labelsize": 8,
+        "xtick.labelsize": AXIS_TICK_SIZE_PT,
+        "ytick.labelsize": AXIS_TICK_SIZE_PT,
         "legend.fontsize": 8,
         "axes.spines.top": False,
         "axes.spines.right": False,
@@ -147,10 +149,11 @@ def set_q1_style() -> None:
 
 
 def apply_internal_tick_font(ax: plt.Axes) -> None:
-    """Apply Inter Regular to tick labels without introducing bold faces."""
+    """Apply Inter Regular at the locked axis-tick size without bold faces."""
     for label in [*ax.get_xticklabels(), *ax.get_yticklabels()]:
         label.set_fontproperties(INTERNAL_TEXT_FONT)
         label.set_fontweight("normal")
+        label.set_fontsize(AXIS_TICK_SIZE_PT)
 
 
 def parse_args() -> argparse.Namespace:
@@ -211,7 +214,11 @@ def save_global_shap(outdir: Path, feature_names: list[str], shap_array: np.ndar
         ax.axhspan(yi - 0.5, yi + 0.5, color=GRAY_BG, zorder=0, lw=0)
 
     ax.barh(y_pos, top["mean_abs_shap"], color=PRIMARY, edgecolor="white", linewidth=0.8, zorder=3)
-    ax.set_xlabel("Mean Absolute SHAP Value", fontproperties=AXIS_LABEL_FONT)
+    ax.set_xlabel(
+        "Mean Absolute SHAP Value",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=AXIS_LABEL_SIZE_PT,
+    )
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
     ax.set_axisbelow(True)
     ax.set_yticks(y_pos)
@@ -237,7 +244,12 @@ def save_classwise_shap(
     image = ax.imshow(heat, aspect="auto", cmap=HEATMAP_CMAP)
     
     ax.set_yticks(np.arange(len(top_idx)))
-    ax.set_yticklabels(top_features, fontproperties=INTERNAL_TEXT_FONT, color=GRAY_TEXT, fontsize=7.5)
+    ax.set_yticklabels(
+        top_features,
+        fontproperties=INTERNAL_TEXT_FONT,
+        color=GRAY_TEXT,
+        fontsize=AXIS_TICK_SIZE_PT,
+    )
     ax.set_xticks(np.arange(len(class_names)))
     ax.set_xticklabels(
         class_names,
@@ -245,7 +257,7 @@ def save_classwise_shap(
         ha="right",
         fontproperties=INTERNAL_TEXT_FONT,
         color=GRAY_TEXT,
-        fontsize=8,
+        fontsize=AXIS_TICK_SIZE_PT,
     )
     
     max_heat = np.nanmax(heat) if np.isfinite(heat).any() else 0.0
@@ -265,11 +277,16 @@ def save_classwise_shap(
             )
             
     colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    colorbar.set_label("Mean Absolute SHAP", fontproperties=AXIS_LABEL_FONT)
+    colorbar.set_label(
+        "Mean Absolute SHAP",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=AXIS_LABEL_SIZE_PT,
+    )
     apply_internal_tick_font(ax)
     for label in colorbar.ax.get_yticklabels():
         label.set_fontproperties(INTERNAL_TEXT_FONT)
         label.set_fontweight("normal")
+        label.set_fontsize(AXIS_TICK_SIZE_PT)
     
     for spine in ["top", "right", "left", "bottom"]:
         ax.spines[spine].set_visible(False)
@@ -330,13 +347,18 @@ def save_shap_summary_swarm(
 
     ax.axvline(0, color=GRAY_LINE, linewidth=1.2, zorder=2)
     ax.set_yticks(np.arange(len(top_idx)))
-    ax.set_yticklabels(top_features, fontproperties=INTERNAL_TEXT_FONT, color=GRAY_TEXT, fontsize=9)
+    ax.set_yticklabels(
+        top_features,
+        fontproperties=INTERNAL_TEXT_FONT,
+        color=GRAY_TEXT,
+        fontsize=AXIS_TICK_SIZE_PT,
+    )
     ax.set_ylim(len(top_idx) - 0.5, -0.5)
     ax.set_xlim(-1.12 * max_abs, 1.12 * max_abs)
     ax.set_xlabel(
         "SHAP Value for Predicted-Class Raw Margin",
         fontproperties=AXIS_LABEL_FONT,
-        fontsize=10,
+        fontsize=AXIS_LABEL_SIZE_PT,
     )
     
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
@@ -346,10 +368,15 @@ def save_shap_summary_swarm(
         colorbar = fig.colorbar(scatter_handle, ax=ax, fraction=0.03, pad=0.02)
         colorbar.set_ticks([0, 1])
         colorbar.set_ticklabels(["Low", "High"])
-        colorbar.set_label("Feature Value", fontproperties=AXIS_LABEL_FONT)
+        colorbar.set_label(
+            "Feature Value",
+            fontproperties=AXIS_LABEL_FONT,
+            fontsize=AXIS_LABEL_SIZE_PT,
+        )
         for label in colorbar.ax.get_yticklabels():
             label.set_fontproperties(INTERNAL_TEXT_FONT)
             label.set_fontweight("normal")
+            label.set_fontsize(AXIS_TICK_SIZE_PT)
 
     apply_internal_tick_font(ax)
 
@@ -382,7 +409,11 @@ def save_lime_group(
             
         ax.barh(y_pos, weights, color=colors, edgecolor="white", linewidth=0.8, zorder=3)
         ax.set_yticks(y_pos)
-        ax.set_yticklabels(rows["feature_rule"], fontsize=8, fontproperties=INTERNAL_TEXT_FONT)
+        ax.set_yticklabels(
+            rows["feature_rule"],
+            fontsize=AXIS_TICK_SIZE_PT,
+            fontproperties=INTERNAL_TEXT_FONT,
+        )
         ax.axvline(0, color=GRAY_LINE, linewidth=1.2, zorder=2)
         ax.set_title(class_name, fontsize=9, loc="left", fontproperties=INTERNAL_TEXT_FONT, pad=4)
         
@@ -390,7 +421,11 @@ def save_lime_group(
         ax.set_axisbelow(True)
         apply_internal_tick_font(ax)
 
-    axes[-1].set_xlabel("LIME surrogate weight", fontproperties=AXIS_LABEL_FONT)
+    axes[-1].set_xlabel(
+        "LIME surrogate weight",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=AXIS_LABEL_SIZE_PT,
+    )
     fig.tight_layout()
     fig.savefig(outdir / filename)
     plt.close(fig)
@@ -558,6 +593,8 @@ def main() -> None:
             "axis_label_font_weight": "regular",
             "axis_label_font_file_basename": AXIS_LABEL_FONT_PATH.name,
             "axis_label_font_file_sha256": file_sha256(AXIS_LABEL_FONT_PATH),
+            "axis_label_font_size_pt": AXIS_LABEL_SIZE_PT,
+            "axis_tick_font_size_pt": AXIS_TICK_SIZE_PT,
             "internal_text_font_family": "Inter",
             "internal_text_font_weight": "regular",
             "internal_text_font_file_basename": INTERNAL_TEXT_FONT_PATH.name,
