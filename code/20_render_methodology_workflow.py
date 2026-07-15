@@ -25,7 +25,7 @@ BOUNDARY = "#5F6B73"
 PHASE_FILL = "#F7F9FB"
 BOX_FILL = "#FFFFFF"
 PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.3.0"
+RENDERER_VERSION = "1.4.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
@@ -219,7 +219,7 @@ def add_box(
     )
     ax.text(
         x + width / 2,
-        y + height * 0.70,
+        y + height * 0.68,
         title,
         ha="center",
         va="center",
@@ -230,13 +230,12 @@ def add_box(
     )
     ax.text(
         x + width / 2,
-        y + height * 0.34,
+        y + height * 0.29,
         body,
         ha="center",
         va="center",
-        fontsize=7.0,
+        fontsize=6.8,
         color=INK,
-        linespacing=1.20,
         zorder=3,
     )
     return x, y, width, height
@@ -334,28 +333,32 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
     if rows_in - excluded_alert != rows_out:
         raise ValueError("Cohort manifest is internally inconsistent.")
 
-    fig, ax = plt.subplots(figsize=(10.0, 6.0))
+    fig, ax = plt.subplots(figsize=(10.0, 4.1))
     ax.set_xlim(0, 10)
-    ax.set_ylim(0, 6)
+    ax.set_ylim(0, 4.1)
     ax.axis("off")
 
-    add_phase(ax, 0.12, 3.67, 9.76, 1.45, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN", align="left")
-    add_phase(ax, 0.12, 1.95, 9.76, 1.45, "PHASE II: RECONSTRUCTION AND STRESS AUDIT", align="center")
+    phase_height = 1.10
+    phase1_y = 2.85
+    phase2_y = 1.50
+    phase3_y = 0.15
+    add_phase(ax, 0.12, phase1_y, 9.76, phase_height, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN", align="left")
+    add_phase(ax, 0.12, phase2_y, 9.76, phase_height, "PHASE II: RECONSTRUCTION AND STRESS AUDIT", align="center")
     add_phase(
         ax,
         0.12,
-        0.23,
+        phase3_y,
         9.76,
-        1.45,
+        phase_height,
         "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY",
         align="right",
     )
 
     width = 2.78
-    height = 0.92
-    row1_y = 3.83
-    row2_y = 2.11
-    row3_y = 0.39
+    height = 0.64
+    row1_y = phase1_y + 0.16
+    row2_y = phase2_y + 0.16
+    row3_y = phase3_y + 0.16
 
     b1 = add_box(
         ax,
@@ -364,7 +367,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "1. Controlled threat-log export",
-        f"{rows_in:,} raw records\nOne firewall and policy state",
+        "Raw records, one policy state",
     )
     b2 = add_box(
         ax,
@@ -373,7 +376,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "2. Deterministic cohort construction",
-        f"Exclude {excluded_alert:,} alert records\nMap {rows_out:,} records to five actions",
+        "Alert filtering and action mapping",
     )
     b3 = add_box(
         ax,
@@ -382,7 +385,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "3. Leakage-graded feature settings",
-        "Core excludes Rule\nDescriptor removal and with-policy bound",
+        "Core, no-descriptor, and with-policy",
     )
 
     b4 = add_box(
@@ -392,7 +395,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "4. Policy-action regularity audit",
-        "Model-independent context entropy\nNamed and missing-rule scopes separated",
+        "Rule-context entropy",
     )
     b5 = add_box(
         ax,
@@ -401,7 +404,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "5. Core reconstruction evidence",
-        "Stratified 80/20 holdout and 5-fold CV\nSix tree-based measurement probes",
+        "Holdout and cross-validation",
     )
     b6 = add_box(
         ax,
@@ -410,7 +413,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "6. Sensitivity and transfer stress",
-        "Descriptor and duplicate-group tests\nTemporal and context stress tests\nConditional intervals and referral audit",
+        "Ablation, duplicate, temporal, and context",
     )
 
     b7 = add_box(
@@ -420,7 +423,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         width,
         height,
         "7. Selected-model inspection",
-        "TreeSHAP on class-wise raw margins\nCategorical-aware LIME local surrogates",
+        "TreeSHAP and LIME",
     )
     b8 = add_box(
         ax,
@@ -429,7 +432,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         5.99,
         height,
         "8. Interpretation and release boundary",
-        "Retrospective policy audit; non-causal and non-autonomous\nPublic code/aggregates; event-level data under controlled access",
+        "Offline, non-causal, controlled access",
     )
 
     add_arrow(ax, side(b1, "right"), side(b2, "left"))
@@ -468,9 +471,11 @@ def main() -> None:
             "semibold_font_file_sha256": sha256(FONT_EMPHASIS_PATH),
             "phase_font_points": 7.8,
             "box_title_font_points": 7.6,
-            "box_body_font_points": 7.0,
+            "box_body_font_points": 6.8,
             "box_corner_style": "square",
-            "box_height_inches": 0.92,
+            "box_height_inches": 0.64,
+            "figure_height_inches": 4.1,
+            "box_text_structure": "one title and one single-line summary",
             "phase_label_alignment": ["left", "center", "right"],
             "content_aware_png_crop": True,
         },

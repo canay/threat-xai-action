@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.3.0",
+  "renderer_version": "1.4.0",
   "render_style": {
     "font_family": "Inter",
     "regular_font_file_basename": "Inter-Regular.ttf",
@@ -9,9 +9,11 @@
     "semibold_font_file_sha256": "38645AC6A41FE142018E5E811BDC62A16563951E0E1F9B168C3B07A2A8E0AEF1",
     "phase_font_points": 7.8,
     "box_title_font_points": 7.6,
-    "box_body_font_points": 7.0,
+    "box_body_font_points": 6.8,
     "box_corner_style": "square",
-    "box_height_inches": 0.92,
+    "box_height_inches": 0.64,
+    "figure_height_inches": 4.1,
+    "box_text_structure": "one title and one single-line summary",
     "phase_label_alignment": [
       "left",
       "center",
@@ -31,29 +33,29 @@
   "crop": {
     "uncropped_pixels": {
       "width": 4650,
-      "height": 2772
+      "height": 1894
     },
     "content_bbox_pixels": {
       "left": 53,
-      "top": 404,
+      "top": 66,
       "right": 4598,
-      "bottom": 2670
+      "bottom": 1829
     },
     "crop_bbox_pixels": {
       "left": 41,
-      "top": 392,
+      "top": 54,
       "right": 4610,
-      "bottom": 2682
+      "bottom": 1841
     },
     "final_pixels": {
       "width": 4569,
-      "height": 2290
+      "height": 1787
     },
     "padding_pixels": 12,
     "dpi": 600
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "9D9CD77799F042FC60E6BF1FDC15B8CCD62ABDE74A139C701B7DD263419ED251"
+    "sha256": "FB13934D8E011308C0800B414F5A9F6FF6200544CE28795C0B591A0F09CB5ECD"
   }
 }
