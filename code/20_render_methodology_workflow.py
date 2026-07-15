@@ -19,13 +19,15 @@ from matplotlib.patches import FancyArrowPatch, Rectangle
 from PIL import Image, ImageChops
 
 
-INK = "#243342"
-PRIMARY = "#00629B"
-BOUNDARY = "#5F6B73"
-PHASE_FILL = "#F7F9FB"
-BOX_FILL = "#FFFFFF"
-PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.6.0"
+INK = "#263B4D"
+PRIMARY = "#1674A8"
+BOUNDARY = "#5E7D91"
+PHASE_FILL = "#F2F7FB"
+BOX_FILL = "#FBFDFF"
+PHASE_EDGE = "#9CB5C7"
+PHASE_TEXT = "#173A5E"
+BOX_EDGE = "#35536B"
+RENDERER_VERSION = "1.7.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
@@ -195,7 +197,7 @@ def add_phase(
         fontsize=7.8,
         fontfamily=TITLE_FONT_FAMILY,
         fontweight="bold",
-        color=INK,
+        color=PHASE_TEXT,
         zorder=3,
     )
 
@@ -209,8 +211,8 @@ def add_box(
     title: str,
     body: str,
     *,
-    title_fontsize: float = 7.6,
-    body_fontsize: float = 6.8,
+    title_fontsize: float = 8.6,
+    body_fontsize: float = 7.8,
 ) -> tuple[float, float, float, float]:
     ax.add_patch(
         Rectangle(
@@ -218,7 +220,7 @@ def add_box(
             width,
             height,
             facecolor=BOX_FILL,
-            edgecolor=INK,
+            edgecolor=BOX_EDGE,
             linewidth=0.9,
             zorder=2,
         )
@@ -232,7 +234,7 @@ def add_box(
         fontsize=title_fontsize,
         fontfamily=TITLE_FONT_FAMILY,
         fontweight="bold",
-        color=INK,
+        color=PHASE_TEXT,
         zorder=3,
     )
     ax.text(
@@ -376,8 +378,6 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "1. Controlled threat-log export",
         "Raw records, one policy state",
-        title_fontsize=9.6,
-        body_fontsize=8.8,
     )
     b2 = add_box(
         ax,
@@ -387,8 +387,6 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "2. Deterministic cohort construction",
         "Alert filtering and action mapping",
-        title_fontsize=9.6,
-        body_fontsize=8.8,
     )
     b3 = add_box(
         ax,
@@ -398,8 +396,6 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "3. Leakage-graded feature settings",
         "Core, no-descriptor, and with-policy",
-        title_fontsize=9.6,
-        body_fontsize=8.8,
     )
 
     b4 = add_box(
@@ -487,10 +483,19 @@ def main() -> None:
             "summary_font_file_basename": SUMMARY_FONT_PATH.name,
             "summary_font_file_sha256": sha256(SUMMARY_FONT_PATH),
             "phase_font_points": 7.8,
-            "first_row_box_title_font_points": 9.6,
-            "first_row_box_body_font_points": 8.8,
-            "remaining_box_title_font_points": 7.6,
-            "remaining_box_body_font_points": 6.8,
+            "box_title_font_points": 8.6,
+            "box_body_font_points": 7.8,
+            "box_text_size_uniform_across_steps": True,
+            "palette": {
+                "phase_fill": PHASE_FILL,
+                "box_fill": BOX_FILL,
+                "phase_edge": PHASE_EDGE,
+                "box_edge": BOX_EDGE,
+                "phase_and_title_text": PHASE_TEXT,
+                "body_text": INK,
+                "primary_connector": PRIMARY,
+                "boundary_connector": BOUNDARY,
+            },
             "box_corner_style": "square",
             "box_height_inches": 0.64,
             "figure_height_inches": 4.1,

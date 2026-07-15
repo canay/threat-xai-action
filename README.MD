@@ -315,7 +315,7 @@ Generate the SHAP and LIME explanation artifacts used for the manuscript figures
 python code/04_xai_explanations.py --data data/processed/threat_five_class.csv --outdir results/xai
 ```
 
-The XAI renderer uses Lato Regular at normal weight for axis and colorbar-axis labels. Set `LEAF_LATO_REGULAR` to an explicit `Lato-Regular.ttf` path when the font is not discoverable through the host font registry. The resolved font filename and SHA-256 are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
+The XAI renderer uses Lato Regular at normal weight for axis and colorbar-axis titles and Inter Regular at normal weight for all internal plot text; no internal label is bold. Set `LEAF_LATO_REGULAR` and `LEAF_INTER_REGULAR` to explicit font-file paths when those faces are not discoverable through the host font registry. The resolved filenames and SHA-256 hashes are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
 
 Run the additional validation checks:
 
@@ -346,6 +346,14 @@ Run policy-context held-out robustness:
 ```bash
 python code/08_policy_context_robustness.py --data data/processed/threat_five_class.csv --outdir results/policy_context_robustness
 ```
+
+Render the held-out named-rule audit figure from the saved aggregate CSV, without fitting a model:
+
+```bash
+python code/21_render_heldout_context_audit.py --aggregate results/policy_context_robustness/policy_context_heldout_aggregate.csv --output results/policy_context_robustness/fig_heldout_policy_context_audit.png --metadata results/policy_context_robustness/fig_heldout_policy_context_audit.metadata.json
+```
+
+The held-out-context figure preserves the three reported settings, their support-weighted accuracy and observed-class macro-F1 values, and their error counts. It uses Lato Regular for axis titles and Inter Regular for non-bold internal text.
 
 Run operational review-queue and unseen-context audit:
 
@@ -399,7 +407,7 @@ Render the manuscript methodology workflow from the aggregate cohort manifest:
 python code/20_render_methodology_workflow.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --outdir results/manuscript_figures
 ```
 
-The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. The first-row boxes use 9.6-point titles and 8.8-point summaries; the remaining boxes retain the compact 7.6/6.8-point hierarchy. The release figure records the resolved filenames and SHA-256 hashes in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. Each workflow box uses one title and one single-line summary. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
+The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. All eight boxes share one 8.6-point title size and one 7.8-point summary size. A restrained cool-blue palette distinguishes phase bands, box boundaries, and arrows while retaining high-contrast dark-navy phase text. The release figure records the resolved filenames, SHA-256 hashes, sizes, and palette in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
 
 ## Submission And Public Release Checklist
 

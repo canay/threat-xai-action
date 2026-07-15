@@ -1,0 +1,245 @@
+"""Render the manuscript figure for the held-out named-rule context audit.
+
+This renderer consumes the stored aggregate CSV only; it does not fit a model
+or alter any scientific result.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+import numpy as np
+import pandas as pd
+
+
+RENDERER_VERSION = "1.0.0"
+INK = "#263B4D"
+GRID = "#DCE6EE"
+ACC_COLOR = "#1674A8"
+MF1_COLOR = "#55A6A0"
+ERROR_COLOR = "#6F8497"
+
+
+def file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+
+
+def resolve_font(env_name: str, accepted_names: set[str], label: str) -> tuple[font_manager.FontProperties, Path]:
+    explicit = os.environ.get(env_name)
+    if explicit:
+        path = Path(explicit).expanduser().resolve()
+        if not path.is_file():
+            raise RuntimeError(f"{env_name} is not a font file: {path}")
+        font_manager.fontManager.addfont(path)
+        return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    for font_path in font_manager.findSystemFonts():
+        path = Path(font_path)
+        if path.name.lower() in accepted_names:
+            font_manager.fontManager.addfont(path)
+            return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    raise RuntimeError(f"{label} is required to render the manuscript figure.")
+
+
+LATO, LATO_PATH = resolve_font("LEAF_LATO_REGULAR", {"lato-regular.ttf"}, "Lato Regular")
+INTER, INTER_PATH = resolve_font(
+    "LEAF_INTER_REGULAR",
+    {"inter-regular.ttf", "inter-variablefont_opsz,wght.ttf"},
+    "Inter Regular",
+)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--aggregate",
+        type=Path,
+        default=Path("results/policy_context_robustness/policy_context_heldout_aggregate.csv"),
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path("results/policy_context_robustness/fig_heldout_policy_context_audit.png"),
+    )
+    parser.add_argument(
+        "--metadata",
+        type=Path,
+        default=Path("results/policy_context_robustness/fig_heldout_policy_context_audit.metadata.json"),
+    )
+    return parser.parse_args()
+
+
+def set_style() -> None:
+    plt.rcParams.update(
+        {
+            "font.family": "sans-serif",
+            "font.sans-serif": [INTER.get_name(), "DejaVu Sans"],
+            "font.size": 7.4,
+            "axes.labelsize": 8.2,
+            "axes.titlesize": 8.0,
+            "axes.titleweight": "normal",
+            "xtick.labelsize": 7.1,
+            "ytick.labelsize": 7.4,
+            "legend.fontsize": 7.0,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.edgecolor": "#8094A5",
+            "axes.linewidth": 0.7,
+            "xtick.color": INK,
+            "ytick.color": INK,
+            "text.color": INK,
+            "savefig.dpi": 600,
+            "savefig.bbox": "tight",
+            "savefig.pad_inches": 0.02,
+        }
+    )
+
+
+def apply_inter(ax: plt.Axes) -> None:
+    for text in [*ax.get_xticklabels(), *ax.get_yticklabels()]:
+        text.set_fontproperties(INTER)
+        text.set_fontweight("normal")
+
+
+def main() -> None:
+    args = parse_args()
+    set_style()
+    source = pd.read_csv(args.aggregate)
+    frame = source[source["scope"] == "named_rule_contexts_only"].copy()
+    order = ["core", "no_threat_descriptors", "minimal_context"]
+    frame["feature_set"] = pd.Categorical(frame["feature_set"], categories=order, ordered=True)
+    frame = frame.sort_values("feature_set").reset_index(drop=True)
+    if frame["feature_set"].astype(str).tolist() != order:
+        raise RuntimeError("Held-out aggregate CSV does not contain the expected three feature settings.")
+
+    labels = ["Core", "No threat descriptors", "Minimal context"]
+    y = np.arange(len(frame))
+    bar_height = 0.28
+
+    fig = plt.figure(figsize=(3.55, 2.18))
+    grid = fig.add_gridspec(1, 2, width_ratios=[1.65, 1.0], wspace=0.28)
+    ax_score = fig.add_subplot(grid[0, 0])
+    ax_error = fig.add_subplot(grid[0, 1], sharey=ax_score)
+
+    accuracy = frame["support_weighted_accuracy"].to_numpy()
+    macro_f1 = frame["support_weighted_observed_macro_f1"].to_numpy()
+    errors = frame["errors"].to_numpy(dtype=int)
+
+    ax_score.barh(y - bar_height / 2, accuracy, height=bar_height, color=ACC_COLOR, label="Accuracy")
+    ax_score.barh(y + bar_height / 2, macro_f1, height=bar_height, color=MF1_COLOR, label="Observed-class macro-F1")
+    for yi, value in zip(y - bar_height / 2, accuracy):
+        ax_score.text(
+            value - 0.025,
+            yi,
+            f"{value:.4f}",
+            va="center",
+            ha="right",
+            fontproperties=INTER,
+            fontsize=6.5,
+            color="white",
+        )
+    for yi, value in zip(y + bar_height / 2, macro_f1):
+        ax_score.text(
+            value - 0.025,
+            yi,
+            f"{value:.4f}",
+            va="center",
+            ha="right",
+            fontproperties=INTER,
+            fontsize=6.5,
+            color="white",
+        )
+    ax_score.set_xlim(0, 1.0)
+    ax_score.set_xticks([0.0, 0.5, 1.0])
+    ax_score.set_yticks(y)
+    ax_score.set_yticklabels(labels, fontproperties=INTER)
+    ax_score.invert_yaxis()
+    ax_score.set_xlabel("Support-weighted score", fontproperties=LATO)
+    ax_score.grid(axis="x", color=GRID, linewidth=0.7, linestyle="--")
+    ax_score.set_axisbelow(True)
+    handles, legend_labels = ax_score.get_legend_handles_labels()
+    legend = fig.legend(
+        handles,
+        legend_labels,
+        loc="upper center",
+        bbox_to_anchor=(0.62, 0.98),
+        frameon=False,
+        ncol=2,
+        columnspacing=1.0,
+        handlelength=1.2,
+        handletextpad=0.45,
+        borderaxespad=0.0,
+        prop=INTER,
+    )
+    for text in legend.get_texts():
+        text.set_fontweight("normal")
+
+    ax_error.barh(y, errors, height=0.40, color=ERROR_COLOR)
+    ax_error.set_xlim(0, 6600)
+    ax_error.set_xticks([0, 3000, 6000])
+    ax_error.set_xticklabels(["0", "3k", "6k"], fontproperties=INTER)
+    ax_error.set_xlabel("Errors", fontproperties=LATO)
+    ax_error.grid(axis="x", color=GRID, linewidth=0.7, linestyle="--")
+    ax_error.set_axisbelow(True)
+    ax_error.tick_params(axis="y", left=False, labelleft=False)
+    for yi, value in zip(y, errors):
+        ax_error.text(
+            min(value + 135, 6420),
+            yi,
+            f"{value:,}",
+            va="center",
+            ha="left" if value < 6200 else "right",
+            fontproperties=INTER,
+            fontsize=7.0,
+            color=INK,
+        )
+
+    ax_score.text(-0.02, 1.04, "(a)", transform=ax_score.transAxes, fontproperties=INTER, fontsize=7.5)
+    ax_error.text(-0.02, 1.04, "(b)", transform=ax_error.transAxes, fontproperties=INTER, fontsize=7.5)
+    apply_inter(ax_score)
+    apply_inter(ax_error)
+    fig.subplots_adjust(left=0.38, right=0.98, top=0.76, bottom=0.24)
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.metadata.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(args.output, facecolor="white")
+    plt.close(fig)
+
+    payload = {
+        "renderer_version": RENDERER_VERSION,
+        "source": str(args.aggregate.as_posix()),
+        "source_sha256": file_sha256(args.aggregate),
+        "output": str(args.output.as_posix()),
+        "output_sha256": file_sha256(args.output),
+        "scope": "named_rule_contexts_only",
+        "test_rows": int(frame["test_rows"].iloc[0]),
+        "settings": [
+            {
+                "feature_set": row.feature_set,
+                "support_weighted_accuracy": float(row.support_weighted_accuracy),
+                "support_weighted_observed_macro_f1": float(row.support_weighted_observed_macro_f1),
+                "errors": int(row.errors),
+            }
+            for row in frame.itertuples(index=False)
+        ],
+        "typography": {
+            "axis_label_font": "Lato Regular",
+            "axis_label_font_sha256": file_sha256(LATO_PATH),
+            "internal_text_font": "Inter Regular",
+            "internal_text_font_sha256": file_sha256(INTER_PATH),
+            "bold_internal_text": False,
+        },
+    }
+    args.metadata.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()

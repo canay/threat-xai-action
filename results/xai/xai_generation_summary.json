@@ -1,10 +1,15 @@
 {
-  "renderer_version": "1.1.0",
+  "renderer_version": "1.2.0",
   "figure_typography": {
     "axis_label_font_family": "Lato",
     "axis_label_font_weight": "regular",
     "axis_label_font_file_basename": "Lato-Regular.ttf",
-    "axis_label_font_file_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7"
+    "axis_label_font_file_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7",
+    "internal_text_font_family": "Inter",
+    "internal_text_font_weight": "regular",
+    "internal_text_font_file_basename": "Inter-VariableFont_opsz,wght.ttf",
+    "internal_text_font_file_sha256": "0BE2399EA925F1F83FF974764761DA9860EC50742ED29A5D4C1FFD0C5C7AC3A8",
+    "bold_internal_text": false
   },
   "model": "XGBoost",
   "split": "stratified 80/20, random_state=42",

@@ -45,7 +45,7 @@ GRAY_BG = "#F8FAFC"
 
 SHAP_CMAP = LinearSegmentedColormap.from_list("q1_shap", [PRIMARY, "#DCE4EE", CRIMSON])
 HEATMAP_CMAP = LinearSegmentedColormap.from_list("q1_heat", [GRAY_BG, "#80B7D8", PRIMARY])
-RENDERER_VERSION = "1.1.0"
+RENDERER_VERSION = "1.2.0"
 
 
 def resolve_lato_regular() -> tuple[font_manager.FontProperties, Path]:
@@ -65,11 +65,34 @@ def resolve_lato_regular() -> tuple[font_manager.FontProperties, Path]:
     raise RuntimeError("Lato Regular is required to render manuscript axis labels.")
 
 
+def resolve_inter_regular() -> tuple[font_manager.FontProperties, Path]:
+    """Resolve the author-selected regular face for internal plot text."""
+    explicit = os.environ.get("LEAF_INTER_REGULAR")
+    if explicit:
+        path = Path(explicit).expanduser().resolve()
+        if not path.is_file():
+            raise RuntimeError(f"LEAF_INTER_REGULAR is not a font file: {path}")
+        font_manager.fontManager.addfont(path)
+        return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    preferred = {
+        "inter-regular.ttf",
+        "inter-variablefont_opsz,wght.ttf",
+    }
+    for font_path in font_manager.findSystemFonts():
+        path = Path(font_path)
+        if path.name.lower() in preferred:
+            font_manager.fontManager.addfont(path)
+            return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    raise RuntimeError("Inter Regular is required to render manuscript plot text.")
+
+
 def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
 AXIS_LABEL_FONT, AXIS_LABEL_FONT_PATH = resolve_lato_regular()
+INTERNAL_TEXT_FONT, INTERNAL_TEXT_FONT_PATH = resolve_inter_regular()
+INTERNAL_TEXT_FAMILY = INTERNAL_TEXT_FONT.get_name()
 
 
 CORE_FEATURES = [
@@ -99,11 +122,11 @@ CORE_FEATURES = [
 def set_q1_style() -> None:
     plt.rcParams.update({
         "font.family": "sans-serif",
-        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "font.sans-serif": [INTERNAL_TEXT_FAMILY, "DejaVu Sans"],
         "font.size": 8,
         "axes.labelsize": 9,
         "axes.titlesize": 9,
-        "axes.titleweight": "bold",
+        "axes.titleweight": "normal",
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
         "legend.fontsize": 8,
@@ -121,6 +144,13 @@ def set_q1_style() -> None:
         # At 600 dpi, 0.02 inches gives a physical 12-pixel outer margin.
         "savefig.pad_inches": 0.02,
     })
+
+
+def apply_internal_tick_font(ax: plt.Axes) -> None:
+    """Apply Inter Regular to tick labels without introducing bold faces."""
+    for label in [*ax.get_xticklabels(), *ax.get_yticklabels()]:
+        label.set_fontproperties(INTERNAL_TEXT_FONT)
+        label.set_fontweight("normal")
 
 
 def parse_args() -> argparse.Namespace:
@@ -185,7 +215,8 @@ def save_global_shap(outdir: Path, feature_names: list[str], shap_array: np.ndar
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
     ax.set_axisbelow(True)
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(top["feature"], fontweight="bold")
+    ax.set_yticklabels(top["feature"], fontproperties=INTERNAL_TEXT_FONT)
+    apply_internal_tick_font(ax)
 
     fig.tight_layout()
     fig.savefig(outdir / "fig_xai_shap_global.png")
@@ -206,19 +237,39 @@ def save_classwise_shap(
     image = ax.imshow(heat, aspect="auto", cmap=HEATMAP_CMAP)
     
     ax.set_yticks(np.arange(len(top_idx)))
-    ax.set_yticklabels(top_features, fontweight="bold", color=GRAY_TEXT, fontsize=7.5)
+    ax.set_yticklabels(top_features, fontproperties=INTERNAL_TEXT_FONT, color=GRAY_TEXT, fontsize=7.5)
     ax.set_xticks(np.arange(len(class_names)))
-    ax.set_xticklabels(class_names, rotation=35, ha="right", fontweight="bold", color=GRAY_TEXT, fontsize=8)
+    ax.set_xticklabels(
+        class_names,
+        rotation=35,
+        ha="right",
+        fontproperties=INTERNAL_TEXT_FONT,
+        color=GRAY_TEXT,
+        fontsize=8,
+    )
     
     max_heat = np.nanmax(heat) if np.isfinite(heat).any() else 0.0
     for i, feature_idx in enumerate(top_idx):
         for j in range(len(class_names)):
             value = class_mean[feature_idx, j]
             text_color = "white" if max_heat > 0 and value > 0.65 * max_heat else GRAY_TEXT
-            ax.text(j, i, f"{value:.2f}", ha="center", va="center", fontsize=7.5, color=text_color, fontweight="bold")
+            ax.text(
+                j,
+                i,
+                f"{value:.2f}",
+                ha="center",
+                va="center",
+                fontsize=7.5,
+                color=text_color,
+                fontproperties=INTERNAL_TEXT_FONT,
+            )
             
     colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
     colorbar.set_label("Mean Absolute SHAP", fontproperties=AXIS_LABEL_FONT)
+    apply_internal_tick_font(ax)
+    for label in colorbar.ax.get_yticklabels():
+        label.set_fontproperties(INTERNAL_TEXT_FONT)
+        label.set_fontweight("normal")
     
     for spine in ["top", "right", "left", "bottom"]:
         ax.spines[spine].set_visible(False)
@@ -279,7 +330,7 @@ def save_shap_summary_swarm(
 
     ax.axvline(0, color=GRAY_LINE, linewidth=1.2, zorder=2)
     ax.set_yticks(np.arange(len(top_idx)))
-    ax.set_yticklabels(top_features, fontweight="bold", color=GRAY_TEXT, fontsize=9)
+    ax.set_yticklabels(top_features, fontproperties=INTERNAL_TEXT_FONT, color=GRAY_TEXT, fontsize=9)
     ax.set_ylim(len(top_idx) - 0.5, -0.5)
     ax.set_xlim(-1.12 * max_abs, 1.12 * max_abs)
     ax.set_xlabel(
@@ -294,8 +345,13 @@ def save_shap_summary_swarm(
     if scatter_handle is not None:
         colorbar = fig.colorbar(scatter_handle, ax=ax, fraction=0.03, pad=0.02)
         colorbar.set_ticks([0, 1])
-        colorbar.set_ticklabels(["Low", "High"], fontweight="bold")
+        colorbar.set_ticklabels(["Low", "High"])
         colorbar.set_label("Feature Value", fontproperties=AXIS_LABEL_FONT)
+        for label in colorbar.ax.get_yticklabels():
+            label.set_fontproperties(INTERNAL_TEXT_FONT)
+            label.set_fontweight("normal")
+
+    apply_internal_tick_font(ax)
 
     fig.tight_layout()
     fig.savefig(outdir / "fig_xai_shap_summary.png")
@@ -326,12 +382,13 @@ def save_lime_group(
             
         ax.barh(y_pos, weights, color=colors, edgecolor="white", linewidth=0.8, zorder=3)
         ax.set_yticks(y_pos)
-        ax.set_yticklabels(rows["feature_rule"], fontsize=8, fontweight="bold")
+        ax.set_yticklabels(rows["feature_rule"], fontsize=8, fontproperties=INTERNAL_TEXT_FONT)
         ax.axvline(0, color=GRAY_LINE, linewidth=1.2, zorder=2)
-        ax.set_title(class_name, fontsize=9, loc="left", fontweight="bold", pad=4)
+        ax.set_title(class_name, fontsize=9, loc="left", fontproperties=INTERNAL_TEXT_FONT, pad=4)
         
         ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
         ax.set_axisbelow(True)
+        apply_internal_tick_font(ax)
 
     axes[-1].set_xlabel("LIME surrogate weight", fontproperties=AXIS_LABEL_FONT)
     fig.tight_layout()
@@ -501,6 +558,11 @@ def main() -> None:
             "axis_label_font_weight": "regular",
             "axis_label_font_file_basename": AXIS_LABEL_FONT_PATH.name,
             "axis_label_font_file_sha256": file_sha256(AXIS_LABEL_FONT_PATH),
+            "internal_text_font_family": "Inter",
+            "internal_text_font_weight": "regular",
+            "internal_text_font_file_basename": INTERNAL_TEXT_FONT_PATH.name,
+            "internal_text_font_file_sha256": file_sha256(INTERNAL_TEXT_FONT_PATH),
+            "bold_internal_text": False,
         },
         "model": "XGBoost",
         "split": "stratified 80/20, random_state=42",

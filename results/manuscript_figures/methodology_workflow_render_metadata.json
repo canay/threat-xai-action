@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.6.0",
+  "renderer_version": "1.7.0",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
@@ -11,10 +11,19 @@
     "summary_font_file_basename": "LiberationSans-Regular.ttf",
     "summary_font_file_sha256": "76D04C18EA243F426B7DE1F3AD208E927008F961DC5945E5AAD352D0DFDE8EE8",
     "phase_font_points": 7.8,
-    "first_row_box_title_font_points": 9.6,
-    "first_row_box_body_font_points": 8.8,
-    "remaining_box_title_font_points": 7.6,
-    "remaining_box_body_font_points": 6.8,
+    "box_title_font_points": 8.6,
+    "box_body_font_points": 7.8,
+    "box_text_size_uniform_across_steps": true,
+    "palette": {
+      "phase_fill": "#F2F7FB",
+      "box_fill": "#FBFDFF",
+      "phase_edge": "#9CB5C7",
+      "box_edge": "#35536B",
+      "phase_and_title_text": "#173A5E",
+      "body_text": "#263B4D",
+      "primary_connector": "#1674A8",
+      "boundary_connector": "#5E7D91"
+    },
     "box_corner_style": "square",
     "box_height_inches": 0.64,
     "figure_height_inches": 4.1,
@@ -61,6 +70,6 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "CA6970FC6D62C4C088E0155D94845405E5AE2FA5303B42AC144561B533B48DAE"
+    "sha256": "D2E840864EB8CBC6D855349A2433C4914ACF8129FBB03791304B75F8563D1140"
   }
 }

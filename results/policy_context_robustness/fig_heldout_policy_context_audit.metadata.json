@@ -1,0 +1,36 @@
+{
+  "renderer_version": "1.0.0",
+  "source": "results/policy_context_robustness/policy_context_heldout_aggregate.csv",
+  "source_sha256": "A3AD5801CE7AB4EB31A38F061F818A7776912643FEA04CC3BE2FC8CDDC58ECD6",
+  "output": "results/policy_context_robustness/fig_heldout_policy_context_audit.png",
+  "output_sha256": "BFA24B335482B47EEED7CB52C5F7B038619DCCDA1B26288497F913A0CF5B44CF",
+  "scope": "named_rule_contexts_only",
+  "test_rows": 16815,
+  "settings": [
+    {
+      "feature_set": "core",
+      "support_weighted_accuracy": 0.8044603033006245,
+      "support_weighted_observed_macro_f1": 0.6530761873542504,
+      "errors": 3288
+    },
+    {
+      "feature_set": "no_threat_descriptors",
+      "support_weighted_accuracy": 0.6526910496580434,
+      "support_weighted_observed_macro_f1": 0.378213959812613,
+      "errors": 5840
+    },
+    {
+      "feature_set": "minimal_context",
+      "support_weighted_accuracy": 0.6448409158489443,
+      "support_weighted_observed_macro_f1": 0.3724873509740429,
+      "errors": 5972
+    }
+  ],
+  "typography": {
+    "axis_label_font": "Lato Regular",
+    "axis_label_font_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7",
+    "internal_text_font": "Inter Regular",
+    "internal_text_font_sha256": "0BE2399EA925F1F83FF974764761DA9860EC50742ED29A5D4C1FFD0C5C7AC3A8",
+    "bold_internal_text": false
+  }
+}
