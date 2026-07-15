@@ -315,6 +315,8 @@ Generate the SHAP and LIME explanation artifacts used for the manuscript figures
 python code/04_xai_explanations.py --data data/processed/threat_five_class.csv --outdir results/xai
 ```
 
+The XAI renderer uses Lato Regular at normal weight for axis and colorbar-axis labels. Set `LEAF_LATO_REGULAR` to an explicit `Lato-Regular.ttf` path when the font is not discoverable through the host font registry. The resolved font filename and SHA-256 are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
+
 Run the additional validation checks:
 
 ```bash
@@ -389,13 +391,15 @@ Render the manuscript-facing descriptive, holdout/CV, and feature-group figures 
 python code/19_render_manuscript_figures.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --core-holdout results/baseline_benchmark_threat_core_baseline.csv --no-threat-holdout results/baseline_benchmark_threat_core_no_threat_descriptors.csv --core-cv results/baseline_benchmark_threat_core_top_cv_cv_summary.csv --no-threat-cv results/baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv --strengthening results/strengthening/strengthening_summary.csv --outdir results/manuscript_figures
 ```
 
+The descriptive, holdout/CV, and feature-group renderers use Lato Regular at normal weight for axis labels and record the resolved font hash in `manuscript_figure_render_metadata.json`. `LEAF_LATO_REGULAR` may be used to provide an explicit font path.
+
 Render the manuscript methodology workflow from the aggregate cohort manifest:
 
 ```bash
 python code/20_render_methodology_workflow.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --outdir results/manuscript_figures
 ```
 
-The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. The release figure records the resolved filenames and SHA-256 hashes in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. Each workflow box uses one title and one single-line summary. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
+The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. The first-row boxes use 9.6-point titles and 8.8-point summaries; the remaining boxes retain the compact 7.6/6.8-point hierarchy. The release figure records the resolved filenames and SHA-256 hashes in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. Each workflow box uses one title and one single-line summary. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
 
 ## Submission And Public Release Checklist
 

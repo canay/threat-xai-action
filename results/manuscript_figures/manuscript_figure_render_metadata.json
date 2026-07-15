@@ -1,6 +1,6 @@
 {
   "renderer": "19_render_manuscript_figures.py",
-  "renderer_version": "1.0.2",
+  "renderer_version": "1.1.0",
   "inputs": {
     "processing_manifest": {
       "basename": "threat_dataset_processing_manifest.json",
@@ -28,6 +28,12 @@
     }
   },
   "input_hash_semantics": "SHA-256 after normalizing CRLF/CR text inputs to LF, matching Git blob bytes.",
+  "render_style": {
+    "axis_label_font_family": "Lato",
+    "axis_label_font_weight": "regular",
+    "axis_label_font_file_basename": "Lato-Regular.ttf",
+    "axis_label_font_file_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7"
+  },
   "checks": {
     "class_count_total": 177156,
     "holdout_models": 6,
@@ -36,13 +42,13 @@
   },
   "outputs": {
     "fig_class_distribution.png": {
-      "sha256": "3DA734AEAFE92AB14A49B26A9B273DCD9EB5C811C35CF4BD7E08358CB74D54A3"
+      "sha256": "D53BD491AA106CF5A69DB8E83593B3D323D5558C6F7AC8954CBD419E31865DCB"
     },
     "fig_results_ablation_cv_combined.png": {
-      "sha256": "C2BF306F01174119EBD0E142FFCCFC137E0DD569F089FB0FB084BC4F7A598ADC"
+      "sha256": "6655C03D1849457523EB108D9B9D77BF30FF7BAE2C064A983197FFF4AFE2958F"
     },
     "fig_feature_group_validation.png": {
-      "sha256": "DF8552DA638D4CF313A2FA34E51DC3DA52670D1AA8BAB7D97F1E5DC3219BE4C9"
+      "sha256": "B65A32CB1011FD0CA77084DAEFEF60F5AE1DA10C8CAC43523DAB616DEB4FCE44"
     }
   }
 }

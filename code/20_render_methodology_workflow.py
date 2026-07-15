@@ -25,7 +25,7 @@ BOUNDARY = "#5F6B73"
 PHASE_FILL = "#F7F9FB"
 BOX_FILL = "#FFFFFF"
 PHASE_EDGE = "#9AA9B5"
-RENDERER_VERSION = "1.5.0"
+RENDERER_VERSION = "1.6.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
@@ -208,6 +208,9 @@ def add_box(
     height: float,
     title: str,
     body: str,
+    *,
+    title_fontsize: float = 7.6,
+    body_fontsize: float = 6.8,
 ) -> tuple[float, float, float, float]:
     ax.add_patch(
         Rectangle(
@@ -226,7 +229,7 @@ def add_box(
         title,
         ha="center",
         va="center",
-        fontsize=7.6,
+        fontsize=title_fontsize,
         fontfamily=TITLE_FONT_FAMILY,
         fontweight="bold",
         color=INK,
@@ -238,7 +241,7 @@ def add_box(
         body,
         ha="center",
         va="center",
-        fontsize=6.8,
+        fontsize=body_fontsize,
         fontfamily=SUMMARY_FONT_FAMILY,
         color=INK,
         zorder=3,
@@ -373,6 +376,8 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "1. Controlled threat-log export",
         "Raw records, one policy state",
+        title_fontsize=9.6,
+        body_fontsize=8.8,
     )
     b2 = add_box(
         ax,
@@ -382,6 +387,8 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "2. Deterministic cohort construction",
         "Alert filtering and action mapping",
+        title_fontsize=9.6,
+        body_fontsize=8.8,
     )
     b3 = add_box(
         ax,
@@ -391,6 +398,8 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "3. Leakage-graded feature settings",
         "Core, no-descriptor, and with-policy",
+        title_fontsize=9.6,
+        body_fontsize=8.8,
     )
 
     b4 = add_box(
@@ -478,8 +487,10 @@ def main() -> None:
             "summary_font_file_basename": SUMMARY_FONT_PATH.name,
             "summary_font_file_sha256": sha256(SUMMARY_FONT_PATH),
             "phase_font_points": 7.8,
-            "box_title_font_points": 7.6,
-            "box_body_font_points": 6.8,
+            "first_row_box_title_font_points": 9.6,
+            "first_row_box_body_font_points": 8.8,
+            "remaining_box_title_font_points": 7.6,
+            "remaining_box_body_font_points": 6.8,
             "box_corner_style": "square",
             "box_height_inches": 0.64,
             "figure_height_inches": 4.1,

@@ -9,12 +9,14 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 import pandas as pd
 
@@ -44,7 +46,27 @@ FEATURE_SET_ORDER = [
     "drop_direction",
 ]
 EXPECTED_CLASSES = {"Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"}
-RENDERER_VERSION = "1.0.2"
+RENDERER_VERSION = "1.1.0"
+
+
+def resolve_lato_regular() -> tuple[font_manager.FontProperties, Path]:
+    """Resolve the author-selected regular face for axis labels."""
+    explicit = os.environ.get("LEAF_LATO_REGULAR")
+    if explicit:
+        path = Path(explicit).expanduser().resolve()
+        if not path.is_file():
+            raise RuntimeError(f"LEAF_LATO_REGULAR is not a font file: {path}")
+        font_manager.fontManager.addfont(path)
+        return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    for font_path in font_manager.findSystemFonts():
+        path = Path(font_path)
+        if path.name.lower() == "lato-regular.ttf":
+            font_manager.fontManager.addfont(path)
+            return font_manager.FontProperties(fname=str(path), weight="normal"), path
+    raise RuntimeError("Lato Regular is required to render manuscript axis labels.")
+
+
+AXIS_LABEL_FONT, AXIS_LABEL_FONT_PATH = resolve_lato_regular()
 
 
 def parse_args() -> argparse.Namespace:
@@ -155,7 +177,7 @@ def render_class_distribution(manifest_path: Path, output: Path) -> None:
     ax.set_yticks(y_pos)
     ax.set_yticklabels(labels, fontweight="bold")
     ax.invert_yaxis()
-    ax.set_xlabel("Number of records (log scale)", fontweight="bold")
+    ax.set_xlabel("Number of records (log scale)", fontproperties=AXIS_LABEL_FONT)
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8, zorder=1)
     ax.set_axisbelow(True)
     for row, value in enumerate(counts):
@@ -250,7 +272,7 @@ def render_combined_benchmark(
     ax1.set_yticks(y_holdout)
     ax1.set_yticklabels(holdout["model"].astype(str), fontweight="bold")
     ax1.invert_yaxis()
-    ax1.set_xlabel("Holdout macro-F1", fontweight="bold")
+    ax1.set_xlabel("Holdout macro-F1", fontproperties=AXIS_LABEL_FONT)
     ax1.set_xlim(*score_limits(holdout[["core", "no_threat_descriptors"]].to_numpy(), pad=0.004))
     ax1.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8)
     ax1.set_axisbelow(True)
@@ -273,7 +295,7 @@ def render_combined_benchmark(
     ax2.set_yticks(y_cv)
     ax2.set_yticklabels(cv["model"].astype(str), fontweight="bold")
     ax2.invert_yaxis()
-    ax2.set_xlabel("Cross-validation macro-F1", fontweight="bold")
+    ax2.set_xlabel("Cross-validation macro-F1", fontproperties=AXIS_LABEL_FONT)
     means = cv[["core_mean", "no_threat_mean"]].to_numpy()
     stds = cv[["core_std", "no_threat_std"]].to_numpy()
     ax2.set_xlim(*score_limits(np.concatenate([(means - stds).ravel(), (means + stds).ravel()]), pad=0.003))
@@ -344,7 +366,7 @@ def render_feature_group_validation(strengthening_path: Path, output: Path) -> N
         ax.set_yticks(y_pos)
         ax.set_yticklabels([display_labels[str(value)] for value in part["feature_set"]])
         ax.set_title(title, fontweight="bold")
-        ax.set_xlabel("Score", fontweight="bold")
+        ax.set_xlabel("Score", fontproperties=AXIS_LABEL_FONT)
         limits = score_limits(part[["macro_f1", "balanced_accuracy"]].to_numpy(), pad=0.025)
         ax.set_xlim(*limits)
         ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8)
@@ -396,6 +418,12 @@ def main() -> None:
             for name, path in input_paths.items()
         },
         "input_hash_semantics": "SHA-256 after normalizing CRLF/CR text inputs to LF, matching Git blob bytes.",
+        "render_style": {
+            "axis_label_font_family": "Lato",
+            "axis_label_font_weight": "regular",
+            "axis_label_font_file_basename": AXIS_LABEL_FONT_PATH.name,
+            "axis_label_font_file_sha256": sha256(AXIS_LABEL_FONT_PATH),
+        },
         "checks": {
             "class_count_total": sum(
                 json.loads(args.processing_manifest.read_text(encoding="utf-8"))["class_counts"].values()

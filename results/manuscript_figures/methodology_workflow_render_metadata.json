@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.5.0",
+  "renderer_version": "1.6.0",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
@@ -11,8 +11,10 @@
     "summary_font_file_basename": "LiberationSans-Regular.ttf",
     "summary_font_file_sha256": "76D04C18EA243F426B7DE1F3AD208E927008F961DC5945E5AAD352D0DFDE8EE8",
     "phase_font_points": 7.8,
-    "box_title_font_points": 7.6,
-    "box_body_font_points": 6.8,
+    "first_row_box_title_font_points": 9.6,
+    "first_row_box_body_font_points": 8.8,
+    "remaining_box_title_font_points": 7.6,
+    "remaining_box_body_font_points": 6.8,
     "box_corner_style": "square",
     "box_height_inches": 0.64,
     "figure_height_inches": 4.1,
@@ -59,6 +61,6 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "486A35479129BA9F90F646EF42814CD9F3DC84B35A9A7C0F71669C34F7391438"
+    "sha256": "CA6970FC6D62C4C088E0155D94845405E5AE2FA5303B42AC144561B533B48DAE"
   }
 }
