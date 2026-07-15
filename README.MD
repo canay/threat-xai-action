@@ -399,7 +399,7 @@ Render the manuscript-facing descriptive, holdout/CV, and feature-group figures 
 python code/19_render_manuscript_figures.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --core-holdout results/baseline_benchmark_threat_core_baseline.csv --no-threat-holdout results/baseline_benchmark_threat_core_no_threat_descriptors.csv --core-cv results/baseline_benchmark_threat_core_top_cv_cv_summary.csv --no-threat-cv results/baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv --strengthening results/strengthening/strengthening_summary.csv --outdir results/manuscript_figures
 ```
 
-The descriptive, holdout/CV, and feature-group renderers use Lato Regular at normal weight for axis labels and record the resolved font hash in `manuscript_figure_render_metadata.json`. `LEAF_LATO_REGULAR` may be used to provide an explicit font path.
+The descriptive, holdout/CV, and feature-group renderers use Lato Regular at normal weight for axis labels and record the resolved font hash in `manuscript_figure_render_metadata.json`. In the manuscript-facing class-distribution and combined holdout/CV figures, axis titles are locked at 8 points and axis tick/category labels at 7 points; the feature-group figure retains its prior sizes. `LEAF_LATO_REGULAR` may be used to provide an explicit font path.
 
 Render the manuscript methodology workflow from the aggregate cohort manifest:
 

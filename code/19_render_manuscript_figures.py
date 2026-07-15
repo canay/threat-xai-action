@@ -46,7 +46,9 @@ FEATURE_SET_ORDER = [
     "drop_direction",
 ]
 EXPECTED_CLASSES = {"Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"}
-RENDERER_VERSION = "1.1.0"
+RENDERER_VERSION = "1.2.0"
+FIG2_FIG3_AXIS_LABEL_SIZE_PT = 8
+FIG2_FIG3_AXIS_TICK_SIZE_PT = 7
 
 
 def resolve_lato_regular() -> tuple[font_manager.FontProperties, Path]:
@@ -175,9 +177,18 @@ def render_class_distribution(manifest_path: Path, output: Path) -> None:
     ax.barh(y_pos, counts, height=0.42, color=PRIMARY, zorder=3)
     ax.set_xscale("log")
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(labels, fontweight="bold")
+    ax.set_yticklabels(
+        labels,
+        fontweight="bold",
+        fontsize=FIG2_FIG3_AXIS_TICK_SIZE_PT,
+    )
     ax.invert_yaxis()
-    ax.set_xlabel("Number of records (log scale)", fontproperties=AXIS_LABEL_FONT)
+    ax.set_xlabel(
+        "Number of records (log scale)",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax.tick_params(axis="x", labelsize=FIG2_FIG3_AXIS_TICK_SIZE_PT)
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8, zorder=1)
     ax.set_axisbelow(True)
     for row, value in enumerate(counts):
@@ -270,9 +281,18 @@ def render_combined_benchmark(
         label="No threat descriptors", zorder=3, edgecolor="white", linewidth=0.7,
     )
     ax1.set_yticks(y_holdout)
-    ax1.set_yticklabels(holdout["model"].astype(str), fontweight="bold")
+    ax1.set_yticklabels(
+        holdout["model"].astype(str),
+        fontweight="bold",
+        fontsize=FIG2_FIG3_AXIS_TICK_SIZE_PT,
+    )
     ax1.invert_yaxis()
-    ax1.set_xlabel("Holdout macro-F1", fontproperties=AXIS_LABEL_FONT)
+    ax1.set_xlabel(
+        "Holdout macro-F1",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax1.tick_params(axis="x", labelsize=FIG2_FIG3_AXIS_TICK_SIZE_PT)
     ax1.set_xlim(*score_limits(holdout[["core", "no_threat_descriptors"]].to_numpy(), pad=0.004))
     ax1.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8)
     ax1.set_axisbelow(True)
@@ -293,9 +313,18 @@ def render_combined_benchmark(
         markeredgecolor="white", label="No threat descriptors", zorder=3,
     )
     ax2.set_yticks(y_cv)
-    ax2.set_yticklabels(cv["model"].astype(str), fontweight="bold")
+    ax2.set_yticklabels(
+        cv["model"].astype(str),
+        fontweight="bold",
+        fontsize=FIG2_FIG3_AXIS_TICK_SIZE_PT,
+    )
     ax2.invert_yaxis()
-    ax2.set_xlabel("Cross-validation macro-F1", fontproperties=AXIS_LABEL_FONT)
+    ax2.set_xlabel(
+        "Cross-validation macro-F1",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax2.tick_params(axis="x", labelsize=FIG2_FIG3_AXIS_TICK_SIZE_PT)
     means = cv[["core_mean", "no_threat_mean"]].to_numpy()
     stds = cv[["core_std", "no_threat_std"]].to_numpy()
     ax2.set_xlim(*score_limits(np.concatenate([(means - stds).ravel(), (means + stds).ravel()]), pad=0.003))
@@ -423,6 +452,9 @@ def main() -> None:
             "axis_label_font_weight": "regular",
             "axis_label_font_file_basename": AXIS_LABEL_FONT_PATH.name,
             "axis_label_font_file_sha256": sha256(AXIS_LABEL_FONT_PATH),
+            "fig2_fig3_axis_label_size_pt": FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+            "fig2_fig3_axis_tick_size_pt": FIG2_FIG3_AXIS_TICK_SIZE_PT,
+            "fig4_axis_sizes_unchanged": True,
         },
         "checks": {
             "class_count_total": sum(

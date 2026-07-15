@@ -10,7 +10,7 @@ authors:
   - family-names: "Garri"
     given-names: "Fatmir"
 repository-code: "https://github.com/canay/threat-xai-action"
-version: "1.0.10"
+version: "1.0.11"
 date-released: "2026-07-15"
 license: "MIT"
 
