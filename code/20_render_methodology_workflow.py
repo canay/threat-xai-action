@@ -19,15 +19,32 @@ from matplotlib.patches import FancyArrowPatch, Rectangle
 from PIL import Image, ImageChops
 
 
-INK = "#263B4D"
-PRIMARY = "#1674A8"
-BOUNDARY = "#5E7D91"
-PHASE_FILL = "#F2F7FB"
-BOX_FILL = "#FBFDFF"
-PHASE_EDGE = "#9CB5C7"
-PHASE_TEXT = "#173A5E"
-BOX_EDGE = "#35536B"
-RENDERER_VERSION = "1.7.0"
+PRIMARY = "#596F7A"
+BOUNDARY = "#765C86"
+PHASE_TEXT = "#7A263A"
+BOX_TITLE_TEXT = "#17365D"
+BOX_BODY_TEXT = "#5B3A78"
+PHASE_PALETTES = {
+    "I": {
+        "phase_fill": "#F8FBFD",
+        "box_fill": "#EDF5FB",
+        "phase_edge": "#A8C4D6",
+        "box_edge": "#7FA8C2",
+    },
+    "II": {
+        "phase_fill": "#FFFCF5",
+        "box_fill": "#FFF8E5",
+        "phase_edge": "#D7C58E",
+        "box_edge": "#BFA35B",
+    },
+    "III": {
+        "phase_fill": "#F8FCF9",
+        "box_fill": "#EEF8F1",
+        "phase_edge": "#ACCBB5",
+        "box_edge": "#82A98E",
+    },
+}
+RENDERER_VERSION = "1.8.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 
@@ -166,16 +183,18 @@ def add_phase(
     width: float,
     height: float,
     label: str,
+    phase_key: str,
     *,
     align: str = "left",
 ) -> None:
+    palette = PHASE_PALETTES[phase_key]
     ax.add_patch(
         Rectangle(
             (x, y),
             width,
             height,
-            facecolor=PHASE_FILL,
-            edgecolor=PHASE_EDGE,
+            facecolor=palette["phase_fill"],
+            edgecolor=palette["phase_edge"],
             linewidth=0.8,
             linestyle=(0, (4, 3)),
             zorder=0,
@@ -210,17 +229,19 @@ def add_box(
     height: float,
     title: str,
     body: str,
+    phase_key: str,
     *,
     title_fontsize: float = 8.6,
     body_fontsize: float = 7.8,
 ) -> tuple[float, float, float, float]:
+    palette = PHASE_PALETTES[phase_key]
     ax.add_patch(
         Rectangle(
             (x, y),
             width,
             height,
-            facecolor=BOX_FILL,
-            edgecolor=BOX_EDGE,
+            facecolor=palette["box_fill"],
+            edgecolor=palette["box_edge"],
             linewidth=0.9,
             zorder=2,
         )
@@ -234,7 +255,7 @@ def add_box(
         fontsize=title_fontsize,
         fontfamily=TITLE_FONT_FAMILY,
         fontweight="bold",
-        color=PHASE_TEXT,
+        color=BOX_TITLE_TEXT,
         zorder=3,
     )
     ax.text(
@@ -245,7 +266,7 @@ def add_box(
         va="center",
         fontsize=body_fontsize,
         fontfamily=SUMMARY_FONT_FAMILY,
-        color=INK,
+        color=BOX_BODY_TEXT,
         zorder=3,
     )
     return x, y, width, height
@@ -352,8 +373,26 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
     phase1_y = 2.85
     phase2_y = 1.50
     phase3_y = 0.15
-    add_phase(ax, 0.12, phase1_y, 9.76, phase_height, "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN", align="left")
-    add_phase(ax, 0.12, phase2_y, 9.76, phase_height, "PHASE II: RECONSTRUCTION AND STRESS AUDIT", align="center")
+    add_phase(
+        ax,
+        0.12,
+        phase1_y,
+        9.76,
+        phase_height,
+        "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN",
+        "I",
+        align="left",
+    )
+    add_phase(
+        ax,
+        0.12,
+        phase2_y,
+        9.76,
+        phase_height,
+        "PHASE II: RECONSTRUCTION AND STRESS AUDIT",
+        "II",
+        align="center",
+    )
     add_phase(
         ax,
         0.12,
@@ -361,6 +400,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         9.76,
         phase_height,
         "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY",
+        "III",
         align="right",
     )
 
@@ -378,6 +418,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "1. Controlled threat-log export",
         "Raw records, one policy state",
+        "I",
     )
     b2 = add_box(
         ax,
@@ -387,6 +428,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "2. Deterministic cohort construction",
         "Alert filtering and action mapping",
+        "I",
     )
     b3 = add_box(
         ax,
@@ -396,6 +438,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "3. Leakage-graded feature settings",
         "Core, no-descriptor, and with-policy",
+        "I",
     )
 
     b4 = add_box(
@@ -406,6 +449,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "4. Policy-action regularity audit",
         "Rule-context entropy",
+        "II",
     )
     b5 = add_box(
         ax,
@@ -415,6 +459,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "5. Core reconstruction evidence",
         "Holdout and cross-validation",
+        "II",
     )
     b6 = add_box(
         ax,
@@ -424,6 +469,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "6. Sensitivity and transfer stress",
         "Ablation, duplicate, temporal, and context",
+        "II",
     )
 
     b7 = add_box(
@@ -434,6 +480,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "7. Selected-model inspection",
         "TreeSHAP and LIME",
+        "III",
     )
     b8 = add_box(
         ax,
@@ -443,6 +490,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
         height,
         "8. Interpretation and release boundary",
         "Offline, non-causal, controlled access",
+        "III",
     )
 
     add_arrow(ax, side(b1, "right"), side(b2, "left"))
@@ -487,12 +535,10 @@ def main() -> None:
             "box_body_font_points": 7.8,
             "box_text_size_uniform_across_steps": True,
             "palette": {
-                "phase_fill": PHASE_FILL,
-                "box_fill": BOX_FILL,
-                "phase_edge": PHASE_EDGE,
-                "box_edge": BOX_EDGE,
-                "phase_and_title_text": PHASE_TEXT,
-                "body_text": INK,
+                "phase_groups": PHASE_PALETTES,
+                "phase_label_text": PHASE_TEXT,
+                "box_title_text": BOX_TITLE_TEXT,
+                "box_body_text": BOX_BODY_TEXT,
                 "primary_connector": PRIMARY,
                 "boundary_connector": BOUNDARY,
             },

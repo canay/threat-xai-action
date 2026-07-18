@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.7.0",
+  "renderer_version": "1.8.0",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
@@ -15,14 +15,31 @@
     "box_body_font_points": 7.8,
     "box_text_size_uniform_across_steps": true,
     "palette": {
-      "phase_fill": "#F2F7FB",
-      "box_fill": "#FBFDFF",
-      "phase_edge": "#9CB5C7",
-      "box_edge": "#35536B",
-      "phase_and_title_text": "#173A5E",
-      "body_text": "#263B4D",
-      "primary_connector": "#1674A8",
-      "boundary_connector": "#5E7D91"
+      "phase_groups": {
+        "I": {
+          "phase_fill": "#F8FBFD",
+          "box_fill": "#EDF5FB",
+          "phase_edge": "#A8C4D6",
+          "box_edge": "#7FA8C2"
+        },
+        "II": {
+          "phase_fill": "#FFFCF5",
+          "box_fill": "#FFF8E5",
+          "phase_edge": "#D7C58E",
+          "box_edge": "#BFA35B"
+        },
+        "III": {
+          "phase_fill": "#F8FCF9",
+          "box_fill": "#EEF8F1",
+          "phase_edge": "#ACCBB5",
+          "box_edge": "#82A98E"
+        }
+      },
+      "phase_label_text": "#7A263A",
+      "box_title_text": "#17365D",
+      "box_body_text": "#5B3A78",
+      "primary_connector": "#596F7A",
+      "boundary_connector": "#765C86"
     },
     "box_corner_style": "square",
     "box_height_inches": 0.64,
@@ -37,7 +54,7 @@
   },
   "input": {
     "basename": "threat_dataset_processing_manifest.json",
-    "sha256": "77CA3EFC384F7A62CAC457160303BFCDFCDD1B273144BFDE118146C3C7EE8E5F"
+    "sha256": "9AA5BB2BB4AADC7B375742FA93569B25B493404F98F0EF2A50A2B8F8FD6E6AED"
   },
   "cohort_checks": {
     "rows_in": 186271,
@@ -70,6 +87,6 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "D2E840864EB8CBC6D855349A2433C4914ACF8129FBB03791304B75F8563D1140"
+    "sha256": "751A67C780749BDA33816482618A9CC86725E8298CE823284C91381418BA978D"
   }
 }

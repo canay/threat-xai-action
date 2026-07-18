@@ -418,7 +418,7 @@ Render the manuscript methodology workflow from the aggregate cohort manifest:
 python code/20_render_methodology_workflow.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --outdir results/manuscript_figures
 ```
 
-The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. All eight boxes share one 8.6-point title size and one 7.8-point summary size. A restrained cool-blue palette distinguishes phase bands, box boundaries, and arrows while retaining high-contrast dark-navy phase text. The release figure records the resolved filenames, SHA-256 hashes, sizes, and palette in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
+The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. All eight boxes share one 8.6-point title size and one 7.8-point summary size. Phase I, II, and III use very light blue, yellow, and green fills, respectively; burgundy phase labels, navy box titles, purple summaries, and neutral connectors retain a consistent high-contrast hierarchy. The release figure records the resolved filenames, SHA-256 hashes, sizes, and palette in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
 
 ## Public Package Maintenance
 
