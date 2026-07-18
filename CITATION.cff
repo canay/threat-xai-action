@@ -1,14 +1,23 @@
 ﻿cff-version: 1.2.0
 title: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
-message: "If you use this reproducibility package, please cite the associated paper and this repository."
+message: "If you use this reproducibility package, please cite it using this file."
 type: software
 authors:
   - family-names: "Canay"
     given-names: "Özkan"
+    orcid: "https://orcid.org/0000-0001-7539-6001"
+    affiliation: "Sakarya University"
+    email: "canay@sakarya.edu.tr"
   - family-names: "Özkurt"
     given-names: "Cem"
+    orcid: "https://orcid.org/0000-0002-1251-7715"
+    affiliation: "Sakarya University"
+    email: "cemozkurt@sakarya.edu.tr"
   - family-names: "Garri"
     given-names: "Fatmir"
+    orcid: "https://orcid.org/0009-0005-6762-6846"
+    affiliation: "Sakarya University of Applied Sciences"
+    email: "fatmirgarri@subu.edu.tr"
 repository-code: "https://github.com/canay/threat-xai-action"
 keywords:
   - "enterprise firewall logs"
@@ -16,8 +25,6 @@ keywords:
   - "leakage-aware evaluation protocol"
   - "security management"
   - "analyst triage"
-  - "explainable artificial intelligence"
-version: "1.0.12"
-date-released: "2026-07-18"
+  - "explainable AI"
 license: "MIT"
 

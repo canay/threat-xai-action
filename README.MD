@@ -4,9 +4,9 @@ Public reproducibility artifact for the manuscript:
 
 **LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement**
 
-Short protocol/artifact name:
+Framework name:
 
-`FIRE-AUDIT`
+`LEAF` (Leakage-aware, Explainable Audit Framework)
 
 Repository short name:
 
@@ -18,7 +18,7 @@ GitHub URL:
 
 ## Related Study
 
-This repository supports FIRE-AUDIT, a paper on five-class operational firewall enforcement audit from real enterprise Palo Alto threat logs. The study uses supervised machine-learning models as comparable measurement instruments in a leakage-aware evaluation protocol, testing whether high performance persists after direct policy and threat descriptor proxies are bounded.
+This repository supports the LEAF study, which audits five-class operational firewall enforcement using real enterprise Palo Alto threat logs. The study uses supervised machine-learning models as comparable measurement instruments within a leakage-aware evaluation protocol and tests how the evidence changes when direct policy fields, threat descriptors, duplicate signatures, time, and policy context are controlled.
 
 Target classes:
 
@@ -35,7 +35,7 @@ Target classes:
 - leakage-aware evaluation protocol
 - security management
 - analyst triage
-- explainable artificial intelligence
+- explainable AI
 
 ## Authors And Contact
 
@@ -72,7 +72,7 @@ GitHub:
 
 https://github.com/canay
 
-This repository is the author-managed code-and-output replication package for the associated manuscript. No Zenodo DOI is planned for this submission; the immutable GitHub release tag is the canonical public snapshot.
+This repository is the author-managed code-and-output replication package for the associated manuscript. The `main` branch is the current public package.
 
 ## Repository Contents
 
@@ -420,19 +420,17 @@ python code/20_render_methodology_workflow.py --processing-manifest data/process
 
 The workflow renderer uses Lato Bold for phase and box titles and Liberation Sans Regular for the single-line box summaries. All eight boxes share one 8.6-point title size and one 7.8-point summary size. A restrained cool-blue palette distinguishes phase bands, box boundaries, and arrows while retaining high-contrast dark-navy phase text. The release figure records the resolved filenames, SHA-256 hashes, sizes, and palette in `methodology_workflow_render_metadata.json`; exact pixel reproduction requires those recorded faces. The renderer applies a content-aware 600-dpi PNG crop with a 12-pixel safety margin.
 
-## Submission And Public Release Checklist
+## Public Package Maintenance
 
-Before archival public release:
+The `main` branch is the current public package. Before updating it:
 
 - Confirm that the GitHub URL matches the public repository.
-- Fill the final commit and release tag fields in `MANIFEST.md`.
-- Use the immutable GitHub release tag as the canonical public snapshot; no Zenodo DOI is planned for this submission.
 - Confirm that `TRACEABILITY.md` still maps the manuscript tables and figures to the final public outputs.
 - Confirm that the controlled processed-file checksum is unchanged or update the checksum in `README.MD`, `MANIFEST.md`, `TRACEABILITY.md`, and `data/processed/README.md`.
 - Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.
 - Confirm that `data/processed/` does not contain the full event-level firewall CSV unless institutional public-release authorization has been obtained.
 - Confirm that no raw enterprise logs, manuscript drafts, private review notes, or local credentials are included.
-- Check whether the publication venue requires a data availability statement or code availability statement.
+- Keep the manuscript's Data availability statement aligned with this repository's actual public contents and controlled-data boundary.
 
 ## License
 

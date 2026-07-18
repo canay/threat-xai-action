@@ -46,18 +46,17 @@ The public package supports inspection of code, command recipes, aggregate outpu
 
 The public benchmark CSV/JSON artifacts preserve the original Linux/aarch64 VPS evidence. The registered dependent evidence bundle `2026-07-13_codex_vps_selected_model_canonicalization` first reproduced the XGBoost core and no-threat-descriptors holdouts exactly, then regenerated the model-dependent validation, explanation, grouped-split, policy-context, review-queue, seed, bootstrap, encoding-sensitivity, and public UCI schema-transfer aggregates under the same locked environment. Public policy-context outputs replace enterprise rule names with deterministic support-ranked aliases. The Windows rerun is retained only as historical diagnostic provenance.
 
-Before public archival release:
+Before updating the public `main` branch:
 
 1. Confirm that no raw or full event-level controlled firewall files are present.
 2. Run the command recipes in `README.MD` against an authorized processed dataset.
 3. Confirm that aggregate outputs in `results/` match the manuscript tables and figures listed in `TRACEABILITY.md`.
 4. Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.
-5. Record the final Git commit and release tag in this manifest; no repository DOI is planned for this submission.
-6. Archive only the approved public package.
+5. Confirm that the intended commit contains only approved public-package files.
+6. Update `main` only after the privacy, checksum, syntax, and smoke-test checks pass.
 
-## Release Identifiers
+## Repository Identity
 
-- Final public commit: resolve with `git rev-parse 'jnca-submission-r0.12^{commit}'`
-- Release tag: `jnca-submission-r0.12`
-- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, `jnca-submission-r0.2`, `jnca-submission-r0.3`, `jnca-submission-r0.4`, `jnca-submission-r0.5`, `jnca-submission-r0.6`, `jnca-submission-r0.7`, `jnca-submission-r0.8`, `jnca-submission-r0.9`, `jnca-submission-r0.10`, and `jnca-submission-r0.11`
-- Repository DOI: not requested for this submission; the immutable GitHub tag/release is canonical.
+- Canonical public branch: `main`
+- Current local commit: resolve with `git rev-parse HEAD`
+- Repository URL: `https://github.com/canay/threat-xai-action`
