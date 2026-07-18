@@ -12,7 +12,7 @@
   },
   "labels": [
     "Allow",
-    "Deny",
+    "Block",
     "Drop",
     "Reset-Both",
     "Reset-Server"

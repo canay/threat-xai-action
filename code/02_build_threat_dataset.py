@@ -47,7 +47,7 @@ def map_action(value: object) -> str | None:
     if action == "allow":
         return "Allow"
     if action == "block":
-        return "Deny"
+        return "Block"
     if action in {"drop", "drop-packet", "random-drop"}:
         return "Drop"
     if action == "reset-both":

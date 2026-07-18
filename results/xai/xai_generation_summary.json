@@ -19,7 +19,7 @@
   "lime_training_sample_size": 6000,
   "classes": [
     "Allow",
-    "Deny",
+    "Block",
     "Drop",
     "Reset-Both",
     "Reset-Server"
@@ -75,7 +75,7 @@
   ],
   "lime_selected_classes": [
     "Allow",
-    "Deny",
+    "Block",
     "Drop",
     "Reset-Both",
     "Reset-Server"

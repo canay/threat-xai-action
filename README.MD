@@ -23,7 +23,7 @@ This repository supports FIRE-AUDIT, a paper on five-class operational firewall 
 Target classes:
 
 - Allow
-- Deny
+- Block
 - Drop
 - Reset-Both
 - Reset-Server
@@ -63,11 +63,11 @@ GitHub:
 
 https://github.com/canay
 
-This repository is the author-managed code-and-output replication package for the associated manuscript. A Zenodo/DOI decision is deferred until journal submission.
+This repository is the author-managed code-and-output replication package for the associated manuscript. No Zenodo DOI is planned for this submission; the immutable GitHub release tag is the canonical public snapshot.
 
 ## Repository Contents
 
-- `code/`: the controlled-data conversion entry point and all manuscript-used evaluation, explanation, validation, and figure-rendering scripts (`02`--`20`)
+- `code/`: the controlled-data conversion entry point and all manuscript-used evaluation, explanation, validation, and figure-rendering scripts (`02`--`21`)
 - `scripts/create_public_sample.py`: the single retained helper for generating the privacy-audited public sample
 - `data/processed/`: controlled-data access and schema notes, the aggregate processing manifest, and a 1,000-row anonymized public smoke-test sample with audit
 - `results/`: CSV/JSON aggregate evaluation outputs, reproducible explanation artifacts, and additional validation outputs
@@ -108,10 +108,12 @@ Controlled processed file identity for authorized reruns:
 - Size: 44,929,133 bytes
 - SHA-256: `1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724`
 
+Label semantics: this checksum identifies the original canonical experiment file, in which raw `block` was stored under the internal alias `Deny`. Release-facing code, tables, figures, and the public sample use `Block`; a label-only byte round-trip check confirms that class membership and reported metrics are unchanged.
+
 Class counts:
 
 - Drop: 160,788
-- Deny: 10,187
+- Block: 10,187
 - Reset-Both: 2,903
 - Allow: 2,502
 - Reset-Server: 776
@@ -121,8 +123,8 @@ Public anonymized smoke-test sample:
 - File: `data/processed/public_anonymized_sample_1000.csv`
 - Audit: `data/processed/public_anonymized_sample_1000.audit.json`
 - Rows: 1,000
-- SHA-256: `52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08`
-- Class counts: Drop 731, Deny 93, Reset-Both 62, Allow 61, Reset-Server 53
+- SHA-256: `68672057A80CA70D5B52301E3BB9ED00D8A41D707C50EFFC8B53217A345253DD`
+- Class counts: Drop 731, Block 93, Reset-Both 62, Allow 61, Reset-Server 53
 
 This sample preserves the 27-column processed-file schema and all five target classes, but it does not preserve original timestamps, raw firewall actions, policy names, zones, interfaces, ports, applications, threat names, countries, source row identifiers, original row order, or other event-level values. Except for `target`, event-level values are redacted or mapped within each column to stable generic tokens such as `application_001`, `source_zone_001`, and `rule_context_001`; sampled rows are shuffled before synthetic sequential timestamps on 2026-01-01 are assigned. The sample is suitable for checking file format, parser behavior, and lightweight script execution only. It does not reproduce the reported metrics.
 
@@ -353,7 +355,7 @@ Render the held-out named-rule audit figure from the saved aggregate CSV, withou
 python code/21_render_heldout_context_audit.py --aggregate results/policy_context_robustness/policy_context_heldout_aggregate.csv --output results/policy_context_robustness/fig_heldout_policy_context_audit.png --metadata results/policy_context_robustness/fig_heldout_policy_context_audit.metadata.json
 ```
 
-The held-out-context figure preserves the three reported settings, their support-weighted accuracy and observed-class macro-F1 values, and their error counts. It uses Lato Regular for axis titles and Inter Regular for non-bold internal text.
+The held-out-context figure preserves the three reported settings, their support-weighted accuracy and observed-class macro-F1 values, and their error counts. Renderer v2.0 uses the same visual system as the other validation figures: blue accuracy circles, teal macro-F1 squares, coral error markers, gray connectors, alternating row bands, and dashed grids. Lato is used for panel and axis typography, while non-bold internal text uses Inter; explicit size locking keeps axis titles at 8 pt and ticks/categories at 7 pt.
 
 Run operational review-queue and unseen-context audit:
 
@@ -415,7 +417,7 @@ Before archival public release:
 
 - Confirm that the GitHub URL matches the public repository.
 - Fill the final commit and release tag fields in `MANIFEST.md`.
-- Defer the optional repository DOI decision until the submission-stage Zenodo decision.
+- Use the immutable GitHub release tag as the canonical public snapshot; no Zenodo DOI is planned for this submission.
 - Confirm that `TRACEABILITY.md` still maps the manuscript tables and figures to the final public outputs.
 - Confirm that the controlled processed-file checksum is unchanged or update the checksum in `README.MD`, `MANIFEST.md`, `TRACEABILITY.md`, and `data/processed/README.md`.
 - Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.

@@ -11,7 +11,7 @@
   "rows_out": 177156,
   "class_counts": {
     "Allow": 2502,
-    "Deny": 10187,
+    "Block": 10187,
     "Drop": 160788,
     "Reset-Both": 2903,
     "Reset-Server": 776
@@ -19,5 +19,7 @@
   "row_level_deduplication": false,
   "additional_row_exclusions": false,
   "processed_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "processed_sha256_scope": "original canonical experiment file with Deny as an internal alias for raw block",
+  "release_label_normalization": {"internal_alias": "Deny", "published_label": "Block", "rows": 10187, "metrics_changed": false},
   "processed_event_level_data_publicly_redistributed": false
 }

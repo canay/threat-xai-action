@@ -17,6 +17,8 @@ Controlled processed file identity for authorized reruns:
 - Size: 44,929,133 bytes
 - SHA-256: `1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724`
 
+Label semantics: this checksum identifies the original canonical experiment file, in which raw `block` was stored under the internal alias `Deny`. Release-facing code, tables, figures, and the public sample use `Block`; a label-only byte round-trip check confirms that class membership and reported metrics are unchanged.
+
 Aggregate cohort construction:
 
 - Observation: 6 h 30 min 26 s on one high-volume weekday
@@ -31,8 +33,8 @@ Public anonymized smoke-test sample:
 - File: `public_anonymized_sample_1000.csv`
 - Audit: `public_anonymized_sample_1000.audit.json`
 - Rows: 1,000
-- SHA-256: `52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08`
-- Class counts: Drop 731, Deny 93, Reset-Both 62, Allow 61, Reset-Server 53
+- SHA-256: `68672057A80CA70D5B52301E3BB9ED00D8A41D707C50EFFC8B53217A345253DD`
+- Class counts: Drop 731, Block 93, Reset-Both 62, Allow 61, Reset-Server 53
 
 This sample preserves the 27-column processed-file schema and all five target labels. It is strongly anonymized: `raw_action` is redacted, timestamps are synthetic, and event-level categorical/numeric values are mapped within each column to generic tokens such as `application_001`, `source_zone_001`, and `rule_context_001`. No source row identifier, original timestamp, or original row order is released.
 

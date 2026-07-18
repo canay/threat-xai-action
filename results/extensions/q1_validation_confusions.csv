@@ -1,12 +1,12 @@
 feature_set,split,true,predicted,count
 core,stratified_holdout,Allow,Allow,500
-core,stratified_holdout,Deny,Deny,2038
+core,stratified_holdout,Block,Block,2038
 core,stratified_holdout,Drop,Drop,32158
 core,stratified_holdout,Reset-Both,Reset-Both,579
 core,stratified_holdout,Reset-Both,Reset-Server,2
 core,stratified_holdout,Reset-Server,Reset-Server,155
 no_threat_descriptors,stratified_holdout,Allow,Allow,500
-no_threat_descriptors,stratified_holdout,Deny,Deny,2038
+no_threat_descriptors,stratified_holdout,Block,Block,2038
 no_threat_descriptors,stratified_holdout,Drop,Drop,32150
 no_threat_descriptors,stratified_holdout,Drop,Reset-Server,8
 no_threat_descriptors,stratified_holdout,Reset-Both,Reset-Both,579
@@ -14,7 +14,7 @@ no_threat_descriptors,stratified_holdout,Reset-Both,Reset-Server,2
 no_threat_descriptors,stratified_holdout,Reset-Server,Drop,5
 no_threat_descriptors,stratified_holdout,Reset-Server,Reset-Server,150
 minimal_context,stratified_holdout,Allow,Allow,500
-minimal_context,stratified_holdout,Deny,Deny,2038
+minimal_context,stratified_holdout,Block,Block,2038
 minimal_context,stratified_holdout,Drop,Drop,32143
 minimal_context,stratified_holdout,Drop,Reset-Both,1
 minimal_context,stratified_holdout,Drop,Reset-Server,14
@@ -24,7 +24,7 @@ minimal_context,stratified_holdout,Reset-Server,Drop,10
 minimal_context,stratified_holdout,Reset-Server,Reset-Both,1
 minimal_context,stratified_holdout,Reset-Server,Reset-Server,144
 core,chronological_holdout,Allow,Allow,2423
-core,chronological_holdout,Deny,Deny,2709
+core,chronological_holdout,Block,Block,2709
 core,chronological_holdout,Drop,Drop,29372
 core,chronological_holdout,Reset-Both,Drop,204
 core,chronological_holdout,Reset-Both,Reset-Both,67
@@ -32,7 +32,7 @@ core,chronological_holdout,Reset-Both,Reset-Server,21
 core,chronological_holdout,Reset-Server,Reset-Both,11
 core,chronological_holdout,Reset-Server,Reset-Server,624
 no_threat_descriptors,chronological_holdout,Allow,Allow,2423
-no_threat_descriptors,chronological_holdout,Deny,Deny,2709
+no_threat_descriptors,chronological_holdout,Block,Block,2709
 no_threat_descriptors,chronological_holdout,Drop,Drop,29358
 no_threat_descriptors,chronological_holdout,Drop,Reset-Server,14
 no_threat_descriptors,chronological_holdout,Reset-Both,Drop,208
@@ -42,7 +42,7 @@ no_threat_descriptors,chronological_holdout,Reset-Server,Drop,171
 no_threat_descriptors,chronological_holdout,Reset-Server,Reset-Both,7
 no_threat_descriptors,chronological_holdout,Reset-Server,Reset-Server,457
 minimal_context,chronological_holdout,Allow,Allow,2423
-minimal_context,chronological_holdout,Deny,Deny,2709
+minimal_context,chronological_holdout,Block,Block,2709
 minimal_context,chronological_holdout,Drop,Drop,29296
 minimal_context,chronological_holdout,Drop,Reset-Both,17
 minimal_context,chronological_holdout,Drop,Reset-Server,59

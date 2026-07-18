@@ -45,7 +45,7 @@ FEATURE_SET_ORDER = [
     "drop_network_endpoint_context",
     "drop_direction",
 ]
-EXPECTED_CLASSES = {"Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"}
+EXPECTED_CLASSES = {"Allow", "Block", "Drop", "Reset-Both", "Reset-Server"}
 RENDERER_VERSION = "1.2.0"
 FIG2_FIG3_AXIS_LABEL_SIZE_PT = 8
 FIG2_FIG3_AXIS_TICK_SIZE_PT = 7
@@ -165,7 +165,7 @@ def render_class_distribution(manifest_path: Path, output: Path) -> None:
     if int(manifest.get("rows_out", -1)) != sum(int(value) for value in class_counts.values()):
         raise ValueError("rows_out must equal the sum of class_counts in the processing manifest.")
 
-    preferred = ["Drop", "Deny", "Reset-Both", "Allow", "Reset-Server"]
+    preferred = ["Drop", "Block", "Reset-Both", "Allow", "Reset-Server"]
     labels = [label for label in preferred if label in class_counts]
     labels.extend(sorted(set(class_counts).difference(labels)))
     counts = np.array([int(class_counts[label]) for label in labels], dtype=int)

@@ -21,35 +21,52 @@ import numpy as np
 import pandas as pd
 
 
-RENDERER_VERSION = "1.0.0"
-INK = "#263B4D"
-GRID = "#DCE6EE"
-ACC_COLOR = "#1674A8"
-MF1_COLOR = "#55A6A0"
-ERROR_COLOR = "#6F8497"
+RENDERER_VERSION = "2.0.0"
+PRIMARY = "#00539C"
+TEAL = "#008080"
+CORAL = "#EEA47F"
+INK = "#333333"
+LINE = "#888888"
+GRID = "#E2E8F0"
+ROW_BG = "#F8FAFC"
+AXIS_LABEL_SIZE_PT = 8
+AXIS_TICK_SIZE_PT = 7
+PANEL_TITLE_SIZE_PT = 8.2
 
 
 def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
-def resolve_font(env_name: str, accepted_names: set[str], label: str) -> tuple[font_manager.FontProperties, Path]:
+def resolve_font(
+    env_name: str,
+    accepted_names: set[str],
+    label: str,
+    *,
+    weight: str = "normal",
+) -> tuple[font_manager.FontProperties, Path]:
     explicit = os.environ.get(env_name)
     if explicit:
         path = Path(explicit).expanduser().resolve()
         if not path.is_file():
             raise RuntimeError(f"{env_name} is not a font file: {path}")
         font_manager.fontManager.addfont(path)
-        return font_manager.FontProperties(fname=str(path), weight="normal"), path
+        return font_manager.FontProperties(fname=str(path), weight=weight), path
     for font_path in font_manager.findSystemFonts():
         path = Path(font_path)
         if path.name.lower() in accepted_names:
             font_manager.fontManager.addfont(path)
-            return font_manager.FontProperties(fname=str(path), weight="normal"), path
+            return font_manager.FontProperties(fname=str(path), weight=weight), path
     raise RuntimeError(f"{label} is required to render the manuscript figure.")
 
 
 LATO, LATO_PATH = resolve_font("LEAF_LATO_REGULAR", {"lato-regular.ttf"}, "Lato Regular")
+LATO_BOLD, LATO_BOLD_PATH = resolve_font(
+    "LEAF_LATO_BOLD",
+    {"lato-bold.ttf"},
+    "Lato Bold",
+    weight="bold",
+)
 INTER, INTER_PATH = resolve_font(
     "LEAF_INTER_REGULAR",
     {"inter-regular.ttf", "inter-variablefont_opsz,wght.ttf"},
@@ -82,17 +99,17 @@ def set_style() -> None:
         {
             "font.family": "sans-serif",
             "font.sans-serif": [INTER.get_name(), "DejaVu Sans"],
-            "font.size": 7.4,
-            "axes.labelsize": 8.2,
-            "axes.titlesize": 8.0,
-            "axes.titleweight": "normal",
-            "xtick.labelsize": 7.1,
-            "ytick.labelsize": 7.4,
+            "font.size": 7,
+            "axes.labelsize": AXIS_LABEL_SIZE_PT,
+            "axes.titlesize": PANEL_TITLE_SIZE_PT,
+            "axes.titleweight": "bold",
+            "xtick.labelsize": AXIS_TICK_SIZE_PT,
+            "ytick.labelsize": AXIS_TICK_SIZE_PT,
             "legend.fontsize": 7.0,
             "axes.spines.top": False,
             "axes.spines.right": False,
-            "axes.edgecolor": "#8094A5",
-            "axes.linewidth": 0.7,
+            "axes.edgecolor": LINE,
+            "axes.linewidth": 1.0,
             "xtick.color": INK,
             "ytick.color": INK,
             "text.color": INK,
@@ -104,9 +121,11 @@ def set_style() -> None:
 
 
 def apply_inter(ax: plt.Axes) -> None:
+    """Apply Inter without allowing FontProperties to reset the locked size."""
     for text in [*ax.get_xticklabels(), *ax.get_yticklabels()]:
         text.set_fontproperties(INTER)
         text.set_fontweight("normal")
+        text.set_fontsize(AXIS_TICK_SIZE_PT)
 
 
 def main() -> None:
@@ -120,12 +139,9 @@ def main() -> None:
     if frame["feature_set"].astype(str).tolist() != order:
         raise RuntimeError("Held-out aggregate CSV does not contain the expected three feature settings.")
 
-    labels = ["Core", "No threat descriptors", "Minimal context"]
     y = np.arange(len(frame))
-    bar_height = 0.28
-
-    fig = plt.figure(figsize=(3.55, 2.18))
-    grid = fig.add_gridspec(1, 2, width_ratios=[1.65, 1.0], wspace=0.28)
+    fig = plt.figure(figsize=(3.60, 2.42))
+    grid = fig.add_gridspec(1, 2, width_ratios=[1.85, 1.0], wspace=0.30)
     ax_score = fig.add_subplot(grid[0, 0])
     ax_error = fig.add_subplot(grid[0, 1], sharey=ax_score)
 
@@ -133,80 +149,108 @@ def main() -> None:
     macro_f1 = frame["support_weighted_observed_macro_f1"].to_numpy()
     errors = frame["errors"].to_numpy(dtype=int)
 
-    ax_score.barh(y - bar_height / 2, accuracy, height=bar_height, color=ACC_COLOR, label="Accuracy")
-    ax_score.barh(y + bar_height / 2, macro_f1, height=bar_height, color=MF1_COLOR, label="Observed-class macro-F1")
-    for yi, value in zip(y - bar_height / 2, accuracy):
-        ax_score.text(
-            value - 0.025,
-            yi,
-            f"{value:.4f}",
-            va="center",
-            ha="right",
-            fontproperties=INTER,
-            fontsize=6.5,
-            color="white",
-        )
-    for yi, value in zip(y + bar_height / 2, macro_f1):
-        ax_score.text(
-            value - 0.025,
-            yi,
-            f"{value:.4f}",
-            va="center",
-            ha="right",
-            fontproperties=INTER,
-            fontsize=6.5,
-            color="white",
-        )
-    ax_score.set_xlim(0, 1.0)
-    ax_score.set_xticks([0.0, 0.5, 1.0])
+    for row in y[1::2]:
+        ax_score.axhspan(row - 0.5, row + 0.5, color=ROW_BG, zorder=0, lw=0)
+        ax_error.axhspan(row - 0.5, row + 0.5, color=ROW_BG, zorder=0, lw=0)
+    for yi, acc, mf1 in zip(y, accuracy, macro_f1):
+        ax_score.plot([mf1, acc], [yi, yi], color=LINE, lw=1.1, zorder=1)
+    ax_score.scatter(
+        accuracy,
+        y,
+        color=PRIMARY,
+        marker="o",
+        s=34,
+        label="Accuracy",
+        edgecolor="white",
+        linewidth=0.6,
+        zorder=3,
+    )
+    ax_score.scatter(
+        macro_f1,
+        y,
+        color=TEAL,
+        marker="s",
+        s=31,
+        label="Observed-class macro-F1",
+        edgecolor="white",
+        linewidth=0.6,
+        zorder=3,
+    )
+    ax_score.set_xlim(0.30, 0.88)
+    ax_score.set_xticks([0.4, 0.6, 0.8])
     ax_score.set_yticks(y)
-    ax_score.set_yticklabels(labels, fontproperties=INTER)
+    ax_score.set_yticklabels(["Core", "No threat\ndescriptors", "Minimal context"], fontproperties=INTER)
     ax_score.invert_yaxis()
-    ax_score.set_xlabel("Support-weighted score", fontproperties=LATO)
-    ax_score.grid(axis="x", color=GRID, linewidth=0.7, linestyle="--")
+    ax_score.set_title("Scores", fontproperties=LATO_BOLD, fontsize=PANEL_TITLE_SIZE_PT, pad=5)
+    ax_score.set_xlabel(
+        "Support-weighted score",
+        fontproperties=LATO,
+        fontsize=AXIS_LABEL_SIZE_PT,
+    )
+    ax_score.grid(axis="x", color=GRID, linewidth=0.8, linestyle="--")
     ax_score.set_axisbelow(True)
     handles, legend_labels = ax_score.get_legend_handles_labels()
     legend = fig.legend(
         handles,
         legend_labels,
         loc="upper center",
-        bbox_to_anchor=(0.62, 0.98),
+        bbox_to_anchor=(0.59, 0.985),
         frameon=False,
         ncol=2,
-        columnspacing=1.0,
-        handlelength=1.2,
+        columnspacing=0.9,
+        handlelength=1.0,
         handletextpad=0.45,
         borderaxespad=0.0,
         prop=INTER,
     )
     for text in legend.get_texts():
         text.set_fontweight("normal")
+        text.set_fontsize(7.0)
 
-    ax_error.barh(y, errors, height=0.40, color=ERROR_COLOR)
+    for yi, value in zip(y, errors):
+        ax_error.plot([0, value], [yi, yi], color=LINE, lw=1.1, zorder=1)
+    ax_error.scatter(
+        errors,
+        y,
+        color=CORAL,
+        marker="s",
+        s=31,
+        edgecolor="white",
+        linewidth=0.6,
+        zorder=3,
+    )
     ax_error.set_xlim(0, 6600)
     ax_error.set_xticks([0, 3000, 6000])
     ax_error.set_xticklabels(["0", "3k", "6k"], fontproperties=INTER)
-    ax_error.set_xlabel("Errors", fontproperties=LATO)
-    ax_error.grid(axis="x", color=GRID, linewidth=0.7, linestyle="--")
+    ax_error.set_title("Errors", fontproperties=LATO_BOLD, fontsize=PANEL_TITLE_SIZE_PT, pad=5)
+    ax_error.set_xlabel("Records", fontproperties=LATO, fontsize=AXIS_LABEL_SIZE_PT)
+    ax_error.grid(axis="x", color=GRID, linewidth=0.8, linestyle="--")
     ax_error.set_axisbelow(True)
     ax_error.tick_params(axis="y", left=False, labelleft=False)
     for yi, value in zip(y, errors):
+        label_x = value + 170 if value < 5000 else value - 170
         ax_error.text(
-            min(value + 135, 6420),
+            label_x,
             yi,
             f"{value:,}",
             va="center",
-            ha="left" if value < 6200 else "right",
+            ha="left" if value < 5000 else "right",
             fontproperties=INTER,
-            fontsize=7.0,
+            fontsize=6.4,
             color=INK,
+            bbox={
+                "facecolor": ROW_BG if yi % 2 else "white",
+                "edgecolor": "none",
+                "pad": 0.35,
+            },
+            zorder=4,
         )
 
-    ax_score.text(-0.02, 1.04, "(a)", transform=ax_score.transAxes, fontproperties=INTER, fontsize=7.5)
-    ax_error.text(-0.02, 1.04, "(b)", transform=ax_error.transAxes, fontproperties=INTER, fontsize=7.5)
+    ax_score.text(0.5, -0.31, "(a)", transform=ax_score.transAxes, ha="center", va="top", fontproperties=INTER, fontsize=7.2)
+    ax_error.text(0.5, -0.31, "(b)", transform=ax_error.transAxes, ha="center", va="top", fontproperties=INTER, fontsize=7.2)
     apply_inter(ax_score)
     apply_inter(ax_error)
-    fig.subplots_adjust(left=0.38, right=0.98, top=0.76, bottom=0.24)
+    fig.subplots_adjust(left=0.34, right=0.98, top=0.76, bottom=0.25)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.metadata.parent.mkdir(parents=True, exist_ok=True)
@@ -233,9 +277,21 @@ def main() -> None:
         "typography": {
             "axis_label_font": "Lato Regular",
             "axis_label_font_sha256": file_sha256(LATO_PATH),
+            "panel_title_font": "Lato Bold",
+            "panel_title_font_sha256": file_sha256(LATO_BOLD_PATH),
             "internal_text_font": "Inter Regular",
             "internal_text_font_sha256": file_sha256(INTER_PATH),
             "bold_internal_text": False,
+            "axis_label_size_pt": AXIS_LABEL_SIZE_PT,
+            "axis_tick_size_pt": AXIS_TICK_SIZE_PT,
+            "panel_title_size_pt": PANEL_TITLE_SIZE_PT,
+        },
+        "palette": {
+            "accuracy": PRIMARY,
+            "observed_class_macro_f1": TEAL,
+            "errors": CORAL,
+            "connector": LINE,
+            "row_background": ROW_BG,
         },
     }
     args.metadata.write_text(json.dumps(payload, indent=2), encoding="utf-8")

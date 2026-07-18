@@ -1,9 +1,9 @@
 {
-  "renderer_version": "1.0.0",
+  "renderer_version": "2.0.0",
   "source": "results/policy_context_robustness/policy_context_heldout_aggregate.csv",
   "source_sha256": "A3AD5801CE7AB4EB31A38F061F818A7776912643FEA04CC3BE2FC8CDDC58ECD6",
   "output": "results/policy_context_robustness/fig_heldout_policy_context_audit.png",
-  "output_sha256": "BFA24B335482B47EEED7CB52C5F7B038619DCCDA1B26288497F913A0CF5B44CF",
+  "output_sha256": "34D8C305981D198E6179AA5CE5BD942D6C0DEC1257CAB1E5AE0F21DFCD95B030",
   "scope": "named_rule_contexts_only",
   "test_rows": 16815,
   "settings": [
@@ -29,8 +29,20 @@
   "typography": {
     "axis_label_font": "Lato Regular",
     "axis_label_font_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7",
+    "panel_title_font": "Lato Bold",
+    "panel_title_font_sha256": "14F7DE6B616950395062902EB8F70F01C0A901223DB5D40F2A05728AC4A830F6",
     "internal_text_font": "Inter Regular",
     "internal_text_font_sha256": "0BE2399EA925F1F83FF974764761DA9860EC50742ED29A5D4C1FFD0C5C7AC3A8",
-    "bold_internal_text": false
+    "bold_internal_text": false,
+    "axis_label_size_pt": 8,
+    "axis_tick_size_pt": 7,
+    "panel_title_size_pt": 8.2
+  },
+  "palette": {
+    "accuracy": "#00539C",
+    "observed_class_macro_f1": "#008080",
+    "errors": "#EEA47F",
+    "connector": "#888888",
+    "row_background": "#F8FAFC"
   }
 }

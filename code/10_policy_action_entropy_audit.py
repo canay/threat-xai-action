@@ -21,7 +21,7 @@ import pandas as pd
 
 
 MISSING_RULE = "__MISSING_RULE__"
-LABEL_ORDER = ["Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"]
+LABEL_ORDER = ["Allow", "Block", "Drop", "Reset-Both", "Reset-Server"]
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 AUDIT_LEVELS = {

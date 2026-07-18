@@ -12,7 +12,7 @@ from pathlib import Path
 
 DEFAULT_COUNTS = {
     "Drop": 731,
-    "Deny": 93,
+    "Block": 93,
     "Reset-Both": 62,
     "Allow": 61,
     "Reset-Server": 53,

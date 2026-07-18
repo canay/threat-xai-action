@@ -1,9 +1,9 @@
-feature_set,rule_group,true,Allow,Reset-Both,Deny,Drop,Reset-Server
+feature_set,rule_group,true,Allow,Reset-Both,Block,Drop,Reset-Server
 core,__MISSING_RULE__,Allow,282.0,0.0,,,
 core,__MISSING_RULE__,Drop,159991.0,3.0,,,
-core,rule_context_01,Deny,,555.0,5375.0,,
+core,rule_context_01,Block,,555.0,5375.0,,
 core,rule_context_01,Drop,,23.0,0.0,,
-core,rule_context_02,Deny,,,4257.0,0.0,
+core,rule_context_02,Block,,,4257.0,0.0,
 core,rule_context_02,Drop,,,0.0,482.0,
 core,rule_context_03,Drop,,,,20.0,0.0
 core,rule_context_03,Reset-Both,,,,2463.0,205.0
@@ -19,9 +19,9 @@ core,rule_context_07,Reset-Both,,13.0,,0.0,0.0
 core,rule_context_07,Reset-Server,,2.0,,0.0,50.0
 no_threat_descriptors,__MISSING_RULE__,Allow,282.0,0.0,,0.0,0.0
 no_threat_descriptors,__MISSING_RULE__,Drop,2.0,54717.0,,1516.0,103759.0
-no_threat_descriptors,rule_context_01,Deny,,0.0,5930.0,,
+no_threat_descriptors,rule_context_01,Block,,0.0,5930.0,,
 no_threat_descriptors,rule_context_01,Drop,,23.0,0.0,,
-no_threat_descriptors,rule_context_02,Deny,330.0,,3927.0,,
+no_threat_descriptors,rule_context_02,Block,330.0,,3927.0,,
 no_threat_descriptors,rule_context_02,Drop,482.0,,0.0,,
 no_threat_descriptors,rule_context_03,Drop,0.0,,,20.0,
 no_threat_descriptors,rule_context_03,Reset-Both,309.0,,,2359.0,
@@ -37,9 +37,9 @@ no_threat_descriptors,rule_context_07,Reset-Both,,13.0,0.0,0.0,0.0
 no_threat_descriptors,rule_context_07,Reset-Server,,4.0,0.0,2.0,46.0
 minimal_context,__MISSING_RULE__,Allow,282.0,0.0,,0.0,0.0
 minimal_context,__MISSING_RULE__,Drop,2.0,60314.0,,277.0,99401.0
-minimal_context,rule_context_01,Deny,,0.0,5930.0,,
+minimal_context,rule_context_01,Block,,0.0,5930.0,,
 minimal_context,rule_context_01,Drop,,23.0,0.0,,
-minimal_context,rule_context_02,Deny,405.0,,3852.0,,
+minimal_context,rule_context_02,Block,405.0,,3852.0,,
 minimal_context,rule_context_02,Drop,482.0,,0.0,,
 minimal_context,rule_context_03,Drop,0.0,,,20.0,
 minimal_context,rule_context_03,Reset-Both,495.0,,,2173.0,

@@ -4,7 +4,7 @@
   "inputs": {
     "processing_manifest": {
       "basename": "threat_dataset_processing_manifest.json",
-      "sha256": "77CA3EFC384F7A62CAC457160303BFCDFCDD1B273144BFDE118146C3C7EE8E5F"
+      "sha256": "9AA5BB2BB4AADC7B375742FA93569B25B493404F98F0EF2A50A2B8F8FD6E6AED"
     },
     "core_holdout": {
       "basename": "baseline_benchmark_threat_core_baseline.csv",
@@ -45,7 +45,7 @@
   },
   "outputs": {
     "fig_class_distribution.png": {
-      "sha256": "53D97CACB2A8E1969921024AEF2E06383B4DC43AF0535B19AA5BCFDDC8A539F8"
+      "sha256": "496C5F88B107515F7D1D4FA8D6807C4939C9D87BB8D72CC0358E264B3E04B98C"
     },
     "fig_results_ablation_cv_combined.png": {
       "sha256": "89A042DD322171477276C9763479783DB2B033A62476E2C9E77F70C297E1739B"

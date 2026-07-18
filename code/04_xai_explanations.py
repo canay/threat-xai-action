@@ -567,7 +567,7 @@ def main() -> None:
     save_lime_group(
         args.outdir,
         lime_df,
-        ["Allow", "Deny", "Drop"],
+        ["Allow", "Block", "Drop"],
         "fig_xai_lime_local_primary.png",
         (3.6, 6.0),
     )

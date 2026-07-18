@@ -8,7 +8,7 @@ Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Condi
 
 ## Public Contents
 
-- `code/`: the controlled-data conversion entry point and every benchmark, validation, explainability, policy-context, review-queue, entropy, revision, and manuscript-figure script used by the manuscript (`02`--`20`).
+- `code/`: the controlled-data conversion entry point and every benchmark, validation, explainability, policy-context, review-queue, entropy, revision, and manuscript-figure script used by the manuscript (`02`--`21`).
 - `scripts/create_public_sample.py`: the only retained helper script; it creates the privacy-audited public smoke-test sample from an authorized local copy.
 - `results/`: aggregate CSV/JSON outputs and generated explanation artifacts used for manuscript reporting.
 - `data/processed/README.md`: controlled-data access note.
@@ -38,6 +38,8 @@ Controlled processed file identity for authorized reruns:
 - Size: 44,929,133 bytes
 - SHA-256: `1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724`
 
+Label semantics: this checksum identifies the original canonical experiment file, in which raw `block` was stored under the internal alias `Deny`. Release-facing code, tables, figures, and the public sample use `Block`; a label-only byte round-trip check confirms that class membership and reported metrics are unchanged.
+
 ## Reproduction Contract
 
 The public package supports inspection of code, command recipes, aggregate outputs, validation summaries, traceability notes, explanation artifacts, and a 1,000-row anonymized smoke-test sample. A full rerun requires an institutionally approved copy of `data/processed/threat_five_class.csv` placed at the expected path. The public sample is suitable for schema and parser checks only and must not be used to reproduce the manuscript metrics. The calendar date, 14 May 2026, is intentionally disclosed with author approval; organization identity, topology, policy names, raw exports, full event-level data, and event-level review queues remain excluded.
@@ -50,12 +52,12 @@ Before public archival release:
 2. Run the command recipes in `README.MD` against an authorized processed dataset.
 3. Confirm that aggregate outputs in `results/` match the manuscript tables and figures listed in `TRACEABILITY.md`.
 4. Confirm that `data/processed/public_anonymized_sample_1000.csv` matches its audit checksum and contains only anonymized sample values.
-5. Record the final Git commit and release tag in this manifest; a repository DOI is intentionally deferred until the submission-stage Zenodo decision.
+5. Record the final Git commit and release tag in this manifest; no repository DOI is planned for this submission.
 6. Archive only the approved public package.
 
 ## Release Identifiers
 
-- Final public commit: resolve with `git rev-parse 'jnca-submission-r0.11^{commit}'`
-- Release tag: `jnca-submission-r0.11`
-- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, `jnca-submission-r0.2`, `jnca-submission-r0.3`, `jnca-submission-r0.4`, `jnca-submission-r0.5`, `jnca-submission-r0.6`, `jnca-submission-r0.7`, `jnca-submission-r0.8`, `jnca-submission-r0.9`, and `jnca-submission-r0.10`
-- Repository DOI: `DEFERRED-PENDING-SUBMISSION-DECISION`
+- Final public commit: resolve with `git rev-parse 'jnca-submission-r0.12^{commit}'`
+- Release tag: `jnca-submission-r0.12`
+- Preserved prior tags: `jnca-submission-r0`, `jnca-submission-r0.1`, `jnca-submission-r0.2`, `jnca-submission-r0.3`, `jnca-submission-r0.4`, `jnca-submission-r0.5`, `jnca-submission-r0.6`, `jnca-submission-r0.7`, `jnca-submission-r0.8`, `jnca-submission-r0.9`, `jnca-submission-r0.10`, and `jnca-submission-r0.11`
+- Repository DOI: not requested for this submission; the immutable GitHub tag/release is canonical.

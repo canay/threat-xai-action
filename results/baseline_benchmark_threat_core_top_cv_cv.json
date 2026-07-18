@@ -41,14 +41,14 @@
   ],
   "labels": [
     "Allow",
-    "Deny",
+    "Block",
     "Drop",
     "Reset-Both",
     "Reset-Server"
   ],
   "class_counts": {
     "Drop": 160788,
-    "Deny": 10187,
+    "Block": 10187,
     "Reset-Both": 2903,
     "Allow": 2502,
     "Reset-Server": 776
@@ -73,7 +73,7 @@
           "f1-score": 1.0,
           "support": 500.0
         },
-        "Deny": {
+        "Block": {
           "precision": 1.0,
           "recall": 1.0,
           "f1-score": 1.0,
@@ -168,7 +168,7 @@
           "f1-score": 1.0,
           "support": 500.0
         },
-        "Deny": {
+        "Block": {
           "precision": 1.0,
           "recall": 1.0,
           "f1-score": 1.0,
@@ -263,7 +263,7 @@
           "f1-score": 1.0,
           "support": 500.0
         },
-        "Deny": {
+        "Block": {
           "precision": 1.0,
           "recall": 1.0,
           "f1-score": 1.0,
@@ -358,7 +358,7 @@
           "f1-score": 1.0,
           "support": 500.0
         },
-        "Deny": {
+        "Block": {
           "precision": 1.0,
           "recall": 1.0,
           "f1-score": 1.0,

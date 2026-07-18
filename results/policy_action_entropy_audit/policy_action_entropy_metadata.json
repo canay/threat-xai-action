@@ -4,7 +4,7 @@
   "rows": 177156,
   "target_labels": [
     "Allow",
-    "Deny",
+    "Block",
     "Drop",
     "Reset-Both",
     "Reset-Server"

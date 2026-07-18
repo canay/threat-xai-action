@@ -2,8 +2,9 @@
   "purpose": "public smoke-test sample; not used for reported manuscript metrics",
   "source_identifier": "threat_five_class.csv",
   "source_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "label_semantics": "The source hash identifies the original experiment file with internal Deny alias; the released target label is Block and class membership is unchanged.",
   "output_identifier": "public_anonymized_sample_1000.csv",
-  "output_sha256": "52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08",
+  "output_sha256": "68672057A80CA70D5B52301E3BB9ED00D8A41D707C50EFFC8B53217A345253DD",
   "seed": 20260701,
   "rows": 1000,
   "header_columns": [
@@ -36,7 +37,7 @@
     "Rule"
   ],
   "source_class_counts": {
-    "Deny": 10187,
+    "Block": 10187,
     "Drop": 160788,
     "Reset-Server": 776,
     "Reset-Both": 2903,
@@ -45,7 +46,7 @@
   "sample_class_counts": {
     "Drop": 731,
     "Allow": 61,
-    "Deny": 93,
+    "Block": 93,
     "Reset-Both": 62,
     "Reset-Server": 53
   },

@@ -71,7 +71,7 @@ def majority_label(labels: pd.Series) -> str:
 
 
 def fixed_label_order(series: pd.Series) -> list[str]:
-    preferred = ["Allow", "Deny", "Drop", "Reset-Both", "Reset-Server"]
+    preferred = ["Allow", "Block", "Drop", "Reset-Both", "Reset-Server"]
     observed = set(series.astype(str))
     ordered = [label for label in preferred if label in observed]
     ordered.extend(sorted(observed - set(ordered)))
