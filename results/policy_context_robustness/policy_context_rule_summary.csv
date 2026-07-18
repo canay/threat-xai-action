@@ -1,4 +1,4 @@
-rule_group,records,nonzero_classes,dominant_class,dominant_fraction,is_missing_rule,class_Allow,class_Deny,class_Drop,class_Reset-Both,class_Reset-Server
+rule_group,records,nonzero_classes,dominant_class,dominant_fraction,is_missing_rule,class_Allow,class_Block,class_Drop,class_Reset-Both,class_Reset-Server
 __MISSING_RULE__,160276,2,Drop,0.9982405350769922,True,282,0,159994,0,0
 rule_context_01,5953,2,Block,0.9961364018142114,False,0,5930,23,0,0
 rule_context_02,4739,2,Block,0.8982907786452838,False,0,4257,482,0,0

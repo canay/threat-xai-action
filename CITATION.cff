@@ -10,6 +10,13 @@ authors:
   - family-names: "Garri"
     given-names: "Fatmir"
 repository-code: "https://github.com/canay/threat-xai-action"
+keywords:
+  - "enterprise firewall logs"
+  - "policy-conditioned firewall enforcement"
+  - "leakage-aware evaluation protocol"
+  - "security management"
+  - "analyst triage"
+  - "explainable artificial intelligence"
 version: "1.0.12"
 date-released: "2026-07-18"
 license: "MIT"

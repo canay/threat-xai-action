@@ -1,4 +1,4 @@
-context_key,records,nonzero_classes,dominant_class,dominant_count,dominant_fraction,entropy_bits,normalized_entropy,records_not_in_dominant_class,class_Allow,class_Deny,class_Drop,class_Reset-Both,class_Reset-Server
+context_key,records,nonzero_classes,dominant_class,dominant_count,dominant_fraction,entropy_bits,normalized_entropy,records_not_in_dominant_class,class_Allow,class_Block,class_Drop,class_Reset-Both,class_Reset-Server
 __MISSING_RULE__,160276,2,Drop,159994,0.9982405350769922,0.01863638027610054,0.008026252112257852,282,282,0,159994,0,0
 rule_context_01,5953,2,Block,5930,0.9961364018142114,0.0365331940912449,0.015733990286644576,23,0,5930,23,0,0
 rule_context_02,4739,2,Block,4257,0.8982907786452838,0.47439039941851124,0.2043088244046266,482,0,4257,482,0,0

@@ -146,7 +146,11 @@ def add_rule_groups(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
 
 def prepare_data(path: Path) -> tuple[pd.DataFrame, int]:
     df = pd.read_csv(path, low_memory=False)
-    df["target"] = df["target"].astype(str)
+    # Release-label normalization: the controlled experiment file stores raw
+    # ``block`` events under the internal alias ``Deny``; all release-facing
+    # outputs report the published label ``Block``. This is a pure label rename
+    # that changes neither class membership nor any reported metric.
+    df["target"] = df["target"].astype(str).replace({"Deny": "Block"})
     df, alias_count = add_rule_groups(df)
     return df.reset_index(drop=True), alias_count
 

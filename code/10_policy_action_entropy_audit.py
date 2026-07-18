@@ -151,7 +151,11 @@ def main() -> None:
     args.outdir.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.data, low_memory=False)
-    df["target"] = df["target"].astype(str)
+    # Release-label normalization: the controlled experiment file stores raw
+    # ``block`` events under the internal alias ``Deny``; all release-facing
+    # outputs report the published label ``Block``. This is a pure label rename
+    # that changes neither class membership nor any reported metric.
+    df["target"] = df["target"].astype(str).replace({"Deny": "Block"})
     df, rule_mapping = add_rule_groups(df, anonymize_rules=not args.no_anonymize_rules)
     labels = label_columns(df)
 

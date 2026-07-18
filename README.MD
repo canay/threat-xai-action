@@ -28,6 +28,15 @@ Target classes:
 - Reset-Both
 - Reset-Server
 
+## Keywords
+
+- enterprise firewall logs
+- policy-conditioned firewall enforcement
+- leakage-aware evaluation protocol
+- security management
+- analyst triage
+- explainable artificial intelligence
+
 ## Authors And Contact
 
 Author order:

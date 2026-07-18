@@ -25,7 +25,7 @@ Public anonymized smoke-test sample:
 - File: `data/processed/public_anonymized_sample_1000.csv`
 - Audit: `data/processed/public_anonymized_sample_1000.audit.json`
 - Rows: 1,000
-- SHA-256: `52A00A06A8D9E7FB2AD7055B4504809451F1F22123078536D2FD42866CA91A08`
+- SHA-256: `68672057A80CA70D5B52301E3BB9ED00D8A41D707C50EFFC8B53217A345253DD`
 - Boundary: schema and parser smoke testing only; not used for reported manuscript metrics.
 
 | Manuscript evidence | Script or command entry point | Public aggregate outputs |
