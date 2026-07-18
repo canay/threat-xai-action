@@ -26,25 +26,25 @@ BOX_TITLE_TEXT = "#17365D"
 BOX_BODY_TEXT = "#5B3A78"
 PHASE_PALETTES = {
     "I": {
-        "phase_fill": "#F8FBFD",
+        "phase_fill": "#FAFAFA",
         "box_fill": "#EDF5FB",
         "phase_edge": "#A8C4D6",
         "box_edge": "#7FA8C2",
     },
     "II": {
-        "phase_fill": "#FFFCF5",
+        "phase_fill": "#F7F7F7",
         "box_fill": "#FFF8E5",
         "phase_edge": "#D7C58E",
         "box_edge": "#BFA35B",
     },
     "III": {
-        "phase_fill": "#F8FCF9",
+        "phase_fill": "#F4F4F4",
         "box_fill": "#EEF8F1",
         "phase_edge": "#ACCBB5",
         "box_edge": "#82A98E",
     },
 }
-RENDERER_VERSION = "1.8.0"
+RENDERER_VERSION = "1.8.1"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 

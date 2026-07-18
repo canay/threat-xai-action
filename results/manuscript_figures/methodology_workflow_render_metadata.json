@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.8.0",
+  "renderer_version": "1.8.1",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
@@ -17,19 +17,19 @@
     "palette": {
       "phase_groups": {
         "I": {
-          "phase_fill": "#F8FBFD",
+          "phase_fill": "#FAFAFA",
           "box_fill": "#EDF5FB",
           "phase_edge": "#A8C4D6",
           "box_edge": "#7FA8C2"
         },
         "II": {
-          "phase_fill": "#FFFCF5",
+          "phase_fill": "#F7F7F7",
           "box_fill": "#FFF8E5",
           "phase_edge": "#D7C58E",
           "box_edge": "#BFA35B"
         },
         "III": {
-          "phase_fill": "#F8FCF9",
+          "phase_fill": "#F4F4F4",
           "box_fill": "#EEF8F1",
           "phase_edge": "#ACCBB5",
           "box_edge": "#82A98E"
@@ -87,6 +87,6 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "751A67C780749BDA33816482618A9CC86725E8298CE823284C91381418BA978D"
+    "sha256": "E6D6135C1400BA88F7A61F14BC6513AFE97E49513F8CFBB80252C8FF6EC90AFB"
   }
 }
