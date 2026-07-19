@@ -1,6 +1,6 @@
 {
   "renderer": "19_render_manuscript_figures.py",
-  "renderer_version": "1.2.0",
+  "renderer_version": "1.3.0",
   "inputs": {
     "processing_manifest": {
       "basename": "threat_dataset_processing_manifest.json",
@@ -45,13 +45,13 @@
   },
   "outputs": {
     "fig_class_distribution.png": {
-      "sha256": "496C5F88B107515F7D1D4FA8D6807C4939C9D87BB8D72CC0358E264B3E04B98C"
+      "sha256": "A3AE5AC397EB79A64FA79E9B2EACF0BC189B804CD5673A0E71C1101A568D3051"
     },
     "fig_results_ablation_cv_combined.png": {
-      "sha256": "89A042DD322171477276C9763479783DB2B033A62476E2C9E77F70C297E1739B"
+      "sha256": "EC0FF429A8904A1F699EA8F627A2D137929808202950181540BE4BEB893478FE"
     },
     "fig_feature_group_validation.png": {
-      "sha256": "B65A32CB1011FD0CA77084DAEFEF60F5AE1DA10C8CAC43523DAB616DEB4FCE44"
+      "sha256": "75899EACCE98AFB1D3A11CE4DE134CD538704648F98A5817D607801B4BDEDBD9"
     }
   }
 }

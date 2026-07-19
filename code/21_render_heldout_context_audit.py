@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 
-RENDERER_VERSION = "2.0.0"
+RENDERER_VERSION = "2.1.0"
 PRIMARY = "#00539C"
 TEAL = "#008080"
 CORAL = "#EEA47F"
@@ -141,7 +141,7 @@ def main() -> None:
 
     y = np.arange(len(frame))
     fig = plt.figure(figsize=(3.60, 2.42))
-    grid = fig.add_gridspec(1, 2, width_ratios=[1.85, 1.0], wspace=0.30)
+    grid = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.0], wspace=0.30)
     ax_score = fig.add_subplot(grid[0, 0])
     ax_error = fig.add_subplot(grid[0, 1], sharey=ax_score)
 
@@ -179,7 +179,7 @@ def main() -> None:
     ax_score.set_xlim(0.30, 0.88)
     ax_score.set_xticks([0.4, 0.6, 0.8])
     ax_score.set_yticks(y)
-    ax_score.set_yticklabels(["Core", "No threat\ndescriptors", "Minimal context"], fontproperties=INTER)
+    ax_score.set_yticklabels(["Core", "No threat\ndescriptors", "Minimal\ncontext"], fontproperties=INTER)
     ax_score.invert_yaxis()
     ax_score.set_title("Scores", fontproperties=LATO_BOLD, fontsize=PANEL_TITLE_SIZE_PT, pad=5)
     ax_score.set_xlabel(
@@ -250,7 +250,7 @@ def main() -> None:
     ax_error.text(0.5, -0.31, "(b)", transform=ax_error.transAxes, ha="center", va="top", fontproperties=INTER, fontsize=7.2)
     apply_inter(ax_score)
     apply_inter(ax_error)
-    fig.subplots_adjust(left=0.34, right=0.98, top=0.76, bottom=0.25)
+    fig.subplots_adjust(left=0.24, right=0.98, top=0.76, bottom=0.25)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.metadata.parent.mkdir(parents=True, exist_ok=True)

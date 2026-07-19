@@ -46,7 +46,7 @@ FEATURE_SET_ORDER = [
     "drop_direction",
 ]
 EXPECTED_CLASSES = {"Allow", "Block", "Drop", "Reset-Both", "Reset-Server"}
-RENDERER_VERSION = "1.2.0"
+RENDERER_VERSION = "1.3.0"
 FIG2_FIG3_AXIS_LABEL_SIZE_PT = 8
 FIG2_FIG3_AXIS_TICK_SIZE_PT = 7
 
@@ -179,7 +179,7 @@ def render_class_distribution(manifest_path: Path, output: Path) -> None:
     ax.set_yticks(y_pos)
     ax.set_yticklabels(
         labels,
-        fontweight="bold",
+        fontweight="normal",
         fontsize=FIG2_FIG3_AXIS_TICK_SIZE_PT,
     )
     ax.invert_yaxis()
@@ -333,7 +333,7 @@ def render_combined_benchmark(
     ax2.legend(frameon=False, loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2)
     ax2.text(0.5, -0.25, "(b)", transform=ax2.transAxes, ha="center", va="top", fontweight="bold")
 
-    fig.tight_layout(pad=0.3)
+    fig.tight_layout(pad=0.3, w_pad=4.5)
     fig.savefig(output)
     plt.close(fig)
 
@@ -405,7 +405,7 @@ def render_feature_group_validation(strengthening_path: Path, output: Path) -> N
     fig.legend(handles, labels, frameon=False, loc="upper center", bbox_to_anchor=(0.5, 1.01), ncol=2)
     axes[0].text(0.5, -0.24, "(a)", transform=axes[0].transAxes, ha="center", va="top", fontweight="bold")
     axes[1].text(0.5, -0.24, "(b)", transform=axes[1].transAxes, ha="center", va="top", fontweight="bold")
-    fig.tight_layout(pad=0.35, rect=(0, 0, 1, 0.92))
+    fig.tight_layout(pad=0.35, w_pad=4.5, rect=(0, 0, 1, 0.92))
     fig.savefig(output)
     plt.close(fig)
 

@@ -1,9 +1,9 @@
 {
-  "renderer_version": "2.0.0",
+  "renderer_version": "2.1.0",
   "source": "results/policy_context_robustness/policy_context_heldout_aggregate.csv",
   "source_sha256": "A3AD5801CE7AB4EB31A38F061F818A7776912643FEA04CC3BE2FC8CDDC58ECD6",
   "output": "results/policy_context_robustness/fig_heldout_policy_context_audit.png",
-  "output_sha256": "34D8C305981D198E6179AA5CE5BD942D6C0DEC1257CAB1E5AE0F21DFCD95B030",
+  "output_sha256": "558F116ADFA18BB8D22A74862FD12B70A88016B2BD6BF6B1F00661B3C34CEE9F",
   "scope": "named_rule_contexts_only",
   "test_rows": 16815,
   "settings": [
