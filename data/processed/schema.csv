@@ -14,8 +14,8 @@ Outbound Interface,network context,retained as residual operational proxy; token
 IP Protocol,transport context,retained as residual operational proxy; tokenized in public smoke-test sample
 Source Port,transport context,retained as residual operational proxy; tokenized in public smoke-test sample
 Destination Port,transport context,retained as residual operational proxy; tokenized in public smoke-test sample
-Source Country,geographic context,retained as residual operational proxy; tokenized in public smoke-test sample
-Destination Country,geographic context,retained as residual operational proxy; tokenized in public smoke-test sample
+Source Country,mixed country or coarse address-range context,retained as a residual geographic or topology proxy; 13,748 controlled rows (7.76%) contain private/shared/special-purpose range labels; tokenized in public smoke-test sample
+Destination Country,mixed country or coarse address-range context,retained as a residual geographic or topology proxy; 7,243 controlled rows (4.09%) contain private/shared/special-purpose range labels; tokenized in public smoke-test sample
 Threat/Content Name,direct threat/signature descriptor,removed in no-threat-descriptors ablation; tokenized in public smoke-test sample
 Category,residual category proxy,retained in no-threat-descriptors ablation and audited separately; tokenized in public smoke-test sample
 Severity,direct threat/signature descriptor,removed in no-threat-descriptors ablation; tokenized in public smoke-test sample
