@@ -5,6 +5,7 @@ benchmark: chronological holdout, a stricter minimal-context feature audit,
 probability calibration diagnostics, error-pair summaries, and SHAP rank
 stability for the selected XGBoost model.
 """
+# compute-plot-fusion: acknowledged
 
 from __future__ import annotations
 

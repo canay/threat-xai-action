@@ -5,6 +5,7 @@ configuration. It retrains the XGBoost model with the manuscript parameters,
 then writes aggregate SHAP artifacts and deidentified manuscript-facing LIME figures.
 Row-level local-surrogate tables remain controlled and are not written.
 """
+# compute-plot-fusion: acknowledged
 
 from __future__ import annotations
 

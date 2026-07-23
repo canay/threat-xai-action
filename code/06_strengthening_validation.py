@@ -12,6 +12,7 @@ The timestamp span in the processed dataset is short, so the temporal analysis i
 reported as a within-day forward-shift stress test rather than long-term temporal
 generalization.
 """
+# compute-plot-fusion: acknowledged
 
 from __future__ import annotations
 
