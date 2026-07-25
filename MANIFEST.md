@@ -4,11 +4,11 @@ Artifact short name: `threat-xai-action`
 
 Repository: `https://github.com/canay/threat-xai-action`
 
-Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
+Manuscript: "LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Firewall Enforcement in a Single-Environment Case Study"
 
 ## Public Contents
 
-- `code/`: the controlled-data conversion entry point and every benchmark, validation, explainability, policy-context, review-queue, entropy, revision, and manuscript-figure script used by the manuscript (`02`--`21`).
+- `code/`: the controlled-data conversion entry point and every benchmark, validation, explainability, policy-context, review-queue, entropy, revision, and manuscript-figure script used by the manuscript (`02`--`25`).
 - `scripts/create_public_sample.py`: the only retained helper script; it creates the privacy-audited public smoke-test sample from an authorized local copy.
 - `results/`: aggregate CSV/JSON outputs and generated explanation artifacts used for manuscript reporting.
 - `data/processed/README.md`: controlled-data access note.

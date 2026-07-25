@@ -8,5 +8,6 @@ This directory contains only aggregate outputs and manuscript-facing figures use
 - `xai/` contains aggregate SHAP evidence and manuscript-facing explanation figures, including one deidentified illustrative LIME panel; no row-level LIME table is released.
 - `manuscript_figures/` contains deterministic manuscript figures rendered from the saved aggregate evidence.
 - `uci_leaf_instantiation/` contains the public-dataset schema-transfer check.
+- `reviewer_revision_sensitivity/` contains paired missing-rule encoding metrics, seven-context and support-qualified six-context pooled metrics, the aggregate Rule-missingness profile, and an aggregate-only session-identifier coverage audit.
 
 Raw exports, the full processed event-level dataset, event-level review queues, local paths, credentials, private policy identifiers, and intermediate diagnostic plots are intentionally excluded. The observation date is disclosed by author decision; the protected boundary is institutional and operational context, not the calendar date.

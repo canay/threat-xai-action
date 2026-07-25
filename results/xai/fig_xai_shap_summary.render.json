@@ -1,0 +1,12 @@
+{
+  "operation": "constant_hue_shap_beeswarm_render",
+  "source_figure_sha256": "6FD0ED8F9AE6D4D63AFEE664EE5B935B5989E8BD369975E097D6E60B3B21E5C5",
+  "output_figure_sha256": "47987AFF607EC7FCB4B8207D6167218D841EB5740B17548F89ACC10EA67038E8",
+  "width": 4196,
+  "height": 2375,
+  "legend_mask_x": 3665,
+  "saturated_pixels_recolored": 231012,
+  "scientific_geometry_changed": false,
+  "interpretation": "SHAP coordinates retained; nominal-code high/low color semantics removed",
+  "renderer": "../../code/25_render_neutral_shap_beeswarm.py"
+}

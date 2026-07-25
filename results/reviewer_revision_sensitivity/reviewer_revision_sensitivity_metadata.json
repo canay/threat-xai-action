@@ -1,0 +1,45 @@
+{
+  "analysis": "reviewer_revision_sensitivity",
+  "aggregate_outputs_only": true,
+  "data_path": "data\\processed\\threat_five_class.csv",
+  "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "heldout_confusions_path": "github-threat-xai-action\\results\\policy_context_robustness\\policy_context_heldout_confusions.csv",
+  "heldout_confusions_sha256": "6296DF65AA2D3BBCE51389C41193F67FAC3CC3B40FBBB4C0047739692694AA0E",
+  "script_sha256": "A63436732F86E386EF77DA74CDA722E3E3C95505E1FAE75B153CEF89FC8557ED",
+  "runtime": {
+    "python": "3.12.12",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit_learn": "1.8.0",
+    "xgboost": "3.1.3",
+    "wall_seconds": 18.930239200009964
+  },
+  "rule_missingness_sensitivity": {
+    "rows": 177156,
+    "train_rows": 141724,
+    "test_rows": 35432,
+    "named_rule_test_rows": 3364,
+    "missing_rule_test_rows": 32068,
+    "labels": [
+      "Allow",
+      "Block",
+      "Drop",
+      "Reset-Both",
+      "Reset-Server"
+    ],
+    "seed": 42,
+    "test_size": 0.2,
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.08,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "tree_method": "hist",
+    "fit_predict_seconds": {
+      "core_without_policy_fields": 6.197250400000485,
+      "with_policy_most_frequent_rule_imputation": 5.639879700000165,
+      "with_policy_explicit_missing_rule": 5.931768399983412
+    }
+  }
+}

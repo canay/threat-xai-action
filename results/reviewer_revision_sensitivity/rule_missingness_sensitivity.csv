@@ -1,0 +1,10 @@
+configuration,scope,rows,observed_classes,accuracy,balanced_accuracy,macro_f1_observed_classes,macro_f1_all_classes,weighted_f1,errors
+core_without_policy_fields,all_test_rows,35432,Allow;Block;Drop;Reset-Both;Reset-Server,0.9999435538496274,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9999436861063017,2
+core_without_policy_fields,named_rule_test_rows,3364,Allow;Block;Drop;Reset-Both;Reset-Server,0.9994054696789536,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9994068626987156,2
+core_without_policy_fields,missing_rule_test_rows,32068,Allow;Drop,1.0,1.0,1.0,0.4,1.0,0
+with_policy_most_frequent_rule_imputation,all_test_rows,35432,Allow;Block;Drop;Reset-Both;Reset-Server,0.9999435538496274,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9999436861063017,2
+with_policy_most_frequent_rule_imputation,named_rule_test_rows,3364,Allow;Block;Drop;Reset-Both;Reset-Server,0.9994054696789536,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9994068626987156,2
+with_policy_most_frequent_rule_imputation,missing_rule_test_rows,32068,Allow;Drop,1.0,1.0,1.0,0.4,1.0,0
+with_policy_explicit_missing_rule,all_test_rows,35432,Allow;Block;Drop;Reset-Both;Reset-Server,0.9999435538496274,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9999436861063017,2
+with_policy_explicit_missing_rule,named_rule_test_rows,3364,Allow;Block;Drop;Reset-Both;Reset-Server,0.9994054696789536,0.9993115318416523,0.9983731211317419,0.9983731211317419,0.9994068626987156,2
+with_policy_explicit_missing_rule,missing_rule_test_rows,32068,Allow;Drop,1.0,1.0,1.0,0.4,1.0,0

@@ -46,7 +46,7 @@ GRAY_BG = "#F8FAFC"
 
 SHAP_CMAP = LinearSegmentedColormap.from_list("q1_shap", [PRIMARY, "#DCE4EE", CRIMSON])
 HEATMAP_CMAP = LinearSegmentedColormap.from_list("q1_heat", [GRAY_BG, "#80B7D8", PRIMARY])
-RENDERER_VERSION = "1.3.0"
+RENDERER_VERSION = "1.4.0"
 AXIS_LABEL_SIZE_PT = 8
 AXIS_TICK_SIZE_PT = 8
 
@@ -322,25 +322,15 @@ def save_shap_summary_swarm(
         if row % 2 == 1:
             ax.axhspan(row - 0.5, row + 0.5, color=GRAY_BG, zorder=0, lw=0)
 
-    scatter_handle = None
     for row, feature_idx in enumerate(top_idx):
         shap_values = predicted_class_shap[:, feature_idx]
-        feature_values = np.asarray(x_sample_enc[:, feature_idx], dtype=float)
-        finite = np.isfinite(feature_values)
-        if finite.any() and np.nanmax(feature_values[finite]) > np.nanmin(feature_values[finite]):
-            colors = (feature_values - np.nanmin(feature_values[finite])) / (
-                np.nanmax(feature_values[finite]) - np.nanmin(feature_values[finite])
-            )
-        else:
-            colors = np.full_like(feature_values, 0.5, dtype=float)
         y_jitter = rng.normal(0.0, 0.08, size=shap_values.shape[0])
-        scatter_handle = ax.scatter(
+        ax.scatter(
             shap_values,
             row + y_jitter,
-            c=colors,
-            cmap=SHAP_CMAP,
+            color=PRIMARY,
             s=8,
-            alpha=0.6,
+            alpha=0.52,
             linewidths=0,
             rasterized=True,
             zorder=3
@@ -365,20 +355,6 @@ def save_shap_summary_swarm(
     ax.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=1.0, zorder=1)
     ax.set_axisbelow(True)
     
-    if scatter_handle is not None:
-        colorbar = fig.colorbar(scatter_handle, ax=ax, fraction=0.03, pad=0.02)
-        colorbar.set_ticks([0, 1])
-        colorbar.set_ticklabels(["Low", "High"])
-        colorbar.set_label(
-            "Feature Value",
-            fontproperties=AXIS_LABEL_FONT,
-            fontsize=AXIS_LABEL_SIZE_PT,
-        )
-        for label in colorbar.ax.get_yticklabels():
-            label.set_fontproperties(INTERNAL_TEXT_FONT)
-            label.set_fontweight("normal")
-            label.set_fontsize(AXIS_TICK_SIZE_PT)
-
     apply_internal_tick_font(ax)
 
     fig.tight_layout()
@@ -626,7 +602,10 @@ def main() -> None:
             "explained_output": "class-wise pre-softmax margin",
             "aggregation_global": "mean absolute SHAP over records and classes",
             "aggregation_classwise": "mean absolute SHAP over records for each class",
-            "beeswarm": "signed SHAP for each record's predicted class",
+            "beeswarm": (
+                "signed SHAP for each record's predicted class; point color is "
+                "held constant to avoid ordinal interpretation of encoded categories"
+            ),
         },
         "shap_additivity_diagnostic": {
             "rows": n_diag,

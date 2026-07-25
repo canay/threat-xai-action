@@ -1,0 +1,76 @@
+{
+  "analysis": "rule_context_regime_audit",
+  "aggregate_outputs_only": true,
+  "data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "heldout_confusions_sha256": "6296DF65AA2D3BBCE51389C41193F67FAC3CC3B40FBBB4C0047739692694AA0E",
+  "rule_summary_sha256": "E8A06C55177474FF34A614AF44F519EA4CE2A12082DF78ED129A875D5F31C8F3",
+  "script_sha256": "4F117347A7DDEA995DF4E5D6B337052F40AE7CF62D40149D5F039E8D28093A49",
+  "removal_threshold": 0.9,
+  "purpose": "post-review sensitivity that separates the fold removing over 90% of one class from the remaining held-out-context folds",
+  "release_label_normalization": "Deny is reported as Block; class membership is unchanged",
+  "retained_contexts": [
+    "rule_context_01",
+    "rule_context_02",
+    "rule_context_04",
+    "rule_context_05",
+    "rule_context_06",
+    "rule_context_07"
+  ],
+  "context_diagnostics": [
+    {
+      "rule_group": "rule_context_01",
+      "records": 5953,
+      "maximum_removed_class": "Block",
+      "maximum_removed_fraction": 0.5821144596053794,
+      "retained": true
+    },
+    {
+      "rule_group": "rule_context_02",
+      "records": 4739,
+      "maximum_removed_class": "Block",
+      "maximum_removed_fraction": 0.4178855403946206,
+      "retained": true
+    },
+    {
+      "rule_group": "rule_context_03",
+      "records": 2688,
+      "maximum_removed_class": "Reset-Both",
+      "maximum_removed_fraction": 0.9190492593868412,
+      "retained": false
+    },
+    {
+      "rule_group": "rule_context_04",
+      "records": 2220,
+      "maximum_removed_class": "Allow",
+      "maximum_removed_fraction": 0.8872901678657075,
+      "retained": true
+    },
+    {
+      "rule_group": "rule_context_05",
+      "records": 647,
+      "maximum_removed_class": "Reset-Server",
+      "maximum_removed_fraction": 0.5335051546391752,
+      "retained": true
+    },
+    {
+      "rule_group": "rule_context_06",
+      "records": 455,
+      "maximum_removed_class": "Reset-Server",
+      "maximum_removed_fraction": 0.36855670103092786,
+      "retained": true
+    },
+    {
+      "rule_group": "rule_context_07",
+      "records": 113,
+      "maximum_removed_class": "Reset-Server",
+      "maximum_removed_fraction": 0.06701030927835051,
+      "retained": true
+    }
+  ],
+  "runtime": {
+    "python": "3.12.12",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.4.6",
+    "pandas": "2.2.3"
+  }
+}

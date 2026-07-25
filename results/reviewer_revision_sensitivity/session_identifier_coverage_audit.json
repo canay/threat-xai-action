@@ -1,0 +1,20 @@
+{
+  "analysis": "session_identifier_coverage_audit",
+  "aggregate_output_only": true,
+  "raw_data_sha256": "9DF84BC33C7CF090B05B015F7AAFB98A4354CC5A4F3F8938FDE77FF6CD8AE00F",
+  "raw_rows": 186271,
+  "eligible_non_alert_rows": 177156,
+  "zero_or_missing_session_rows": 162496,
+  "valid_nonzero_session_rows": 14660,
+  "valid_nonzero_session_fraction": 0.08275192485718802,
+  "unique_valid_session_ids": 14561,
+  "session_ids_with_multiple_rows": 98,
+  "rows_in_repeated_session_ids": 197,
+  "maximum_rows_per_valid_session_id": 3,
+  "interpretation": "The identifier covers too little of the processed benchmark to define a full session-grouped split without arbitrary pseudo-groups for zero or missing identifiers.",
+  "runtime": {
+    "python": "3.12.12",
+    "pandas": "2.2.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  }
+}

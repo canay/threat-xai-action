@@ -2,11 +2,11 @@
 
 Public reproducibility artifact for the manuscript:
 
-**LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement**
+**LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Firewall Enforcement in a Single-Environment Case Study**
 
-Framework name:
+Study name:
 
-`LEAF` (Leakage-aware, Explainable Audit Framework)
+`LEAF` (Leakage-Aware Evaluation and Audit of Firewalls)
 
 Repository short name:
 
@@ -18,7 +18,7 @@ GitHub URL:
 
 ## Related Study
 
-This repository supports the LEAF study, which audits five-class operational firewall enforcement using real enterprise Palo Alto threat logs. The study uses supervised machine-learning models as comparable measurement instruments within a leakage-aware evaluation protocol and tests how the evidence changes when direct policy fields, threat descriptors, duplicate signatures, time, and policy context are controlled.
+This repository supports a single-environment LEAF case study of five-class operational firewall enforcement using enterprise Palo Alto threat logs. Supervised models serve as measurement probes within a leakage-aware evaluation sequence. The study tests how the evidence changes when direct policy fields, threat descriptors, duplicate signatures, time ordering, and unseen policy contexts are examined separately; it does not claim cross-device or longitudinal validation.
 
 Target classes:
 
@@ -32,10 +32,10 @@ Target classes:
 
 - enterprise firewall logs
 - policy-conditioned firewall enforcement
-- leakage-aware evaluation protocol
-- security management
-- analyst triage
-- explainable AI
+- single-environment case study
+- leakage-aware evaluation
+- temporal validation
+- diagnostic explainable AI
 
 ## Authors And Contact
 
@@ -76,7 +76,7 @@ This repository is the author-managed code-and-output replication package for th
 
 ## Repository Contents
 
-- `code/`: the controlled-data conversion entry point and all manuscript-used evaluation, explanation, validation, and figure-rendering scripts (`02`--`21`)
+- `code/`: the controlled-data conversion entry point and all manuscript-used evaluation, explanation, validation, and figure-rendering scripts (`02`--`25`)
 - `scripts/create_public_sample.py`: the single retained helper for generating the privacy-audited public sample
 - `data/processed/`: controlled-data access and schema notes, the aggregate processing manifest, and a 1,000-row anonymized public smoke-test sample with audit
 - `results/`: CSV/JSON aggregate evaluation outputs, reproducible explanation artifacts, and additional validation outputs
@@ -230,6 +230,18 @@ Held-out policy-context stress test:
 - The no-threat-descriptors and minimal-context settings reached 0.378214 and 0.372487 support-weighted observed-class macro-F1, respectively.
 - These results are a stress audit for local policy-context sensitivity, not evidence of cross-organization generalization.
 
+Reviewer-revision sensitivity checks:
+
+- Aggregate outputs are in `results/reviewer_revision_sensitivity/`.
+- `code/22_reviewer_revision_sensitivity.py` compares the core setting, most-frequent `Rule` imputation, and explicit missing-rule encoding on the same seed-42 partition.
+- In the registered Windows sensitivity environment, all three configurations produce two errors and 0.998373 macro-F1; the two with-policy encodings generate identical predictions.
+- Pooling saved confusion counts across seven disjoint named-rule holdouts gives standard five-class macro-F1 values of 0.663073 for core, 0.422397 without threat descriptors, and 0.411417 for minimal context.
+- The seven named contexts contribute 16,815 held-out events; this is the effective support for named-context transfer.
+- `code/24_rule_context_regime_audit.py` shows that all 159,992 packet records lack `Rule` and account for 99.82% of missing `Rule` values. It also reports a support-qualified six-context sensitivity after excluding the fold that removes 91.90% of Reset-Both training support; core pooled macro-F1 is 0.867243 across 14,127 held-out events.
+- `code/23_session_identifier_coverage_audit.py` writes aggregate coverage only. A valid nonzero raw session identifier exists for 14,660 of 177,156 eligible events, and only 197 events belong to repeated identifiers.
+- None of these scripts exports event-level predictions, session identifiers, enterprise rule names, or raw records.
+
+
 Operational review and unseen-context audit:
 
 - Outputs are in `results/operational_review_context_audit/`.
@@ -326,7 +338,7 @@ Generate the SHAP and LIME explanation artifacts used for the manuscript figures
 python code/04_xai_explanations.py --data data/processed/threat_five_class.csv --outdir results/xai
 ```
 
-The XAI renderer uses 8-point Lato Regular at normal weight for axis and colorbar-axis titles and 8-point Inter Regular at normal weight for axis tick/feature labels; no internal label is bold. Set `LEAF_LATO_REGULAR` and `LEAF_INTER_REGULAR` to explicit font-file paths when those faces are not discoverable through the host font registry. The resolved filenames, SHA-256 hashes, and locked sizes are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
+The XAI renderer uses 8-point Lato Regular at normal weight for axis and applicable colorbar-axis titles and 8-point Inter Regular at normal weight for axis tick/feature labels; no internal label is bold. The summary beeswarm uses one constant point hue because the encoded categorical values are nominal, so no ordinal High/Low feature-value legend is shown. Set `LEAF_LATO_REGULAR` and `LEAF_INTER_REGULAR` to explicit font-file paths when those faces are not discoverable through the host font registry. The resolved filenames, SHA-256 hashes, and locked sizes are recorded in `xai_generation_summary.json`. The locked evidence environment uses SHAP 0.51.0 with XGBoost 3.2.0; older SHAP releases that cannot parse XGBoost's multiclass vector base score are not supported.
 
 Run the additional validation checks:
 
@@ -402,6 +414,8 @@ python code/15_forward_chaining_chronological.py --data data/processed/threat_fi
 python code/16_uci_leaf_instantiation.py --data data/uci_internet_firewall/log2.csv --outdir results/uci_leaf_instantiation --seed 42
 python code/17_category_code_order_sensitivity.py --data data/processed/threat_five_class.csv --outdir results/q1_audit_revision
 python code/18_full_feature_lookup_baseline.py --data data/processed/threat_five_class.csv --outdir results/q1_audit_revision
+python code/22_reviewer_revision_sensitivity.py --data data/processed/threat_five_class.csv
+python code/24_rule_context_regime_audit.py --data data/processed/threat_five_class.csv
 ```
 
 Render the manuscript-facing descriptive, holdout/CV, and feature-group figures from the saved aggregate evidence:
