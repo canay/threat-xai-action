@@ -50,7 +50,7 @@ PHASE_PALETTES = {
         "box_edge": "#82A98E",
     },
 }
-RENDERER_VERSION = "1.9.0"
+RENDERER_VERSION = "1.9.1"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
 # Reproducible-build anchor: matplotlib stamps the PDF CreationDate from
@@ -401,7 +401,7 @@ def render(manifest_path: Path, output: Path, output_pdf: Path) -> tuple[dict, d
         phase1_y,
         9.76,
         phase_height,
-        "PHASE I: CONTROLLED DATA AND LEAKAGE DESIGN",
+        "Phase I: Controlled Data and Leakage Design",
         "I",
         align="left",
     )
@@ -411,7 +411,7 @@ def render(manifest_path: Path, output: Path, output_pdf: Path) -> tuple[dict, d
         phase2_y,
         9.76,
         phase_height,
-        "PHASE II: RECONSTRUCTION AND STRESS AUDIT",
+        "Phase II: Reconstruction and Stress Audit",
         "II",
         align="center",
     )
@@ -421,7 +421,7 @@ def render(manifest_path: Path, output: Path, output_pdf: Path) -> tuple[dict, d
         phase3_y,
         9.76,
         phase_height,
-        "PHASE III: MODEL INSPECTION AND INTERPRETATION BOUNDARY",
+        "Phase III: Model Inspection and Interpretation Boundary",
         "III",
         align="right",
     )
@@ -501,7 +501,7 @@ def render(manifest_path: Path, output: Path, output_pdf: Path) -> tuple[dict, d
         width,
         height,
         "7. Selected-model inspection",
-        "TreeSHAP and LIME",
+        "SHAP and LIME",
         "III",
     )
     b8 = add_box(

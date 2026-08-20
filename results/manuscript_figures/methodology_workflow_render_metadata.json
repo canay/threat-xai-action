@@ -1,6 +1,6 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.9.0",
+  "renderer_version": "1.9.1",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
@@ -87,11 +87,11 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "C9140D80BC9484397BEFE1EFE83BA6CD3A5C3F97572B6EEA9F1B1AD099ED954E"
+    "sha256": "610CC657A46B96CDF3BC5FC975D0D382D4914C49D73D833069C6256A31FC9D73"
   },
   "output_pdf": {
     "basename": "fig_methodology_workflow.pdf",
-    "sha256": "F412D42A1D27F8AF177D559B73C7AE2C578A4ADEA6FF9806969C7DFAA197416F",
+    "sha256": "B179E7DFCC37ED2C8148370ED378308B1C73F1A4D09CFA2586713614C78522CA",
     "source_date_epoch": "0"
   }
 }
