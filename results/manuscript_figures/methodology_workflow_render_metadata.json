@@ -1,15 +1,15 @@
 {
   "renderer": "20_render_methodology_workflow.py",
-  "renderer_version": "1.8.1",
+  "renderer_version": "1.9.0",
   "render_style": {
     "title_font_family": "Lato",
     "title_font_weight": "bold",
     "title_font_file_basename": "Lato-Bold.ttf",
-    "title_font_file_sha256": "14F7DE6B616950395062902EB8F70F01C0A901223DB5D40F2A05728AC4A830F6",
+    "title_font_file_sha256": "8A0AACE75D33794EECE4B28187BFC1DF0BBD2888B5D8A56E01788C8D65D16BE1",
     "summary_font_family": "Liberation Sans",
     "summary_font_weight": "regular",
     "summary_font_file_basename": "LiberationSans-Regular.ttf",
-    "summary_font_file_sha256": "76D04C18EA243F426B7DE1F3AD208E927008F961DC5945E5AAD352D0DFDE8EE8",
+    "summary_font_file_sha256": "4659BC0C58C5028DD488EC928D41D9265DB43D9B669FC14CA8B0832DACA7B144",
     "phase_font_points": 7.8,
     "box_title_font_points": 8.6,
     "box_body_font_points": 7.8,
@@ -87,6 +87,11 @@
   },
   "output": {
     "basename": "fig_methodology_workflow.png",
-    "sha256": "E6D6135C1400BA88F7A61F14BC6513AFE97E49513F8CFBB80252C8FF6EC90AFB"
+    "sha256": "C9140D80BC9484397BEFE1EFE83BA6CD3A5C3F97572B6EEA9F1B1AD099ED954E"
+  },
+  "output_pdf": {
+    "basename": "fig_methodology_workflow.pdf",
+    "sha256": "F412D42A1D27F8AF177D559B73C7AE2C578A4ADEA6FF9806969C7DFAA197416F",
+    "source_date_epoch": "0"
   }
 }

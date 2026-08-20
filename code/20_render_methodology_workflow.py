@@ -1,4 +1,9 @@
-"""Render the manuscript methodology workflow from aggregate cohort metadata."""
+"""Render the manuscript methodology workflow from aggregate cohort metadata.
+
+Emits both a content-cropped 600 dpi PNG and a vector PDF of the same drawing;
+the PDF is the manuscript-facing artifact because journal artwork rules treat
+vector line art as resolution-independent.
+"""
 
 from __future__ import annotations
 
@@ -6,6 +11,7 @@ import argparse
 import hashlib
 import io
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -44,9 +50,12 @@ PHASE_PALETTES = {
         "box_edge": "#82A98E",
     },
 }
-RENDERER_VERSION = "1.8.1"
+RENDERER_VERSION = "1.9.0"
 PNG_DPI = 600
 CROP_PADDING_PIXELS = 12
+# Reproducible-build anchor: matplotlib stamps the PDF CreationDate from
+# SOURCE_DATE_EPOCH, so two runs of this script produce byte-identical PDFs.
+PDF_SOURCE_DATE_EPOCH = "0"
 
 
 def ensure_inter_static_fonts() -> None:
@@ -356,7 +365,20 @@ def save_content_cropped_png(fig: plt.Figure, output: Path) -> dict:
     }
 
 
-def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
+def save_vector_pdf(fig: plt.Figure, output: Path) -> None:
+    """Save the same drawing as a vector PDF with embedded TrueType fonts."""
+    os.environ.setdefault("SOURCE_DATE_EPOCH", PDF_SOURCE_DATE_EPOCH)
+    fig.savefig(
+        output,
+        format="pdf",
+        bbox_inches="tight",
+        pad_inches=CROP_PADDING_PIXELS / PNG_DPI,
+        facecolor="white",
+        edgecolor="none",
+    )
+
+
+def render(manifest_path: Path, output: Path, output_pdf: Path) -> tuple[dict, dict]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     rows_in = int(manifest["rows_in"])
     rows_out = int(manifest["rows_out"])
@@ -502,6 +524,7 @@ def render(manifest_path: Path, output: Path) -> tuple[dict, dict]:
     add_arrow(ax, side(b7, "right"), side(b8, "left"), dashed=True)
 
     crop_metadata = save_content_cropped_png(fig, output)
+    save_vector_pdf(fig, output_pdf)
     plt.close(fig)
     return (
         {
@@ -517,7 +540,8 @@ def main() -> None:
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
     output = args.outdir / "fig_methodology_workflow.png"
-    checks, crop_metadata = render(args.processing_manifest, output)
+    output_pdf = args.outdir / "fig_methodology_workflow.pdf"
+    checks, crop_metadata = render(args.processing_manifest, output, output_pdf)
     metadata = {
         "renderer": Path(__file__).name,
         "renderer_version": RENDERER_VERSION,
@@ -556,11 +580,17 @@ def main() -> None:
         "cohort_checks": checks,
         "crop": crop_metadata,
         "output": {"basename": output.name, "sha256": sha256(output)},
+        "output_pdf": {
+            "basename": output_pdf.name,
+            "sha256": sha256(output_pdf),
+            "source_date_epoch": PDF_SOURCE_DATE_EPOCH,
+        },
     }
     (args.outdir / "methodology_workflow_render_metadata.json").write_text(
         json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
     )
     print(f"Wrote {output}")
+    print(f"Wrote {output_pdf}")
 
 
 if __name__ == "__main__":
