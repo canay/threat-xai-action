@@ -1,4 +1,4 @@
-variant,map_seed,macro_f1,balanced_accuracy,errors,f1_allow,f1_deny,f1_drop,f1_reset_both,f1_reset_server,feature_set
+variant,map_seed,macro_f1,balanced_accuracy,errors,f1_allow,f1_block,f1_drop,f1_reset_both,f1_reset_server,feature_set
 ordinal_reference,,0.9983731211317419,0.9993115318416523,2,1.0,1.0,1.0,0.9982758620689656,0.9935897435897436,core
 permuted_category_codes,20260708.0,0.9983731211317419,0.9993115318416523,2,1.0,1.0,1.0,0.9982758620689656,0.9935897435897436,core
 permuted_category_codes,20260709.0,0.9983731211317419,0.9993115318416523,2,1.0,1.0,1.0,0.9982758620689656,0.9935897435897436,core

@@ -1,8 +1,8 @@
-﻿# Policy-Conditioned Firewall Enforcement Audit Reproducibility Package
+# Policy-Conditioned Firewall Enforcement Audit Reproducibility Package
 
 Public reproducibility artifact for the manuscript:
 
-**LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Firewall Enforcement in a Single-Environment Case Study**
+**LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement**
 
 Study name:
 
@@ -18,7 +18,7 @@ GitHub URL:
 
 ## Related Study
 
-This repository supports a single-environment LEAF case study of five-class operational firewall enforcement using enterprise Palo Alto threat logs. Supervised models serve as measurement probes within a leakage-aware evaluation sequence. The study tests how the evidence changes when direct policy fields, threat descriptors, duplicate signatures, time ordering, and unseen policy contexts are examined separately; it does not claim cross-device or longitudinal validation.
+This repository supports LEAF, an audit framework evaluated on five-class operational firewall enforcement using enterprise Palo Alto threat logs. Supervised models serve as measurement probes within a leakage-aware evaluation sequence. The study tests how the evidence changes when direct policy fields, threat descriptors, duplicate signatures, time ordering, and unseen policy contexts are examined separately. The evidence comes from one firewall and policy state over one observation window, so cross-device and longitudinal validation remain future work.
 
 Target classes:
 
@@ -32,7 +32,7 @@ Target classes:
 
 - enterprise firewall logs
 - policy-conditioned firewall enforcement
-- single-environment case study
+- operational firewall telemetry
 - leakage-aware evaluation
 - temporal validation
 - diagnostic explainable AI
@@ -233,6 +233,7 @@ Held-out policy-context stress test:
 Reviewer-revision sensitivity checks:
 
 - Aggregate outputs are in `results/reviewer_revision_sensitivity/`.
+- `reviewer_revision_provenance_manifest.json` binds scripts `22`--`24`, their controlled input hashes, and their aggregate outputs without exposing raw identifiers or event-level rows.
 - `code/22_reviewer_revision_sensitivity.py` compares the core setting, most-frequent `Rule` imputation, and explicit missing-rule encoding on the same seed-42 partition.
 - In the registered Windows sensitivity environment, all three configurations produce two errors and 0.998373 macro-F1; the two with-policy encodings generate identical predictions.
 - Pooling saved confusion counts across seven disjoint named-rule holdouts gives standard five-class macro-F1 values of 0.663073 for core, 0.422397 without threat descriptors, and 0.411417 for minimal context.
@@ -268,6 +269,7 @@ Round-9 revision experiments:
 - `classweight_sensitivity.csv`: adding inverse-frequency sample weights leaves core macro-F1 unchanged at 0.9984; in the no-threat-descriptors setting, macro-F1 rises from 0.9901 to 0.9907 and balanced accuracy from 0.9928 to 0.9967, with the same 15 errors. The selected-model conclusion is stable under this tested weighting change.
 - `sourceport_nearduplicate_ablation.csv`: `Source Port` is high-cardinality (10,345 distinct); grouping records by their signature excluding `Source Port` (which collapses 14,678 signature groups and raises the duplicate-row fraction from 0.854 to 0.923) still yields a median core macro-F1 of 0.9932 (range 0.924--0.997), so the reconstruction evidence does not collapse when burst-level source-port variation is removed from grouping.
 - `forward_chaining_chronological.csv`: expanding-window chronological folds (train earliest 60/70/80/90 percent, test the following 10 percent) show that within-day temporal performance is cutpoint-dependent rather than a single value, consistent with the class-mix shift documented for the 80/20 cut.
+- `forward_chaining_class_support_attestation.json`: a no-refit, hash-bound readback confirms that every saved test window contains all five canonical classes; the saved macro-F1 denominator was therefore five in every fold.
 - `category_code_order_sensitivity_summary.csv`: under canonical most-frequent categorical imputation and fixed transformed-feature order, five category-map permutations change selected-model macro-F1 by at most 0.0016 in the core setting and 0.0017 without threat descriptors.
 
 ## Experimental Environment
@@ -288,16 +290,18 @@ python -m pip install -r requirements.txt
 
 For exact inspection of the reported outputs, use the platform-labelled Linux/aarch64 lock. The Windows lock is historical diagnostic provenance; neither lock file is a cross-platform installer.
 
-Build the controlled five-class dataset and write an aggregate manifest (all controlled paths must remain outside this public repository):
+Recreate the canonical experiment-file label surface and write an aggregate manifest (all controlled paths must remain outside this public repository). The expected checksum makes byte identity fail closed:
 
 ```bash
-python code/02_build_threat_dataset.py --input <controlled-raw.csv> --output <controlled-output.csv> --manifest <aggregate-manifest.json>
+python code/02_build_threat_dataset.py --input <controlled-raw.csv> --output <controlled-output.csv> --manifest <aggregate-manifest.json> --label-surface canonical --expected-sha256 1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724
 ```
+
+The canonical surface stores raw `block` under the internal alias `Deny`, matching the controlled file used for the reported experiments. To create a release-labelled derivative instead, use `--label-surface release`; that derivative reports `Block` and is not claimed to have the canonical byte checksum.
 
 Smoke-test the schema and parser on the public anonymized sample:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree" --sample-per-class 20 --data-override data/processed/public_anonymized_sample_1000.csv --tag public_sample_smoke --output-dir results/public_sample_smoke
+python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree" --sample-per-class 20 --data-override data/processed/public_anonymized_sample_1000.csv --random-state 42 --tag public_sample_smoke --output-dir results/public_sample_smoke
 ```
 
 The command above is the supported public-sample smoke test. Other scripts require the controlled processed dataset because the public sample deliberately tokenizes sensitive numeric values; do not rename or substitute the public sample to regenerate manuscript metrics or explanation artifacts.
@@ -305,31 +309,31 @@ The command above is the supported public-sample smoke test. Other scripts requi
 Run the core holdout benchmark:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --tag baseline --output-dir results
+python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --random-state 42 --tag baseline --output-dir results
 ```
 
 Run the no-threat-descriptors ablation:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --exclude-features "Threat/Content Name,Threat/Content Type,Severity" --tag no_threat_descriptors --output-dir results
+python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --exclude-features "Threat/Content Name,Threat/Content Type,Severity" --random-state 42 --tag no_threat_descriptors --output-dir results
 ```
 
 Run the no-threat-descriptors top-model CV:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Extra Trees,XGBoost,LightGBM,CatBoost" --exclude-features "Threat/Content Name,Threat/Content Type,Severity" --cv --tag no_threat_descriptors_top_cv --output-dir results
+python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Extra Trees,XGBoost,LightGBM,CatBoost" --exclude-features "Threat/Content Name,Threat/Content Type,Severity" --cv --random-state 42 --tag no_threat_descriptors_top_cv --output-dir results
 ```
 
 Run the matching core top-model CV:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Extra Trees,XGBoost,LightGBM,CatBoost" --cv --tag top_cv --output-dir results
+python code/03_benchmark_baseline.py --dataset threat --feature-set core --models "Extra Trees,XGBoost,LightGBM,CatBoost" --cv --random-state 42 --tag top_cv --output-dir results
 ```
 
 Run the policy-included upper-bound comparison:
 
 ```bash
-python code/03_benchmark_baseline.py --dataset threat --feature-set with_policy --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --tag with_policy --output-dir results
+python code/03_benchmark_baseline.py --dataset threat --feature-set with_policy --models "Decision Tree,Random Forest,Extra Trees,XGBoost,LightGBM,CatBoost" --random-state 42 --tag with_policy --output-dir results
 ```
 
 Generate the SHAP and LIME explanation artifacts used for the manuscript figures:
@@ -418,13 +422,13 @@ python code/22_reviewer_revision_sensitivity.py --data data/processed/threat_fiv
 python code/24_rule_context_regime_audit.py --data data/processed/threat_five_class.csv
 ```
 
-Render the manuscript-facing descriptive, holdout/CV, and feature-group figures from the saved aggregate evidence:
+Render the manuscript-facing descriptive, holdout/CV, feature-group, and temporal/uncertainty figures from the saved aggregate evidence:
 
 ```bash
-python code/19_render_manuscript_figures.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --core-holdout results/baseline_benchmark_threat_core_baseline.csv --no-threat-holdout results/baseline_benchmark_threat_core_no_threat_descriptors.csv --core-cv results/baseline_benchmark_threat_core_top_cv_cv_summary.csv --no-threat-cv results/baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv --strengthening results/strengthening/strengthening_summary.csv --outdir results/manuscript_figures
+python code/19_render_manuscript_figures.py --processing-manifest data/processed/threat_dataset_processing_manifest.json --core-holdout results/baseline_benchmark_threat_core_baseline.csv --no-threat-holdout results/baseline_benchmark_threat_core_no_threat_descriptors.csv --core-cv results/baseline_benchmark_threat_core_top_cv_cv_summary.csv --no-threat-cv results/baseline_benchmark_threat_core_no_threat_descriptors_top_cv_cv_summary.csv --strengthening results/strengthening/strengthening_summary.csv --rolling-origin results/q1_audit_revision/forward_chaining_chronological.csv --bootstrap-ci results/q1_audit_revision/xgb_fixed_model_bootstrap_ci.csv --outdir results/manuscript_figures
 ```
 
-The descriptive, holdout/CV, and feature-group renderers use Lato Regular at normal weight for axis labels and record the resolved font hash in `manuscript_figure_render_metadata.json`. In the manuscript-facing class-distribution and combined holdout/CV figures, axis titles are locked at 8 points and axis tick/category labels at 7 points; the feature-group figure retains its prior sizes. `LEAF_LATO_REGULAR` may be used to provide an explicit font path.
+The descriptive, holdout/CV, feature-group, and temporal/uncertainty renderers use Lato Regular at normal weight for axis labels and record the resolved font hash in `manuscript_figure_render_metadata.json`. In the manuscript-facing class-distribution and combined holdout/CV figures, axis titles are locked at 8 points and axis tick/category labels at 7 points; the feature-group figure retains its prior sizes. The temporal/uncertainty renderer writes both a 600-dpi PNG and a vector PDF. `LEAF_LATO_REGULAR` may be used to provide an explicit font path.
 
 Render the manuscript methodology workflow from the aggregate cohort manifest:
 

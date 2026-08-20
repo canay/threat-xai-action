@@ -1,6 +1,6 @@
 {
   "renderer": "19_render_manuscript_figures.py",
-  "renderer_version": "1.3.0",
+  "renderer_version": "1.4.0",
   "inputs": {
     "processing_manifest": {
       "basename": "threat_dataset_processing_manifest.json",
@@ -25,6 +25,14 @@
     "strengthening": {
       "basename": "strengthening_summary.csv",
       "sha256": "69D2400A24F9D90CF6CF437E46C686A11CF0FCEB7DDC2EB4FC06CD8AB6F868C9"
+    },
+    "rolling_origin": {
+      "basename": "forward_chaining_chronological.csv",
+      "sha256": "6A475FD13FF09F5F92CAB00FAD87E73E9266D84471CB31797275913317AF57A5"
+    },
+    "bootstrap_ci": {
+      "basename": "xgb_fixed_model_bootstrap_ci.csv",
+      "sha256": "F8CC24016E3C3F7324925E9644661DBECA6D4E839E16D5B603D394EBFCCF87DB"
     }
   },
   "input_hash_semantics": "SHA-256 after normalizing CRLF/CR text inputs to LF, matching Git blob bytes.",
@@ -33,6 +41,9 @@
     "axis_label_font_weight": "regular",
     "axis_label_font_file_basename": "Lato-Regular.ttf",
     "axis_label_font_file_sha256": "7AE714B63C2C8B940BDD211A0CC678F01168A34EEA8AA13C0DF25364F29238A7",
+    "vector_font_type": 42,
+    "temporal_figure_support_font_family": "DejaVu Sans",
+    "temporal_figure_support_font_size_pt": 7.2,
     "fig2_fig3_axis_label_size_pt": 8,
     "fig2_fig3_axis_tick_size_pt": 7,
     "fig4_axis_sizes_unchanged": true
@@ -41,7 +52,9 @@
     "class_count_total": 177156,
     "holdout_models": 6,
     "cv_models": 4,
-    "feature_group_rows": 12
+    "feature_group_rows": 12,
+    "rolling_origin_rows": 4,
+    "bootstrap_interval_rows": 12
   },
   "outputs": {
     "fig_class_distribution.png": {
@@ -52,6 +65,12 @@
     },
     "fig_feature_group_validation.png": {
       "sha256": "75899EACCE98AFB1D3A11CE4DE134CD538704648F98A5817D607801B4BDEDBD9"
+    },
+    "fig_temporal_uncertainty_validation.png": {
+      "sha256": "39AD567E9728760D49534C504FCDF4F575374E0A08AB1DC2A08D21E3D048B536"
+    },
+    "fig_temporal_uncertainty_validation.pdf": {
+      "sha256": "1BBC221C368039761C97C2A530BEE85935C8E355DC7563D45D78ADAA2CA43164"
     }
   }
 }

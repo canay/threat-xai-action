@@ -46,7 +46,7 @@ FEATURE_SET_ORDER = [
     "drop_direction",
 ]
 EXPECTED_CLASSES = {"Allow", "Block", "Drop", "Reset-Both", "Reset-Server"}
-RENDERER_VERSION = "1.3.0"
+RENDERER_VERSION = "1.4.0"
 FIG2_FIG3_AXIS_LABEL_SIZE_PT = 8
 FIG2_FIG3_AXIS_TICK_SIZE_PT = 7
 
@@ -85,6 +85,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-threat-cv", type=Path, required=True)
     parser.add_argument("--strengthening", type=Path, required=True)
     parser.add_argument(
+        "--rolling-origin",
+        type=Path,
+        default=Path("results/q1_audit_revision/forward_chaining_chronological.csv"),
+    )
+    parser.add_argument(
+        "--bootstrap-ci",
+        type=Path,
+        default=Path("results/q1_audit_revision/xgb_fixed_model_bootstrap_ci.csv"),
+    )
+    parser.add_argument(
         "--outdir",
         type=Path,
         default=Path("results/manuscript_figures"),
@@ -110,6 +120,8 @@ def set_style() -> None:
             "xtick.color": GRAY_TEXT,
             "ytick.color": GRAY_TEXT,
             "text.color": GRAY_TEXT,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
             "savefig.dpi": 600,
             "savefig.bbox": "tight",
             # At 600 dpi, 0.02 inches gives a physical 12-pixel outer margin.
@@ -410,6 +422,220 @@ def render_feature_group_validation(strengthening_path: Path, output: Path) -> N
     plt.close(fig)
 
 
+def load_rolling_origin(path: Path) -> pd.DataFrame:
+    required = {
+        "train_pct",
+        "test_window",
+        "macro_f1",
+        "balanced_accuracy",
+        "errors",
+    }
+    frame = pd.read_csv(path)
+    missing = required.difference(frame.columns)
+    if missing:
+        raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+    frame = frame.sort_values("train_pct").reset_index(drop=True)
+    if len(frame) != 4 or frame["train_pct"].duplicated().any():
+        raise ValueError("Rolling-origin input must contain exactly four unique training cutoffs.")
+    require_probability_scores(frame, ["macro_f1", "balanced_accuracy"], path)
+    errors = pd.to_numeric(frame["errors"], errors="coerce")
+    if not np.isfinite(errors).all() or (errors < 0).any():
+        raise ValueError("Rolling-origin errors must be finite non-negative counts.")
+    frame["errors"] = errors.astype(int)
+    return frame
+
+
+def load_bootstrap_intervals(path: Path) -> pd.DataFrame:
+    required = {
+        "split",
+        "feature_set",
+        "point_estimate",
+        "metric",
+        "ci_low_95",
+        "ci_high_95",
+        "bootstrap_iterations",
+        "uncertainty_scope",
+    }
+    frame = pd.read_csv(path)
+    missing = required.difference(frame.columns)
+    if missing:
+        raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+    splits = ["stratified_holdout", "chronological_holdout"]
+    feature_sets = ["core", "no_threat_descriptors", "minimal_context"]
+    metrics = ["macro_f1", "balanced_accuracy_fixed_labels"]
+    frame = frame[
+        frame["split"].isin(splits)
+        & frame["feature_set"].isin(feature_sets)
+        & frame["metric"].isin(metrics)
+    ].copy()
+    expected = {
+        (split, feature_set, metric)
+        for split in splits
+        for feature_set in feature_sets
+        for metric in metrics
+    }
+    actual = set(zip(frame["split"], frame["feature_set"], frame["metric"]))
+    if actual != expected or frame.duplicated(["split", "feature_set", "metric"]).any():
+        raise ValueError("Bootstrap input must contain each split/feature/metric interval exactly once.")
+    require_probability_scores(frame, ["point_estimate", "ci_low_95", "ci_high_95"], path)
+    if (frame["ci_low_95"] > frame["point_estimate"]).any() or (
+        frame["point_estimate"] > frame["ci_high_95"]
+    ).any():
+        raise ValueError("Every point estimate must fall inside its 95% interval.")
+    if set(pd.to_numeric(frame["bootstrap_iterations"])) != {1000}:
+        raise ValueError("Bootstrap intervals must use exactly 1000 resamples.")
+    if set(frame["uncertainty_scope"].astype(str)) != {
+        "test_set_bootstrap_fixed_fitted_model"
+    }:
+        raise ValueError("Unexpected uncertainty scope in bootstrap input.")
+    frame["split"] = pd.Categorical(frame["split"], categories=splits, ordered=True)
+    frame["feature_set"] = pd.Categorical(
+        frame["feature_set"], categories=feature_sets, ordered=True
+    )
+    frame["metric"] = pd.Categorical(frame["metric"], categories=metrics, ordered=True)
+    return frame.sort_values(["split", "feature_set", "metric"]).reset_index(drop=True)
+
+
+def render_temporal_uncertainty_validation(
+    rolling_path: Path,
+    bootstrap_path: Path,
+    output_png: Path,
+    output_pdf: Path,
+) -> None:
+    rolling = load_rolling_origin(rolling_path)
+    intervals = load_bootstrap_intervals(bootstrap_path)
+    support_font = font_manager.FontProperties(family="DejaVu Sans", size=7.2)
+
+    fig, (ax1, ax2) = plt.subplots(
+        1,
+        2,
+        figsize=(7.2, 3.25),
+        gridspec_kw={"width_ratios": [0.88, 1.25]},
+    )
+
+    x_pos = np.arange(len(rolling))
+    ax1.plot(
+        x_pos,
+        rolling["macro_f1"],
+        color=PRIMARY,
+        marker="o",
+        markersize=5.6,
+        markeredgecolor="white",
+        linewidth=1.7,
+        label="Macro-F1",
+        zorder=3,
+    )
+    ax1.plot(
+        x_pos,
+        rolling["balanced_accuracy"],
+        color=TEAL,
+        marker="s",
+        markersize=5.2,
+        markeredgecolor="white",
+        linewidth=1.7,
+        label="Balanced accuracy",
+        zorder=3,
+    )
+    for x_value, error_count in zip(x_pos, rolling["errors"]):
+        ax1.annotate(
+            f"Err. {error_count}",
+            xy=(x_value, max(rolling.loc[x_value, "macro_f1"], rolling.loc[x_value, "balanced_accuracy"])),
+            xytext=(0, 8),
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+            fontproperties=support_font,
+            color=GRAY_TEXT,
+        )
+    window_labels = [f"{str(value).replace('-', '–')}%" for value in rolling["test_window"]]
+    ax1.set_xticks(x_pos)
+    ax1.set_xticklabels(window_labels, fontproperties=support_font)
+    ax1.set_xlabel(
+        "Following 10% test window",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax1.set_ylabel(
+        "Score",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax1.set_ylim(0.76, 1.02)
+    ax1.set_yticks(np.arange(0.80, 1.01, 0.05))
+    ax1.grid(axis="y", color=GRAY_GRID, linestyle="--", linewidth=0.8)
+    ax1.set_axisbelow(True)
+    ax1.legend(frameon=False, loc="lower center", bbox_to_anchor=(0.5, 1.01), ncol=2)
+
+    split_labels = {
+        "stratified_holdout": "Stratified",
+        "chronological_holdout": "Chronological",
+    }
+    feature_labels = {
+        "core": "Core",
+        "no_threat_descriptors": "No descriptors",
+        "minimal_context": "Minimal context",
+    }
+    rows = [
+        (split, feature_set)
+        for split in ["stratified_holdout", "chronological_holdout"]
+        for feature_set in ["core", "no_threat_descriptors", "minimal_context"]
+    ]
+    y_pos = np.arange(len(rows))
+    for row in y_pos[1::2]:
+        ax2.axhspan(row - 0.5, row + 0.5, color=GRAY_BG, zorder=0, lw=0)
+    metric_specs = [
+        ("macro_f1", -0.11, "o", PRIMARY, "Macro-F1"),
+        ("balanced_accuracy_fixed_labels", 0.11, "s", TEAL, "Balanced accuracy"),
+    ]
+    for metric, offset, marker, color, label in metric_specs:
+        part = intervals[intervals["metric"] == metric].copy()
+        lookup = {
+            (str(item["split"]), str(item["feature_set"])): item
+            for item in part.to_dict("records")
+        }
+        points = np.array([lookup[row]["point_estimate"] for row in rows], dtype=float)
+        lows = np.array([lookup[row]["ci_low_95"] for row in rows], dtype=float)
+        highs = np.array([lookup[row]["ci_high_95"] for row in rows], dtype=float)
+        ax2.errorbar(
+            points,
+            y_pos + offset,
+            xerr=np.vstack([points - lows, highs - points]),
+            fmt=marker,
+            color=color,
+            ecolor=color,
+            elinewidth=1.1,
+            capsize=2.6,
+            markersize=5.2,
+            markeredgecolor="white",
+            label=label,
+            zorder=3,
+        )
+    ax2.axhline(2.5, color=GRAY_LINE, linewidth=0.8)
+    ax2.set_yticks(y_pos)
+    ax2.set_yticklabels(
+        [f"{split_labels[split]} / {feature_labels[feature]}" for split, feature in rows],
+        fontproperties=support_font,
+    )
+    ax2.invert_yaxis()
+    ax2.set_xlim(0.76, 1.005)
+    ax2.set_xticks(np.arange(0.80, 1.001, 0.05))
+    ax2.set_xlabel(
+        "Fixed-prediction estimate and 95% interval",
+        fontproperties=AXIS_LABEL_FONT,
+        fontsize=FIG2_FIG3_AXIS_LABEL_SIZE_PT,
+    )
+    ax2.grid(axis="x", color=GRAY_GRID, linestyle="--", linewidth=0.8)
+    ax2.set_axisbelow(True)
+    ax2.legend(frameon=False, loc="lower center", bbox_to_anchor=(0.5, 1.01), ncol=2)
+
+    ax1.text(0.5, -0.24, "(a)", transform=ax1.transAxes, ha="center", va="top")
+    ax2.text(0.5, -0.24, "(b)", transform=ax2.transAxes, ha="center", va="top")
+    fig.tight_layout(pad=0.35, w_pad=3.2, rect=(0, 0.02, 1, 0.96))
+    fig.savefig(output_png, dpi=600)
+    fig.savefig(output_pdf)
+    plt.close(fig)
+
+
 def main() -> None:
     args = parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
@@ -426,6 +652,12 @@ def main() -> None:
         args.strengthening,
         args.outdir / "fig_feature_group_validation.png",
     )
+    render_temporal_uncertainty_validation(
+        args.rolling_origin,
+        args.bootstrap_ci,
+        args.outdir / "fig_temporal_uncertainty_validation.png",
+        args.outdir / "fig_temporal_uncertainty_validation.pdf",
+    )
     input_paths = {
         "processing_manifest": args.processing_manifest,
         "core_holdout": args.core_holdout,
@@ -433,11 +665,15 @@ def main() -> None:
         "core_cv": args.core_cv,
         "no_threat_cv": args.no_threat_cv,
         "strengthening": args.strengthening,
+        "rolling_origin": args.rolling_origin,
+        "bootstrap_ci": args.bootstrap_ci,
     }
     output_names = [
         "fig_class_distribution.png",
         "fig_results_ablation_cv_combined.png",
         "fig_feature_group_validation.png",
+        "fig_temporal_uncertainty_validation.png",
+        "fig_temporal_uncertainty_validation.pdf",
     ]
     metadata = {
         "renderer": Path(__file__).name,
@@ -452,6 +688,9 @@ def main() -> None:
             "axis_label_font_weight": "regular",
             "axis_label_font_file_basename": AXIS_LABEL_FONT_PATH.name,
             "axis_label_font_file_sha256": sha256(AXIS_LABEL_FONT_PATH),
+            "vector_font_type": 42,
+            "temporal_figure_support_font_family": "DejaVu Sans",
+            "temporal_figure_support_font_size_pt": 7.2,
             "fig2_fig3_axis_label_size_pt": FIG2_FIG3_AXIS_LABEL_SIZE_PT,
             "fig2_fig3_axis_tick_size_pt": FIG2_FIG3_AXIS_TICK_SIZE_PT,
             "fig4_axis_sizes_unchanged": True,
@@ -463,6 +702,8 @@ def main() -> None:
             "holdout_models": len(load_holdout(args.core_holdout, args.no_threat_holdout)),
             "cv_models": len(load_cv(args.core_cv, args.no_threat_cv)),
             "feature_group_rows": 12,
+            "rolling_origin_rows": len(load_rolling_origin(args.rolling_origin)),
+            "bootstrap_interval_rows": len(load_bootstrap_intervals(args.bootstrap_ci)),
         },
         "outputs": {
             name: {"sha256": sha256(args.outdir / name)} for name in output_names

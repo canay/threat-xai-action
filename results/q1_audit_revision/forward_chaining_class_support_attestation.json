@@ -1,0 +1,50 @@
+{
+  "attestation": "rolling_origin_fixed_five_class_macro_f1",
+  "verification_type": "hash-verified aggregate class-support readback; no model fitting",
+  "controlled_data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+  "saved_output": {
+    "path": "results/q1_audit_revision/forward_chaining_chronological.csv",
+    "sha256": "6A475FD13FF09F5F92CAB00FAD87E73E9266D84471CB31797275913317AF57A5"
+  },
+  "pre_revision_script": {
+    "path": "code/15_forward_chaining_chronological.py",
+    "working_tree_sha256": "73ECF5B998F9BC163A4B873AE409126ABA801B96762F1185B6E030296F96CE0A"
+  },
+  "post_revision_script": {
+    "path": "code/15_forward_chaining_chronological.py",
+    "packaged_lf_sha256": "9FCE9CDDE6F713F57AD93836921D0F1B3D8B976064700B9B94F4194A7431F8DA"
+  },
+  "canonical_label_order": [
+    "Allow",
+    "Deny",
+    "Drop",
+    "Reset-Both",
+    "Reset-Server"
+  ],
+  "release_label_note": "Deny is the canonical experiment-file alias reported as Block; class membership is unchanged.",
+  "folds": [
+    {
+      "test_window": "60-70",
+      "test_rows": 17718,
+      "class_support": {"Allow": 13, "Deny": 1342, "Drop": 16007, "Reset-Both": 282, "Reset-Server": 74}
+    },
+    {
+      "test_window": "70-80",
+      "test_rows": 17714,
+      "class_support": {"Allow": 9, "Deny": 755, "Drop": 16458, "Reset-Both": 460, "Reset-Server": 32}
+    },
+    {
+      "test_window": "80-90",
+      "test_rows": 17721,
+      "class_support": {"Allow": 194, "Deny": 460, "Drop": 16929, "Reset-Both": 69, "Reset-Server": 69}
+    },
+    {
+      "test_window": "90-100",
+      "test_rows": 17710,
+      "class_support": {"Allow": 2229, "Deny": 2249, "Drop": 12443, "Reset-Both": 223, "Reset-Server": 566}
+    }
+  ],
+  "conclusion": "Every saved test window contains all five canonical classes. The previously inferred sklearn macro-F1 denominator was therefore five in every fold and is numerically equivalent to the fixed-label contract now encoded in code/15.",
+  "model_refit": false,
+  "reported_metrics_changed": false
+}

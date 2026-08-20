@@ -31,6 +31,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input", type=Path, required=True, help="Controlled raw threat-log CSV.")
     parser.add_argument("--output", type=Path, required=True, help="Controlled processed CSV.")
     parser.add_argument("--manifest", type=Path, required=True, help="Aggregate JSON manifest path.")
+    parser.add_argument(
+        "--label-surface",
+        choices=("canonical", "release"),
+        required=True,
+        help="Use canonical for the experiment-file Deny alias or release for the published Block label.",
+    )
+    parser.add_argument(
+        "--expected-sha256",
+        help="Optional expected processed-file SHA-256; a mismatch fails after the manifest is written.",
+    )
     parser.add_argument("--chunksize", type=int, default=200_000)
     return parser.parse_args()
 
@@ -42,12 +52,12 @@ def normalize(value: object) -> str | None:
     return text or None
 
 
-def map_action(value: object) -> str | None:
+def map_action(value: object, label_surface: str) -> str | None:
     action = normalize(value)
     if action == "allow":
         return "Allow"
     if action == "block":
-        return "Block"
+        return "Deny" if label_surface == "canonical" else "Block"
     if action in {"drop", "drop-packet", "random-drop"}:
         return "Drop"
     if action == "reset-both":
@@ -67,6 +77,11 @@ def sha256(path: Path) -> str:
 
 def main() -> None:
     args = parse_args()
+    expected_sha256 = args.expected_sha256.upper() if args.expected_sha256 else None
+    if expected_sha256 is not None and (
+        len(expected_sha256) != 64 or any(character not in "0123456789ABCDEF" for character in expected_sha256)
+    ):
+        raise ValueError("--expected-sha256 must be a 64-character hexadecimal SHA-256 digest")
     repository_root = Path(__file__).resolve().parents[1]
     for controlled_path in (args.input.resolve(), args.output.resolve()):
         try:
@@ -95,7 +110,7 @@ def main() -> None:
         for column in chunk.columns:
             if pd.api.types.is_object_dtype(chunk[column]) or pd.api.types.is_string_dtype(chunk[column]):
                 chunk[column] = chunk[column].astype("string").str.strip().replace({"": pd.NA, "<NA>": pd.NA})
-        chunk["target"] = chunk["Action"].map(map_action)
+        chunk["target"] = chunk["Action"].map(lambda value: map_action(value, args.label_surface))
         excluded = chunk.loc[chunk["target"].isna(), "Action"].map(normalize).fillna("__MISSING__")
         for action, count in excluded.value_counts().items():
             excluded_by_normalized_action[str(action)] = excluded_by_normalized_action.get(str(action), 0) + int(count)
@@ -109,8 +124,17 @@ def main() -> None:
         output.to_csv(args.output, index=False, mode="w" if first else "a", header=first, encoding="utf-8")
         first = False
 
+    processed_sha256 = sha256(args.output)
     manifest = {
         "source_scope": "controlled raw threat-log CSV; not redistributed",
+        "label_surface": args.label_surface,
+        "target_mapping": {
+            "allow": "Allow",
+            "block": "Deny" if args.label_surface == "canonical" else "Block",
+            "drop|drop-packet|random-drop": "Drop",
+            "reset-both": "Reset-Both",
+            "reset-server": "Reset-Server",
+        },
         "rows_in": rows_in,
         "normalization": "strip surrounding whitespace and lowercase action for mapping",
         "excluded_by_normalized_action": dict(sorted(excluded_by_normalized_action.items())),
@@ -118,10 +142,18 @@ def main() -> None:
         "class_counts": dict(sorted(class_counts.items())),
         "row_level_deduplication": False,
         "additional_row_exclusions": False,
-        "processed_sha256": sha256(args.output),
+        "processed_sha256": processed_sha256,
+        "expected_processed_sha256": expected_sha256,
+        "processed_sha256_matches_expected": (
+            None if expected_sha256 is None else processed_sha256 == expected_sha256
+        ),
     }
     args.manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     print(json.dumps(manifest, indent=2))
+    if expected_sha256 is not None and processed_sha256 != expected_sha256:
+        raise RuntimeError(
+            f"Processed SHA-256 mismatch: expected {expected_sha256}, observed {processed_sha256}"
+        )
 
 
 if __name__ == "__main__":

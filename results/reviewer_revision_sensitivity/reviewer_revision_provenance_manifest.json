@@ -1,0 +1,40 @@
+{
+  "manifest": "reviewer_revision_sensitivity_provenance",
+  "verification_type": "hash-bound script and aggregate-output attestation; no experiment rerun",
+  "controlled_inputs": {
+    "processed_data_sha256": "1BE9896A996DD58A582D94319180405A8559AB5193EF692BD8D2D2D614693724",
+    "heldout_confusions_generating_worktree_sha256_recorded_in_metadata": "6296DF65AA2D3BBCE51389C41193F67FAC3CC3B40FBBB4C0047739692694AA0E",
+    "heldout_confusions_packaged_lf_sha256": "AF3F5DBFA5F3C56A48310722CAC7C5EFE1A92C62DED44DF59E0114CB7CB79958",
+    "raw_data_sha256_for_session_coverage_only": "9DF84BC33C7CF090B05B015F7AAFB98A4354CC5A4F3F8938FDE77FF6CD8AE00F"
+  },
+  "scripts": {
+    "code/22_reviewer_revision_sensitivity.py": {
+      "generating_script_sha256_recorded_in_metadata": "A63436732F86E386EF77DA74CDA722E3E3C95505E1FAE75B153CEF89FC8557ED",
+      "packaged_lf_text_sha256": "170377FE9C2A442E08D4EDA7B98F8E15C4119666009CB51AFB0F6C1807496C7B",
+      "verification_worktree_sha256": "3EDF5F5715896DFD7D580B0722AC2C6C1424A96459DCB936974BE987C9FF3B01",
+      "normalized_text_equivalent_to_archived_generating_script": true,
+      "difference_scope": "line-ending bytes only"
+    },
+    "code/23_session_identifier_coverage_audit.py": {
+      "sha256": "3CA619B67B19028B290473A18F8F192CCE64B3616372634EEF7BC516A3892438"
+    },
+    "code/24_rule_context_regime_audit.py": {
+      "sha256": "4F117347A7DDEA995DF4E5D6B337052F40AE7CF62D40149D5F039E8D28093A49"
+    }
+  },
+  "aggregate_output_hash_scope": "packaged LF-normalized public artifact bytes as listed in SHA256SUMS.txt",
+  "aggregate_outputs": {
+    "heldout_named_context_pooled_classwise.csv": "A8A2F5ED9910D84445D1D3FFE797306769585B56EAD3167DA17F0A6732594F40",
+    "heldout_named_context_pooled_metrics.csv": "844F5665EBC49C6E06BA00012E775BA6DA4986B9AF5093209256D7CF0C29E762",
+    "heldout_named_context_support_qualified_classwise.csv": "13B0782AD4DEC49100C956E8C71D65D824F877271BF18E4A10BCF1030010E9F4",
+    "heldout_named_context_support_qualified_metrics.csv": "1E1CDA61D93E2DF7A0A4C72476BD9B9DB7C6019DFFC37E9DF8F27D8685A8FCF5",
+    "reviewer_revision_sensitivity_metadata.json": "41BC6BB084D7F1D7C53BC72D088625CA87D5A25D1A6B1E74C1F29730473883CF",
+    "rule_context_regime_audit_metadata.json": "17F6E16BD3451FD4A67A3ACD88FEDD20BE5C22F416AB9AD8BD7636AB59228303",
+    "rule_missingness_profile.csv": "8648508C433A8F68C6E38E5EB5AF65DD35575F1F26DA30EA95D9E93E6E6B57A7",
+    "rule_missingness_sensitivity.csv": "FE3680AD0E4EB3AF04C0A3FD43B18B79A1268C19D137F33D212A690A4EAE18DE",
+    "rule_missingness_sensitivity_confusions.csv": "541D3A8CD0715204760F3742C054B26E820D306A3EED1C964891D7B4008C55F4",
+    "session_identifier_coverage_audit.json": "924F2CED3AAE29D14F8153C833746BC5630A8CB0B0966846CB4EF325C66A3BD2"
+  },
+  "privacy_boundary": "Only checksums and aggregate outputs are attested; no raw identifiers, rule names, predictions, or event-level rows are exposed.",
+  "model_refit": false
+}

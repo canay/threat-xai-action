@@ -1,0 +1,28 @@
+{
+  "manifest": "canonical_to_public_xai_field_provenance",
+  "verification_type": "hash-bound field comparison; no model fitting or explanation regeneration",
+  "canonical_evidence": {
+    "run_id": "2026-07-13_codex_vps_selected_model_canonicalization",
+    "script_sha256": "1112B6C7521D22059CFC67E575ECF41E74029C1D43732DF6F6249008355ED65B",
+    "summary_sha256": "F8A5EDF40182CAB6B56F747F97809698A18802821B0B451210395EEAB3748C03"
+  },
+  "public_release": {
+    "script_path": "code/04_xai_explanations.py",
+    "script_sha256": "238DBA4E7556ECF4C55ABA85EA502B6406FB93C99118769D705D2A58534719CB",
+    "summary_path": "results/xai/xai_generation_summary.json",
+    "summary_sha256": "7089CC64A8C78C13707ECBADBA62F4FD5475C046E2FEBA00E6C824B3DB890D71",
+    "global_importance_path": "results/xai/xai_shap_global_importance.csv",
+    "global_importance_sha256": "42BE19F00640CA8EE2D21637B0EAA43509304AC977EF10A88FB69A6DCD06C83E"
+  },
+  "field_comparison": {
+    "selected_model_holdout_check": "exactly equal: test_rows=35432, accuracy=0.9999435538496274, balanced_accuracy=0.9993115318416523, macro_f1=0.9983731211317419, errors=2",
+    "top_global_shap_features": "all ten feature identities, order, and mean-absolute SHAP values are exactly equal",
+    "shap_additivity_diagnostic": "exactly equal and passed; maximum absolute margin error=8.821487426757812e-06 and probability error=1.1920928955078125e-07",
+    "class_membership": "exactly equal; canonical Deny is release-facing Block",
+    "lime_selected_classes": "exactly equal modulo canonical Deny to release-facing Block",
+    "shap_semantics": "scientific fields are equal; the public summary adds the constant-hue nominal-category rendering statement",
+    "release_only_changes": "typography metadata, neutral nominal-category coloring, and Deny-to-Block reporting normalization"
+  },
+  "model_refit": false,
+  "scientific_values_changed": false
+}

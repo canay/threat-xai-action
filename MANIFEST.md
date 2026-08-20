@@ -4,7 +4,7 @@ Artifact short name: `threat-xai-action`
 
 Repository: `https://github.com/canay/threat-xai-action`
 
-Manuscript: "LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Firewall Enforcement in a Single-Environment Case Study"
+Manuscript: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
 
 ## Public Contents
 
@@ -17,6 +17,9 @@ Manuscript: "LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Fire
 - `data/processed/public_anonymized_sample_1000.audit.json`: sample generation, checksum, class-count, and anonymization audit record.
 - `data/processed/threat_dataset_processing_manifest.json`: aggregate raw-to-processed step counts, class counts, observation scope, and processed-file checksum.
 - `TRACEABILITY.md`: table/figure-to-command/output mapping and controlled processed-file checksum for authorized reruns.
+- `results/q1_audit_revision/forward_chaining_class_support_attestation.json`: no-refit verification that every rolling-origin test window contains the full five-class label set.
+- `results/xai/xai_provenance_manifest.json`: field-level, hash-bound canonical-to-public XAI provenance.
+- `results/reviewer_revision_sensitivity/reviewer_revision_provenance_manifest.json`: hash-bound provenance for scripts `22`--`24` and their aggregate-only outputs.
 - `SEED_MANIFEST.json`: explicit random seeds and resampling scope.
 - `requirements.txt`: portable minimum compatible versions.
 - `requirements-lock-primary-linux-aarch64.txt`: exact complete resolution for the canonical Linux/aarch64 VPS evidence.

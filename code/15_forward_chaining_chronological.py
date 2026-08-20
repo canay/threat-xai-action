@@ -78,6 +78,7 @@ def main():
     n = len(order)
     le = LabelEncoder().fit(df["target"])  # all five classes, consistent encoding
     y_all = le.transform(df["target"])
+    all_label_ids = np.arange(len(le.classes_))
 
     rows = []
     for train_pct in (60, 70, 80, 90):
@@ -89,7 +90,14 @@ def main():
         pipe.fit(df.loc[tr_idx, CORE], y_all[tr_idx])
         pred = pipe.predict(df.loc[te_idx, CORE])
         yt = y_all[te_idx]
-        f = f1_score(yt, pred, average="macro"); b = balanced_accuracy_score(yt, pred)
+        f = f1_score(
+            yt,
+            pred,
+            labels=all_label_ids,
+            average="macro",
+            zero_division=0,
+        )
+        b = balanced_accuracy_score(yt, pred)
         e = int((pred != yt).sum())
         rows.append({"train_pct": train_pct, "test_window": f"{train_pct}-{train_pct+10}",
                      "train_rows": len(tr_idx), "test_rows": len(te_idx),

@@ -1,5 +1,5 @@
-﻿cff-version: 1.2.0
-title: "LEAF: Leakage-Aware Evaluation and Audit of Policy-Conditioned Firewall Enforcement in a Single-Environment Case Study"
+cff-version: 1.2.0
+title: "LEAF: A Leakage-Aware, Explainable Audit Framework for Policy-Conditioned Firewall Enforcement"
 message: "If you use this reproducibility package, please cite it using this file."
 type: software
 authors:
@@ -22,7 +22,7 @@ repository-code: "https://github.com/canay/threat-xai-action"
 keywords:
   - "enterprise firewall logs"
   - "policy-conditioned firewall enforcement"
-  - "single-environment case study"
+  - "operational firewall telemetry"
   - "leakage-aware evaluation"
   - "temporal validation"
   - "diagnostic explainable AI"
